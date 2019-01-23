@@ -29,7 +29,7 @@ import lxy.com.wanandroid.home.model.ArticleModel;
 import lxy.com.wanandroid.network.NetworkManager;
 
 /**
- * Creator : lxy
+ * @author  : lxy
  * date: 2019/1/15
  */
 
@@ -48,8 +48,7 @@ public class HomeFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.home_frag_article,container,false);
-        return view;
+        return inflater.inflate(R.layout.home_frag_article,container,false);
     }
 
     @Override

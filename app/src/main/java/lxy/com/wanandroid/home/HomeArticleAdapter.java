@@ -1,6 +1,7 @@
 package lxy.com.wanandroid.home;
 
 import android.content.Context;
+import android.text.TextUtils;
 
 import java.util.List;
 
@@ -23,6 +24,17 @@ public class HomeArticleAdapter extends BaseAdapter<ArticleModel> {
     @Override
     protected void convert(ViewHolder holder, ArticleModel articleModel, int position) {
 
-        holder.setText(R.id.item_home_article_title,articleModel.getTitle());
+        holder.setText(R.id.item_home_article_title,articleModel.getTitle())
+                .setText(R.id.item_home_article_author,articleModel.getAuthor())
+                .setText(R.id.item_home_article_time,articleModel.getNiceDate());
+
+        StringBuffer tag = new StringBuffer();
+        for (int i = 0; i < articleModel.getTags().size(); i++) {
+            ArticleModel.TagsBean tagsBean = articleModel.getTags().get(i);
+            tag.append(tagsBean.getName() + "&");
+        }
+        if (!TextUtils.isEmpty(tag)){
+            holder.setText(R.id.item_home_article_tag,tag.substring(0,tag.length() - 1));
+        }
     }
 }
