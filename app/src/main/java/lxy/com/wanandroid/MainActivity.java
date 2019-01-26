@@ -1,7 +1,9 @@
 package lxy.com.wanandroid;
 
+import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 
 
 /**
@@ -9,6 +11,8 @@ import android.os.Bundle;
  */
 public class MainActivity extends AppCompatActivity {
 
+    private Toolbar toolbar;
+    private TabLayout tabLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,6 +23,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initView() {
+        toolbar = findViewById(R.id.home_activity_toolbar);
+        tabLayout = findViewById(R.id.home_activity_tabLayout);
 
+        setSupportActionBar(toolbar);
     }
 }

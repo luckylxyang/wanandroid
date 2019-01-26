@@ -12,7 +12,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +20,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import lxy.com.wanandroid.R;
+import lxy.com.wanandroid.base.BaseAdapter;
 import lxy.com.wanandroid.base.Constants;
 import lxy.com.wanandroid.base.ResponseModel;
 import lxy.com.wanandroid.base.ToastUtils;
@@ -55,7 +55,25 @@ public class HomeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initView(view);
+        initListener();
         getArticleByServer();
+    }
+
+    private void initListener() {
+        articleAdapter.setOnItemListener(new BaseAdapter.OnItemClickListener() {
+            @Override
+            public void onClick(View view, int position) {
+
+            }
+        });
+
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                page = 0;
+                getArticleByServer();
+            }
+        });
     }
 
     private void initView(View view) {
@@ -90,6 +108,7 @@ public class HomeFragment extends Fragment {
                             homeList.addAll(model.getData().getDatas());
                             totalPage = model.getData().getPageCount();
                             ++page;
+                            refreshLayout.setRefreshing(false);
                             articleAdapter.notifyDataSetChanged();
                         }
                     }
