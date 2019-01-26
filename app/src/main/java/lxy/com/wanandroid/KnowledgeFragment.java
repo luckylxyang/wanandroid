@@ -1,8 +1,6 @@
-package lxy.com.wanandroid.home.view;
+package lxy.com.wanandroid;
 
-import android.annotation.TargetApi;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -22,22 +20,21 @@ import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
-import lxy.com.wanandroid.R;
 import lxy.com.wanandroid.base.BaseAdapter;
 import lxy.com.wanandroid.base.Constants;
 import lxy.com.wanandroid.base.ResponseModel;
 import lxy.com.wanandroid.base.ToastUtils;
 import lxy.com.wanandroid.home.HomeArticleAdapter;
 import lxy.com.wanandroid.home.model.ArticleModel;
+import lxy.com.wanandroid.home.view.ArticleDetailActivity;
 import lxy.com.wanandroid.network.NetworkManager;
 
 /**
- * @author  : lxy
- * date: 2019/1/15
+ * Creator : lxy
+ * date: 2019/1/26
  */
 
-public class HomeFragment extends Fragment {
-
+public class KnowledgeFragment extends Fragment {
 
     private SwipeRefreshLayout refreshLayout;
     private RecyclerView recyclerView;
@@ -62,7 +59,6 @@ public class HomeFragment extends Fragment {
         getArticleByServer();
     }
 
-    @TargetApi(Build.VERSION_CODES.M)
     private void initListener() {
         articleAdapter.setOnItemListener(new BaseAdapter.OnItemClickListener() {
             @Override
@@ -80,18 +76,6 @@ public class HomeFragment extends Fragment {
                 getArticleByServer();
             }
         });
-
-        recyclerView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
-            @Override
-            public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-                LinearLayoutManager manager = (LinearLayoutManager) recyclerView.getLayoutManager();
-                int lastVisibleItemPosition = manager.findLastVisibleItemPosition();
-                int total = articleAdapter.getItemCount();
-                if (lastVisibleItemPosition + 4 >= total){
-                    getArticleByServer();
-                }
-            }
-        });
     }
 
     private void initView(View view) {
@@ -101,6 +85,7 @@ public class HomeFragment extends Fragment {
         articleAdapter = new HomeArticleAdapter(getContext(),homeList,R.layout.item_home_article);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(articleAdapter);
+
     }
 
     public void getArticleByServer(){

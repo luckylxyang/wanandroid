@@ -1,4 +1,4 @@
-package lxy.com.wanandroid.home.view;
+package lxy.com.wanandroid.officeaccount;
 
 import android.annotation.TargetApi;
 import android.content.Intent;
@@ -29,15 +29,15 @@ import lxy.com.wanandroid.base.ResponseModel;
 import lxy.com.wanandroid.base.ToastUtils;
 import lxy.com.wanandroid.home.HomeArticleAdapter;
 import lxy.com.wanandroid.home.model.ArticleModel;
+import lxy.com.wanandroid.home.view.ArticleDetailActivity;
 import lxy.com.wanandroid.network.NetworkManager;
 
 /**
  * @author  : lxy
- * date: 2019/1/15
+ * date: 2019/1/26
  */
 
-public class HomeFragment extends Fragment {
-
+public class OfficeAccountFragment extends Fragment {
 
     private SwipeRefreshLayout refreshLayout;
     private RecyclerView recyclerView;
@@ -80,7 +80,6 @@ public class HomeFragment extends Fragment {
                 getArticleByServer();
             }
         });
-
         recyclerView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
             @Override
             public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
@@ -101,6 +100,7 @@ public class HomeFragment extends Fragment {
         articleAdapter = new HomeArticleAdapter(getContext(),homeList,R.layout.item_home_article);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(articleAdapter);
+
     }
 
     public void getArticleByServer(){
