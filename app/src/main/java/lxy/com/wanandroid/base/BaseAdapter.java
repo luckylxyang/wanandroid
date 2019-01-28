@@ -39,8 +39,19 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, final int position) {
 
+        holder.convertView.setOnClickListener(v -> {
+            if (listener != null){
+                listener.onClick(v,position);
+            }
+        });
+        holder.convertView.setOnLongClickListener(v -> {
+            if (longListener != null){
+                longListener.onLongClick(v,position);
+            }
+            return true;
+        });
         convert(holder, list.get(position),position);
 
     }
@@ -54,12 +65,15 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<ViewHolder> {
         return list.size();
     }
 
+    /**
+     * 列表的每条 item 的点击事件
+     */
     public interface OnItemClickListener{
         void onClick(View view, int position);
     }
 
     public interface OnItemLongClickListener{
-        void onClick(View view, int position);
+        void onLongClick(View view, int position);
     }
 
     public void setOnItemListener(OnItemClickListener listener){

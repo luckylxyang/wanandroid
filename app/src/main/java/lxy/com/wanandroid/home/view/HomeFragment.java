@@ -15,6 +15,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.gson.Gson;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,6 +61,7 @@ public class HomeFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         initView(view);
         initListener();
+        refreshLayout.setRefreshing(true);
         getArticleByServer();
     }
 
@@ -68,7 +71,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View view, int position) {
                 Intent intent = new Intent(getContext(),ArticleDetailActivity.class);
-                intent.putExtra("article",homeList.get(position).toString());
+                intent.putExtra("article",new Gson().toJson(homeList.get(position)));
                 startActivity(intent);
             }
         });
@@ -125,7 +128,6 @@ public class HomeFragment extends Fragment {
                             homeList.addAll(model.getData().getDatas());
                             totalPage = model.getData().getPageCount();
                             ++page;
-                            refreshLayout.setRefreshing(false);
                             articleAdapter.notifyDataSetChanged();
                         }
                     }
@@ -137,7 +139,7 @@ public class HomeFragment extends Fragment {
 
                     @Override
                     public void onComplete() {
-
+                        refreshLayout.setRefreshing(false);
                     }
                 });
     }

@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
+import lxy.com.wanandroid.base.BaseActivity;
 import lxy.com.wanandroid.home.view.HomeFragment;
 import lxy.com.wanandroid.officeaccount.OfficeAccountFragment;
 
@@ -16,32 +17,31 @@ import lxy.com.wanandroid.officeaccount.OfficeAccountFragment;
 /**
  * @author lxy
  */
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
 
-    private Toolbar toolbar;
     private BottomNavigationView tabLayout;
     private HomeFragment homeFragment;
     private KnowledgeFragment knowledgeFragment;
     private OfficeAccountFragment officeAccountFragment;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
+    protected void initOptions() {
         initView();
         initListener();
         addFragment(homeFragment,"HomeFragment");
     }
 
     private void initView() {
-        toolbar = findViewById(R.id.home_activity_toolbar);
         tabLayout = findViewById(R.id.home_activity_navigate);
-        setSupportActionBar(toolbar);
 
         homeFragment = new HomeFragment();
         knowledgeFragment = new KnowledgeFragment();
         officeAccountFragment = new OfficeAccountFragment();
+    }
+
+    @Override
+    public int setContextView() {
+        return R.layout.activity_main;
     }
 
     private void initListener(){
