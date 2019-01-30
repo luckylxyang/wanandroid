@@ -49,4 +49,16 @@ public interface NetworkAPI {
     @GET("article/listproject/{page}/json")
     Observable<ResponseModel> getNewProject(@Path("page") int page);
 
+
+    // 收藏
+
+    /**
+     * http://www.wanandroid.com/lg/collect/1165/json
+     * @param id
+     * @return
+     */
+    @POST("lg/collect/{id}/json")
+    @FormUrlEncoded
+    Observable<ResponseBody> collectArticleInSite(@Field("id") int id);
+
 }

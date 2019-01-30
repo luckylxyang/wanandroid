@@ -91,9 +91,9 @@ public class LoginActivity extends BaseActivity {
                             ToastUtils.show(LoginActivity.this,loginModel.getErrorMsg());
                         }else {
                             ToastUtils.show(LoginActivity.this,R.string.login_success);
-
-                            Intent intent = new Intent(LoginActivity.this,MainActivity.class);
-                            startActivity(intent);
+                            LoginUtil.getInstance().setLoginInfo(new Gson().toJson(loginModel));
+//                            Intent intent = new Intent(LoginActivity.this,MainActivity.class);
+//                            startActivity(intent);
                             finish();
                         }
                     }
