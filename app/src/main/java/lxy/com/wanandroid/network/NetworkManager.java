@@ -3,6 +3,7 @@ package lxy.com.wanandroid.network;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -30,8 +31,13 @@ public class NetworkManager {
     }
 
     private void init(){
+        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
+        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         client = new OkHttpClient.Builder()
                 .connectTimeout(12,TimeUnit.SECONDS)
+                .addInterceptor(new SaveCookieInterceptor())
+//                .addNetworkInterceptor(loggingInterceptor)
+                .addInterceptor(new AddCookieInterceptor())
                 .build();
     }
 

@@ -18,7 +18,7 @@ import lxy.com.wanandroid.R;
 public abstract class BaseActivity extends AppCompatActivity {
 
     private FrameLayout flContext;
-    private Toolbar toolbar;
+    protected Toolbar toolbar;
 
 
     @Override
@@ -31,6 +31,13 @@ public abstract class BaseActivity extends AppCompatActivity {
         initOptions();
     }
 
+
+    /**
+     * 设置 activity 内容
+     * @return
+     */
+    public abstract int setContextView();
+
     protected abstract void initOptions();
 
     private void initView() {
@@ -40,11 +47,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
     }
 
-    /**
-     * 设置 activity 内容
-     * @return
-     */
-    public abstract int setContextView();
 
     public void addContextView(){
         flContext.addView(View.inflate(this,setContextView(),null));
@@ -57,6 +59,10 @@ public abstract class BaseActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             toolbar.setNavigationOnClickListener(v -> finish());
         }
+    }
+
+    protected void setToolbarTitle(String title){
+        getSupportActionBar().setTitle(title);
     }
 
 }

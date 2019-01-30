@@ -11,10 +11,10 @@
         android:icon="@drawable/main_knowledge_system"
         android:title="@string/official_accounts" />
 
-    <!--<item-->
-        <!--android:id="@+id/navigation_dashboard"-->
-        <!--android:icon="@drawable/main_knowledge_system"-->
-        <!--android:title="@string/title_knowledge_system" />-->
+    <item
+        android:id="@+id/navigation_dashboard"
+        android:icon="@drawable/main_knowledge_system"
+        android:title="@string/title_knowledge_system" />
 
     <item
         android:id="@+id/navigation_notifications"

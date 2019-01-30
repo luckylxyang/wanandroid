@@ -1,6 +1,9 @@
 package lxy.com.wanandroid;
 
+import android.annotation.SuppressLint;
 import android.support.annotation.NonNull;
+import android.support.design.internal.BottomNavigationItemView;
+import android.support.design.internal.BottomNavigationMenuView;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -9,9 +12,12 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
+import java.lang.reflect.Field;
+
 import lxy.com.wanandroid.base.BaseActivity;
 import lxy.com.wanandroid.home.view.HomeFragment;
 import lxy.com.wanandroid.officeaccount.OfficeAccountFragment;
+import lxy.com.wanandroid.project.ProjectFragment;
 
 
 /**
@@ -23,6 +29,7 @@ public class MainActivity extends BaseActivity {
     private HomeFragment homeFragment;
     private KnowledgeFragment knowledgeFragment;
     private OfficeAccountFragment officeAccountFragment;
+    private ProjectFragment projectFragment;
 
     @Override
     protected void initOptions() {
@@ -33,10 +40,11 @@ public class MainActivity extends BaseActivity {
 
     private void initView() {
         tabLayout = findViewById(R.id.home_activity_navigate);
-
+        disableShiftMode(tabLayout);
         homeFragment = new HomeFragment();
         knowledgeFragment = new KnowledgeFragment();
         officeAccountFragment = new OfficeAccountFragment();
+        projectFragment = new ProjectFragment();
     }
 
     @Override
@@ -57,9 +65,13 @@ public class MainActivity extends BaseActivity {
                         hiddenAllFragment();
                         addFragment(officeAccountFragment,"OfficeAccountFragment");
                         break;
-                    case R.id.navigation_notifications:
+                    case R.id.navigation_dashboard:
                         hiddenAllFragment();
                         addFragment(knowledgeFragment,"KnowledgeFragment");
+                        break;
+                    case R.id.navigation_notifications:
+                        hiddenAllFragment();
+                        addFragment(projectFragment,"ProjectFragment");
                         break;
                     default:
                         break;
@@ -86,5 +98,30 @@ public class MainActivity extends BaseActivity {
             transition.show(frag);
         }
         transition.commit();
+    }
+
+    /**
+     * Java反射得到BottomNavigationMenuView，关闭item >= 4 时的默认效果
+     * @param navigationView
+     */
+    @SuppressLint("RestrictedApi")
+    public void disableShiftMode(BottomNavigationView navigationView) {
+
+        BottomNavigationMenuView menuView = (BottomNavigationMenuView) navigationView.getChildAt(0);
+        try {
+            Field shiftingMode = menuView.getClass().getDeclaredField("mShiftingMode");
+            shiftingMode.setAccessible(true);
+            shiftingMode.setBoolean(menuView, false);
+            shiftingMode.setAccessible(false);
+
+            for (int i = 0; i < menuView.getChildCount(); i++) {
+                BottomNavigationItemView itemView = (BottomNavigationItemView) menuView.getChildAt(i);
+                itemView.setShiftingMode(false);
+                itemView.setChecked(itemView.getItemData().isChecked());
+            }
+
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -25,12 +25,14 @@ public class ToastUtils {
 //    }
 
     public static void show(Context context,String message){
-        if (toast == null){
-            toast = Toast.makeText(context,message,Toast.LENGTH_SHORT);
+        if (toast != null){
+            toast.cancel();
         }
-        toast.cancel();
-        toast.setDuration(Toast.LENGTH_SHORT);
-        toast.setText(message);
+        toast = Toast.makeText(context,message,Toast.LENGTH_SHORT);
         toast.show();
+    }
+
+    public static void show(Context context,int strId){
+        show(context,context.getString(strId));
     }
 }

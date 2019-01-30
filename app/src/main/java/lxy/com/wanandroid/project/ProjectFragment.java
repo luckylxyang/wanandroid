@@ -1,4 +1,4 @@
-package lxy.com.wanandroid.home.view;
+package lxy.com.wanandroid.project;
 
 import android.annotation.TargetApi;
 import android.content.Intent;
@@ -31,17 +31,16 @@ import lxy.com.wanandroid.base.ResponseModel;
 import lxy.com.wanandroid.base.ToastUtils;
 import lxy.com.wanandroid.home.HomeArticleAdapter;
 import lxy.com.wanandroid.home.model.ArticleModel;
+import lxy.com.wanandroid.home.view.ArticleDetailActivity;
 import lxy.com.wanandroid.network.NetworkManager;
 
 /**
- * @author  : lxy
- * date: 2019/1/15
+ * Creator : lxy
+ * date: 2019/1/29
  */
 
-public class HomeFragment extends Fragment {
+public class ProjectFragment extends Fragment {
 
-
-    private SwipeRefreshLayout refreshLayout;
     private RecyclerView recyclerView;
     private HomeArticleAdapter articleAdapter;
     private List<ArticleModel> homeList;
@@ -53,7 +52,7 @@ public class HomeFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.home_frag_article,container,false);
+        return inflater.inflate(R.layout.frag_project,container,false);
     }
 
     @Override
@@ -61,7 +60,6 @@ public class HomeFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         initView(view);
         initListener();
-        refreshLayout.setRefreshing(true);
         getArticleByServer();
     }
 
@@ -76,13 +74,6 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                page = 0;
-                getArticleByServer();
-            }
-        });
 
         recyclerView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
             @Override
@@ -98,18 +89,17 @@ public class HomeFragment extends Fragment {
     }
 
     private void initView(View view) {
-        refreshLayout = view.findViewById(R.id.home_frag_refresh);
-        recyclerView = view.findViewById(R.id.home_frag_recycle);
+        recyclerView = view.findViewById(R.id.project_recycle);
         homeList = new ArrayList<>();
         articleAdapter = new HomeArticleAdapter(getContext(),homeList,R.layout.item_home_article);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(articleAdapter);
-        refreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorPrimary));
+
     }
 
     public void getArticleByServer(){
 
-        NetworkManager.getManager().getServer().getArticleList(page)
+        NetworkManager.getManager().getServer().getNewProject(page)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<ResponseModel>() {
@@ -120,6 +110,7 @@ public class HomeFragment extends Fragment {
 
                     @Override
                     public void onNext(ResponseModel model) {
+                        ToastUtils.show(getContext(),model.getErrorMsg());
                         Log.i("homeArticle",model.getData().getSize() + " hjkkhlk" );
                         if (model.getErrorCode() == Constants.NET_SUCCESS){
                             if (page == 0){
@@ -139,7 +130,6 @@ public class HomeFragment extends Fragment {
 
                     @Override
                     public void onComplete() {
-                        refreshLayout.setRefreshing(false);
                     }
                 });
     }
