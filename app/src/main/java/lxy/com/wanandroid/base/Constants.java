@@ -8,4 +8,6 @@ public class Constants {
 
     public final static int NET_SUCCESS = 0;
 
+    public final static int ITEM_NUM = 4;
+
 }

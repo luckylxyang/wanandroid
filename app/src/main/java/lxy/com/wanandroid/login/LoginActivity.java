@@ -18,6 +18,7 @@ import io.reactivex.schedulers.Schedulers;
 import lxy.com.wanandroid.MainActivity;
 import lxy.com.wanandroid.R;
 import lxy.com.wanandroid.base.BaseActivity;
+import lxy.com.wanandroid.base.Constants;
 import lxy.com.wanandroid.base.ResponseModel;
 import lxy.com.wanandroid.base.ToastUtils;
 import lxy.com.wanandroid.network.NetworkAPI;
@@ -86,7 +87,7 @@ public class LoginActivity extends BaseActivity {
                     @Override
                     public void onNext(LoginModel loginModel) {
                         Log.i(TAG,new Gson().toJson(loginModel));
-                        if (loginModel.getErrorCode() != 0){
+                        if (loginModel.getErrorCode() != Constants.NET_SUCCESS){
                             ToastUtils.show(LoginActivity.this,loginModel.getErrorMsg());
                         }else {
                             ToastUtils.show(LoginActivity.this,R.string.login_success);

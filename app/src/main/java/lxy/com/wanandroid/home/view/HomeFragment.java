@@ -90,7 +90,7 @@ public class HomeFragment extends Fragment {
                 LinearLayoutManager manager = (LinearLayoutManager) recyclerView.getLayoutManager();
                 int lastVisibleItemPosition = manager.findLastVisibleItemPosition();
                 int total = articleAdapter.getItemCount();
-                if (lastVisibleItemPosition + 4 >= total){
+                if (lastVisibleItemPosition + Constants.ITEM_NUM >= total){
                     getArticleByServer();
                 }
             }
