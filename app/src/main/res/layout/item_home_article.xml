@@ -53,7 +53,7 @@
 
     <ImageView
         android:id="@+id/item_home_article_like"
-        android:src="@drawable/love"
+        android:src="@drawable/ic_article_unlike"
         android:layout_alignParentRight="true"
         android:layout_marginRight="20dp"
         android:layout_marginBottom="15dp"

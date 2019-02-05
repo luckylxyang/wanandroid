@@ -1,12 +1,15 @@
 package lxy.com.wanandroid.base;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.support.annotation.IdRes;
 import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 
@@ -71,6 +74,13 @@ public class ViewHolder extends RecyclerView.ViewHolder {
     public ViewHolder setText(int viewId,CharSequence message){
         TextView tv = getView(viewId);
         tv.setText(message);
+        return this;
+    }
+
+    @SuppressLint("ResourceType")
+    public ViewHolder setImageResource(int viewId, @IdRes int imageId){
+        ImageView iv = getView(viewId);
+        iv.setImageResource(imageId);
         return this;
     }
 

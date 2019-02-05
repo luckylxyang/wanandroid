@@ -75,6 +75,9 @@ public class ArticleDetailActivity extends BaseActivity {
                     Intent intent = new Intent(Intent.ACTION_VIEW,uri);
                     startActivity(intent);
                     break;
+                case R.id.detail_refresh:
+                    webView.reload();
+                    break;
                 default:
                     break;
             }

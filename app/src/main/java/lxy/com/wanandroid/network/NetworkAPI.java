@@ -53,12 +53,35 @@ public interface NetworkAPI {
     // 收藏
 
     /**
+     * 收藏站内文章
      * http://www.wanandroid.com/lg/collect/1165/json
      * @param id
      * @return
      */
     @POST("lg/collect/{id}/json")
+    Observable<ResponseModel> collectArticleInSite(@Path("id") int id);
+
+    /**
+     * 收藏站外文章
+     * http://www.wanandroid.com/lg/collect/add/json
+     * @param title
+     * @param author
+     * @param link
+     * @return
+     */
+    @POST("lg/collect/add/json")
     @FormUrlEncoded
-    Observable<ResponseBody> collectArticleInSite(@Field("id") int id);
+    Observable<ResponseModel> collectArticleOutSite(@Field("title") int title,
+                                                    @Field("author") String author,
+                                                    @Field("link") String link);
+
+    /**
+     * 在文章列表取消收藏
+     * http://www.wanandroid.com/lg/uncollect_originId/2333/json
+     * @return
+     */
+    @POST("lg/uncollect_originId/{id}/json")
+    Observable<ResponseModel> unCollectArticle(@Path("id") int id);
+
 
 }

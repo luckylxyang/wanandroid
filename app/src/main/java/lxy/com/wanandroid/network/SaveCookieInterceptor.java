@@ -30,8 +30,8 @@ public class SaveCookieInterceptor implements Interceptor {
     public Response intercept(Chain chain) throws IOException {
         Response response = chain.proceed(chain.request());
 //        Log.i(TAG,response.body().string());
-        if (!response.header("set-Cookie").isEmpty()){
-            List<String> cookies = new ArrayList<>();
+        if (!response.headers("set-Cookie").isEmpty()){
+            List<String> cookies = response.headers("set-cookie");
             String cookie = encodeCookie(cookies);
             saveCookie(chain.request().url().toString(), chain.request().url().host(), cookie);
         }

@@ -35,8 +35,8 @@ public class NetworkManager {
         loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         client = new OkHttpClient.Builder()
                 .connectTimeout(12,TimeUnit.SECONDS)
+                .addNetworkInterceptor(loggingInterceptor)
                 .addInterceptor(new SaveCookieInterceptor())
-//                .addNetworkInterceptor(loggingInterceptor)
                 .addInterceptor(new AddCookieInterceptor())
                 .build();
     }

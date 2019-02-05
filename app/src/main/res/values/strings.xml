@@ -12,4 +12,6 @@
     <string name="login_toast">请输入用户名或密码</string>
     <string name="login_success">登录成功</string>
     <string name="login_out">请先登录</string>
+    <string name="collect_success">收藏成功</string>
+    <string name="uncollect_success">取消收藏成功</string>
 </resources>
