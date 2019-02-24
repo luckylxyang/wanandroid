@@ -16,6 +16,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.gson.Gson;
+import com.youth.banner.Banner;
+import com.youth.banner.BannerConfig;
+import com.youth.banner.listener.OnBannerListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,13 +27,16 @@ import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
+import lxy.com.wanandroid.ArticleDetailActivity;
 import lxy.com.wanandroid.R;
-import lxy.com.wanandroid.base.BaseAdapter;
+import lxy.com.wanandroid.baseadapter.BaseAdapter;
 import lxy.com.wanandroid.base.Constants;
 import lxy.com.wanandroid.base.ResponseModel;
 import lxy.com.wanandroid.base.ToastUtils;
+import lxy.com.wanandroid.home.GlideImageLoader;
 import lxy.com.wanandroid.home.HomeArticleAdapter;
 import lxy.com.wanandroid.home.model.ArticleModel;
+import lxy.com.wanandroid.home.model.BannerModel;
 import lxy.com.wanandroid.network.NetworkManager;
 
 /**
@@ -46,6 +52,8 @@ public class HomeFragment extends Fragment {
     private HomeArticleAdapter articleAdapter;
     private List<ArticleModel> homeList;
     private int totalPage = 0;
+    private Banner banner;
+    private List<BannerModel.DataBean> bannerList;
 
     /** 文章页数 */
     private int page = 0;
@@ -63,6 +71,7 @@ public class HomeFragment extends Fragment {
         initListener();
         refreshLayout.setRefreshing(true);
         getArticleByServer();
+        getBannerByServer();
     }
 
     @TargetApi(Build.VERSION_CODES.M)
@@ -71,6 +80,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View view, int position) {
                 Intent intent = new Intent(getContext(),ArticleDetailActivity.class);
+                intent.putExtra("type",Constants.TYPE_ARTICLE);
                 intent.putExtra("article",new Gson().toJson(homeList.get(position)));
                 startActivity(intent);
             }
@@ -95,6 +105,16 @@ public class HomeFragment extends Fragment {
                 }
             }
         });
+
+        banner.setOnBannerListener(new OnBannerListener() {
+            @Override
+            public void OnBannerClick(int position) {
+                Intent intent = new Intent(getContext(),ArticleDetailActivity.class);
+                intent.putExtra("type",Constants.TYPE_BANNER);
+                intent.putExtra("article",new Gson().toJson(bannerList.get(position)));
+                startActivity(intent);
+            }
+        });
     }
 
     private void initView(View view) {
@@ -105,6 +125,14 @@ public class HomeFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(articleAdapter);
         refreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorPrimary));
+
+        bannerList = new ArrayList<>();
+        banner = view.findViewById(R.id.home_article_banner);
+        banner.setBannerStyle(BannerConfig.CIRCLE_INDICATOR)
+                .isAutoPlay(true)
+                .setIndicatorGravity(BannerConfig.RIGHT)
+                .setImageLoader(new GlideImageLoader());
+
     }
 
     public void getArticleByServer(){
@@ -140,6 +168,36 @@ public class HomeFragment extends Fragment {
                     @Override
                     public void onComplete() {
                         refreshLayout.setRefreshing(false);
+                    }
+                });
+    }
+
+    public void getBannerByServer(){
+        NetworkManager.getManager().getServer().getBannerList()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<BannerModel>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(BannerModel model) {
+                        Log.i("homeBanner",model.getData().size() + " hjkkhlk" );
+                        bannerList.clear();
+                        bannerList.addAll(model.getData());
+                        banner.setImages(model.getData()).start();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        ToastUtils.show(getContext(),e.getMessage());
+                    }
+
+                    @Override
+                    public void onComplete() {
+
                     }
                 });
     }

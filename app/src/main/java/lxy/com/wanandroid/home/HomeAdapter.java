@@ -3,7 +3,13 @@ package lxy.com.wanandroid.home;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.view.View;
+import android.widget.AdapterView;
+
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.BaseViewHolder;
 
 import java.util.List;
 
@@ -12,33 +18,29 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import lxy.com.wanandroid.R;
-import lxy.com.wanandroid.baseadapter.BaseAdapter;
 import lxy.com.wanandroid.base.ResponseModel;
 import lxy.com.wanandroid.base.ToastUtils;
+import lxy.com.wanandroid.baseadapter.MultiTypeBaseAdapter;
+import lxy.com.wanandroid.baseadapter.MultiTypeSupport;
 import lxy.com.wanandroid.baseadapter.ViewHolder;
 import lxy.com.wanandroid.home.model.ArticleModel;
 import lxy.com.wanandroid.login.LoginActivity;
 import lxy.com.wanandroid.network.NetworkManager;
 
 /**
- * date: 2019/1/15
- *
- * @author lxy
+ * Creator : lxy
+ * date: 2019/2/8
  */
 
-public class HomeArticleAdapter extends BaseAdapter<ArticleModel> {
+public class HomeAdapter extends BaseQuickAdapter<ArticleModel,BaseViewHolder> {
 
-    private String TAG = "HomeArticleAdapter";
-
-    public HomeArticleAdapter(Context context, List<ArticleModel> list, int layoutId) {
-        super(context, list, layoutId);
+    public HomeAdapter(int layoutResId, @Nullable List<ArticleModel> data) {
+        super(layoutResId, data);
     }
 
-    @SuppressLint("ResourceType")
     @Override
-    protected void convert(ViewHolder holder, ArticleModel articleModel, int position) {
-
-        holder.setText(R.id.item_home_article_title, articleModel.getTitle())
+    protected void convert(BaseViewHolder helper, ArticleModel articleModel) {
+        helper.setText(R.id.item_home_article_title, articleModel.getTitle())
                 .setText(R.id.item_home_article_author, articleModel.getAuthor())
                 .setText(R.id.item_home_article_time, articleModel.getNiceDate());
 
@@ -48,21 +50,22 @@ public class HomeArticleAdapter extends BaseAdapter<ArticleModel> {
             tag.append(tagsBean.getName() + "&");
         }
         if (!TextUtils.isEmpty(tag)) {
-            holder.setText(R.id.item_home_article_tag, tag.substring(0, tag.length() - 1));
+            helper.setText(R.id.item_home_article_tag, tag.substring(0, tag.length() - 1));
         }
         if (articleModel.isCollect()){
-            holder.setImageResource(R.id.item_home_article_like,R.drawable.ic_article_like);
+            helper.setImageResource(R.id.item_home_article_like,R.drawable.ic_article_like);
         }
-        holder.setOnClickListener(R.id.item_home_article_like, v -> {
+        helper.setOnClickListener(R.id.item_home_article_like, v -> {
             if (articleModel.isCollect()){
-                unCollectArticle(holder,articleModel);
+                unCollectArticle(helper,articleModel);
             }else {
-                collectArticle(holder,articleModel);
+                collectArticle(helper,articleModel);
             }
         });
     }
 
-    private void collectArticle(ViewHolder holder, ArticleModel articleModel){
+
+    private void collectArticle(BaseViewHolder holder, ArticleModel articleModel){
         NetworkManager.getManager().getServer().collectArticleInSite(articleModel.getId())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -77,14 +80,14 @@ public class HomeArticleAdapter extends BaseAdapter<ArticleModel> {
                     public void onNext(ResponseModel model) {
                         try {
                             if (model.getErrorCode() != 0) {
-                                ToastUtils.show(context, R.string.login_out);
-                                Intent intent = new Intent(context, LoginActivity.class);
-                                context.startActivity(intent);
+                                ToastUtils.show(mContext, R.string.login_out);
+                                Intent intent = new Intent(mContext, LoginActivity.class);
+                                mContext.startActivity(intent);
                             } else {
-                                ToastUtils.show(context, R.string.collect_success);
+                                ToastUtils.show(mContext, R.string.collect_success);
                                 holder.setImageResource(R.id.item_home_article_like, R.drawable.ic_article_like);
                                 articleModel.setCollect(true);
-                                HomeArticleAdapter.this.notifyDataSetChanged();
+                                HomeAdapter.this.notifyDataSetChanged();
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -103,7 +106,7 @@ public class HomeArticleAdapter extends BaseAdapter<ArticleModel> {
                 });
     }
 
-    private void unCollectArticle(ViewHolder holder, ArticleModel articleModel){
+    private void unCollectArticle(BaseViewHolder holder, ArticleModel articleModel){
         NetworkManager.getManager().getServer().unCollectArticle(articleModel.getId())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -118,14 +121,14 @@ public class HomeArticleAdapter extends BaseAdapter<ArticleModel> {
                     public void onNext(ResponseModel model) {
                         try {
                             if (model.getErrorCode() != 0) {
-                                ToastUtils.show(context, R.string.login_out);
-                                Intent intent = new Intent(context, LoginActivity.class);
-                                context.startActivity(intent);
+                                ToastUtils.show(mContext, R.string.login_out);
+                                Intent intent = new Intent(mContext, LoginActivity.class);
+                                mContext.startActivity(intent);
                             } else {
-                                ToastUtils.show(context, R.string.uncollect_success);
+                                ToastUtils.show(mContext, R.string.uncollect_success);
                                 holder.setImageResource(R.id.item_home_article_like, R.drawable.ic_article_unlike);
                                 articleModel.setCollect(false);
-                                HomeArticleAdapter.this.notifyDataSetChanged();
+                                HomeAdapter.this.notifyDataSetChanged();
                             }
                         } catch (Exception e) {
                             e.printStackTrace();

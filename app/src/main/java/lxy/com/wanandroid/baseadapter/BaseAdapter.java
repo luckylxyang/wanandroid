@@ -1,4 +1,4 @@
-package lxy.com.wanandroid.base;
+package lxy.com.wanandroid.baseadapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -22,7 +22,11 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<ViewHolder> {
     private LayoutInflater inflater;
     protected OnItemClickListener listener;
     protected OnItemLongClickListener longListener;
-    protected int pos;
+
+
+    private int ITEM_HEADER = 0;
+    private int ITEM_COMMON = 1;
+    private int ITEM_FOOTER = 2;
 
     public BaseAdapter(Context context, List<T> list, int layoutId) {
         this.context = context;
@@ -40,7 +44,6 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<ViewHolder> {
 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
-
         holder.convertView.setOnClickListener(v -> {
             if (listener != null){
                 listener.onClick(v,position);
@@ -59,7 +62,6 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<ViewHolder> {
     protected abstract void convert(ViewHolder holder, T t,int position);
 
 
-
     @Override
     public int getItemCount() {
         return list.size();
@@ -69,6 +71,7 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<ViewHolder> {
      * 列表的每条 item 的点击事件
      */
     public interface OnItemClickListener{
+
         void onClick(View view, int position);
     }
 
@@ -83,4 +86,5 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<ViewHolder> {
     public void setOnItemLongListener(OnItemLongClickListener listener){
         this.longListener = listener;
     }
+
 }

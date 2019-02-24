@@ -3,6 +3,7 @@ package lxy.com.wanandroid.network;
 import io.reactivex.Observable;
 import lxy.com.wanandroid.base.ResponseModel;
 import lxy.com.wanandroid.home.model.ArticleModel;
+import lxy.com.wanandroid.home.model.BannerModel;
 import lxy.com.wanandroid.login.LoginModel;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -33,6 +34,14 @@ public interface NetworkAPI {
     @FormUrlEncoded
     Observable<LoginModel> login(@Field("username") String username,
                                  @Field("password") String password);
+
+    /**
+     * http://www.wanandroid.com/banner/json
+     * 获取首页banner
+     * @return
+     */
+    @GET("banner/json")
+    Observable<BannerModel> getBannerList();
 
     /**
      * Get article in a website which link is www.wanandroid.com

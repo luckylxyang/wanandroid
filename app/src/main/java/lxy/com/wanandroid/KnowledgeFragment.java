@@ -20,13 +20,12 @@ import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
-import lxy.com.wanandroid.base.BaseAdapter;
+import lxy.com.wanandroid.baseadapter.BaseAdapter;
 import lxy.com.wanandroid.base.Constants;
 import lxy.com.wanandroid.base.ResponseModel;
 import lxy.com.wanandroid.base.ToastUtils;
 import lxy.com.wanandroid.home.HomeArticleAdapter;
 import lxy.com.wanandroid.home.model.ArticleModel;
-import lxy.com.wanandroid.home.view.ArticleDetailActivity;
 import lxy.com.wanandroid.network.NetworkManager;
 
 /**

@@ -1,4 +1,4 @@
-package lxy.com.wanandroid.base;
+package lxy.com.wanandroid.baseadapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

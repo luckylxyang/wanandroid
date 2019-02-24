@@ -10,4 +10,7 @@ public class Constants {
 
     public final static int ITEM_NUM = 4;
 
+    public final static String TYPE_ARTICLE = "ARTICLE";
+    public final static String TYPE_BANNER = "BANNER";
+
 }
