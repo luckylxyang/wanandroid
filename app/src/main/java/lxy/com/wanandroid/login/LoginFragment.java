@@ -1,10 +1,16 @@
 package lxy.com.wanandroid.login;
 
+import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.design.widget.TextInputEditText;
+import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 
 import com.google.gson.Gson;
 
@@ -13,42 +19,35 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import lxy.com.wanandroid.R;
-import lxy.com.wanandroid.base.BaseActivity;
 import lxy.com.wanandroid.base.Constants;
 import lxy.com.wanandroid.base.ToastUtils;
 import lxy.com.wanandroid.network.NetworkManager;
 
 /**
- * @author : lxy
- * date: 2019/1/29
+ * Creator : lxy
+ * date: 2019/2/27
  */
 
-public class LoginActivity extends BaseActivity {
+public class LoginFragment extends Fragment {
+    private static String TAG = LoginFragment.class.getSimpleName();
 
-    private static String TAG = "LoginActivity";
-
-    private EditText etUsername;
-    private EditText etPassword;
+    private TextInputEditText etUsername;
+    private TextInputEditText etPassword;
     private Button btnLogin;
 
+    @Nullable
     @Override
-    protected void initOptions() {
-        showToolbarBack(true);
-        setToolbarTitle(getString(R.string.login));
-//        initView();
-//        initListener();
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_login,container,false);
+        initView(view);
+        initListener();
+        return view;
     }
 
-    @Override
-    public int setContextView() {
-        return R.layout.activity_login;
-    }
-
-    private void initView(){
-        etUsername = findViewById(R.id.login_et_username);
-        etPassword = findViewById(R.id.login_et_password);
-        btnLogin = findViewById(R.id.login_btn);
-
+    private void initView(View view) {
+        etUsername = view.findViewById(R.id.login_et_username);
+        etPassword = view.findViewById(R.id.login_et_password);
+        btnLogin = view.findViewById(R.id.login_btn);
     }
 
     private void initListener(){
@@ -87,7 +86,7 @@ public class LoginActivity extends BaseActivity {
                             LoginUtil.getInstance().setLoginInfo(new Gson().toJson(loginModel));
 //                            Intent intent = new Intent(LoginActivity.this,MainActivity.class);
 //                            startActivity(intent);
-                            finish();
+                            getActivity().finish();
                         }
                     }
 

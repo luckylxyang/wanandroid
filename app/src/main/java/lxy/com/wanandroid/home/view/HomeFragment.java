@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.google.gson.Gson;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
@@ -33,8 +34,11 @@ import lxy.com.wanandroid.baseadapter.BaseAdapter;
 import lxy.com.wanandroid.base.Constants;
 import lxy.com.wanandroid.base.ResponseModel;
 import lxy.com.wanandroid.base.ToastUtils;
+import lxy.com.wanandroid.baseadapter.MultiTypeSupport;
 import lxy.com.wanandroid.home.GlideImageLoader;
+import lxy.com.wanandroid.home.HomeAdapter;
 import lxy.com.wanandroid.home.HomeArticleAdapter;
+import lxy.com.wanandroid.home.HomeMultiAdapter;
 import lxy.com.wanandroid.home.model.ArticleModel;
 import lxy.com.wanandroid.home.model.BannerModel;
 import lxy.com.wanandroid.network.NetworkManager;
@@ -49,7 +53,8 @@ public class HomeFragment extends Fragment {
 
     private SwipeRefreshLayout refreshLayout;
     private RecyclerView recyclerView;
-    private HomeArticleAdapter articleAdapter;
+    private HomeAdapter articleAdapter;
+    private HomeMultiAdapter adapter;
     private List<ArticleModel> homeList;
     private int totalPage = 0;
     private Banner banner;
@@ -74,11 +79,31 @@ public class HomeFragment extends Fragment {
         getBannerByServer();
     }
 
+    private void initView(View view) {
+        bannerList = new ArrayList<>();
+        banner = (Banner) getActivity().getLayoutInflater().inflate(R.layout.item_home_banner,null);
+        banner.setBannerStyle(BannerConfig.CIRCLE_INDICATOR)
+                .isAutoPlay(true)
+                .setIndicatorGravity(BannerConfig.RIGHT)
+                .setImageLoader(new GlideImageLoader());
+
+        refreshLayout = view.findViewById(R.id.home_frag_refresh);
+        recyclerView = view.findViewById(R.id.home_frag_recycle);
+        homeList = new ArrayList<>();
+        articleAdapter = new HomeAdapter(R.layout.item_home_article,homeList);
+//        articleAdapter = new HomeArticleAdapter(getContext(),homeList,R.layout.item_home_article);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setAdapter(articleAdapter);
+        articleAdapter.setHeaderView(banner);
+        refreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorPrimary));
+
+    }
+
     @TargetApi(Build.VERSION_CODES.M)
     private void initListener() {
-        articleAdapter.setOnItemListener(new BaseAdapter.OnItemClickListener() {
+        articleAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
-            public void onClick(View view, int position) {
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 Intent intent = new Intent(getContext(),ArticleDetailActivity.class);
                 intent.putExtra("type",Constants.TYPE_ARTICLE);
                 intent.putExtra("article",new Gson().toJson(homeList.get(position)));
@@ -117,24 +142,6 @@ public class HomeFragment extends Fragment {
         });
     }
 
-    private void initView(View view) {
-        refreshLayout = view.findViewById(R.id.home_frag_refresh);
-        recyclerView = view.findViewById(R.id.home_frag_recycle);
-        homeList = new ArrayList<>();
-        articleAdapter = new HomeArticleAdapter(getContext(),homeList,R.layout.item_home_article);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.setAdapter(articleAdapter);
-        refreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorPrimary));
-
-        bannerList = new ArrayList<>();
-        banner = view.findViewById(R.id.home_article_banner);
-        banner.setBannerStyle(BannerConfig.CIRCLE_INDICATOR)
-                .isAutoPlay(true)
-                .setIndicatorGravity(BannerConfig.RIGHT)
-                .setImageLoader(new GlideImageLoader());
-
-    }
-
     public void getArticleByServer(){
 
         NetworkManager.getManager().getServer().getArticleList(page)
@@ -162,7 +169,7 @@ public class HomeFragment extends Fragment {
 
                     @Override
                     public void onError(Throwable e) {
-                        ToastUtils.show(getContext(),e.getMessage());
+                        ToastUtils.show(e.getMessage());
                     }
 
                     @Override
@@ -192,7 +199,7 @@ public class HomeFragment extends Fragment {
 
                     @Override
                     public void onError(Throwable e) {
-                        ToastUtils.show(getContext(),e.getMessage());
+                        ToastUtils.show(e.getMessage());
                     }
 
                     @Override

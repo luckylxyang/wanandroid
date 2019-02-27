@@ -4,6 +4,7 @@ import io.reactivex.Observable;
 import lxy.com.wanandroid.base.ResponseModel;
 import lxy.com.wanandroid.home.model.ArticleModel;
 import lxy.com.wanandroid.home.model.BannerModel;
+import lxy.com.wanandroid.knowledge.KnowledgeModel;
 import lxy.com.wanandroid.login.LoginModel;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -58,7 +59,12 @@ public interface NetworkAPI {
     @GET("article/listproject/{page}/json")
     Observable<ResponseModel> getNewProject(@Path("page") int page);
 
-
+    /**
+     * http://www.wanandroid.com/tree/json
+     * @return
+     */
+    @GET("tree/json")
+    Observable<KnowledgeModel> getTree();
     // 收藏
 
     /**

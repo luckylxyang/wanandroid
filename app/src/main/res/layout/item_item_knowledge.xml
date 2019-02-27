@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/item_item_knowledge_title"
+    android:textSize="14sp"
+    android:paddingHorizontal="12dp"
+    android:background="@drawable/bg_knowledge_item"
+    android:layout_margin="6dp"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+</TextView>

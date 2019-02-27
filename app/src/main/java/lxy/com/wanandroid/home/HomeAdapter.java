@@ -80,11 +80,11 @@ public class HomeAdapter extends BaseQuickAdapter<ArticleModel,BaseViewHolder> {
                     public void onNext(ResponseModel model) {
                         try {
                             if (model.getErrorCode() != 0) {
-                                ToastUtils.show(mContext, R.string.login_out);
+                                ToastUtils.show(R.string.login_out);
                                 Intent intent = new Intent(mContext, LoginActivity.class);
                                 mContext.startActivity(intent);
                             } else {
-                                ToastUtils.show(mContext, R.string.collect_success);
+                                ToastUtils.show( R.string.collect_success);
                                 holder.setImageResource(R.id.item_home_article_like, R.drawable.ic_article_like);
                                 articleModel.setCollect(true);
                                 HomeAdapter.this.notifyDataSetChanged();
@@ -121,11 +121,11 @@ public class HomeAdapter extends BaseQuickAdapter<ArticleModel,BaseViewHolder> {
                     public void onNext(ResponseModel model) {
                         try {
                             if (model.getErrorCode() != 0) {
-                                ToastUtils.show(mContext, R.string.login_out);
+                                ToastUtils.show(R.string.login_out);
                                 Intent intent = new Intent(mContext, LoginActivity.class);
                                 mContext.startActivity(intent);
                             } else {
-                                ToastUtils.show(mContext, R.string.uncollect_success);
+                                ToastUtils.show( R.string.uncollect_success);
                                 holder.setImageResource(R.id.item_home_article_like, R.drawable.ic_article_unlike);
                                 articleModel.setCollect(false);
                                 HomeAdapter.this.notifyDataSetChanged();

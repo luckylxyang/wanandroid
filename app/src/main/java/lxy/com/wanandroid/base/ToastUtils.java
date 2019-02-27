@@ -24,6 +24,14 @@ public class ToastUtils {
 //        return instance;
 //    }
 
+    public static void show(String message){
+        if (toast != null){
+            toast.cancel();
+        }
+        toast = Toast.makeText(WanApplication.getContext(),message,Toast.LENGTH_SHORT);
+        toast.show();
+    }
+
     public static void show(Context context,String message){
         if (toast != null){
             toast.cancel();
@@ -32,7 +40,11 @@ public class ToastUtils {
         toast.show();
     }
 
+    public static void show(int strId){
+        show(WanApplication.getContext().getString(strId));
+    }
+
     public static void show(Context context,int strId){
-        show(context,context.getString(strId));
+        show(context,WanApplication.getContext().getString(strId));
     }
 }

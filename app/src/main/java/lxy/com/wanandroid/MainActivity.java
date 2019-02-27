@@ -7,15 +7,13 @@ import android.support.design.internal.BottomNavigationMenuView;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import java.lang.reflect.Field;
 
 import lxy.com.wanandroid.base.BaseActivity;
 import lxy.com.wanandroid.home.view.HomeFragment;
+import lxy.com.wanandroid.knowledge.KnowledgeFragment;
 import lxy.com.wanandroid.officeaccount.OfficeAccountFragment;
 import lxy.com.wanandroid.project.ProjectFragment;
 
