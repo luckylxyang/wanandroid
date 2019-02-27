@@ -23,6 +23,7 @@
         <activity android:name=".login.LoginActivity">
 
         </activity>
+        <activity android:name=".knowledge.KnowledgeChildActivity" />
     </application>
 
 </manifest>

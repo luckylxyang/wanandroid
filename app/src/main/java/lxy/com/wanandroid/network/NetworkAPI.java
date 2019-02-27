@@ -13,6 +13,7 @@ import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
 
 /**
@@ -65,6 +66,16 @@ public interface NetworkAPI {
      */
     @GET("tree/json")
     Observable<KnowledgeModel> getTree();
+
+    /**
+     * http://www.wanandroid.com/article/list/0/json?cid=60
+     * @param cid
+     * @return
+     */
+    @GET("article/list/{page}/json")
+    Observable<ResponseModel> getKnowledgeList(@Path("page") int page,
+                                               @Query("cid") int cid);
+
     // 收藏
 
     /**

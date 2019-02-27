@@ -2,9 +2,12 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent">
 
-    <fragment
-        android:id="@+id/login_login"
-        android:name="lxy.com.wanandroid.login.LoginFragment"
+    <FrameLayout
+        android:id="@+id/login_frag"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent">
+
+    </FrameLayout>
+
+
 </FrameLayout>

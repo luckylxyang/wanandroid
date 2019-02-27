@@ -1,10 +1,12 @@
 package lxy.com.wanandroid.knowledge;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -38,6 +40,15 @@ public class KnowledgeAdapter extends BaseQuickAdapter<KnowledgeModel.DataBean,B
             TextView tv = (TextView) inflater.inflate(R.layout.item_item_knowledge,flowLayout,false);
             tv.setText(bean.getName());
             flowLayout.addView(tv);
+            tv.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(mContext,KnowledgeChildActivity.class);
+                    intent.putExtra("name",bean.getName());
+                    intent.putExtra("id",bean.getId());
+                    mContext.startActivity(intent);
+                }
+            });
         }
     }
 }

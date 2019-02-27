@@ -1,16 +1,19 @@
 package lxy.com.wanandroid.login;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 
@@ -34,6 +37,7 @@ public class LoginFragment extends Fragment {
     private TextInputEditText etUsername;
     private TextInputEditText etPassword;
     private Button btnLogin;
+    private TextView tvRegister;
 
     @Nullable
     @Override
@@ -48,6 +52,7 @@ public class LoginFragment extends Fragment {
         etUsername = view.findViewById(R.id.login_et_username);
         etPassword = view.findViewById(R.id.login_et_password);
         btnLogin = view.findViewById(R.id.login_btn);
+        tvRegister = view.findViewById(R.id.login_register);
     }
 
     private void initListener(){
@@ -55,6 +60,13 @@ public class LoginFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 login();
+            }
+        });
+
+        tvRegister.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((LoginActivity)getActivity()).showRegister();
             }
         });
     }

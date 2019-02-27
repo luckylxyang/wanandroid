@@ -2,7 +2,6 @@ package lxy.com.wanandroid.base;
 
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
-import android.support.annotation.LayoutRes;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -26,7 +25,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_base);
 
-        initView();
+        init();
         addContextView();
         initOptions();
     }
@@ -40,7 +39,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     protected abstract void initOptions();
 
-    private void initView() {
+    private void init() {
         flContext = findViewById(R.id.base_activity_context);
 
         toolbar = findViewById(R.id.base_activity_toolbar);
@@ -62,6 +61,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     protected void setToolbarTitle(String title){
+        showToolbarBack(true);
         getSupportActionBar().setTitle(title);
     }
 

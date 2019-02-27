@@ -1,5 +1,6 @@
 package lxy.com.wanandroid.login;
 
+import android.support.v4.app.FragmentTransaction;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -20,23 +21,19 @@ import lxy.com.wanandroid.network.NetworkManager;
 
 /**
  * @author : lxy
- * date: 2019/1/29
+ *         date: 2019/1/29
  */
 
 public class LoginActivity extends BaseActivity {
 
     private static String TAG = "LoginActivity";
-
-    private EditText etUsername;
-    private EditText etPassword;
-    private Button btnLogin;
+    private LoginFragment loginFragment;
+    private RegisterFragment registerFragment;
 
     @Override
     protected void initOptions() {
-        showToolbarBack(true);
         setToolbarTitle(getString(R.string.login));
-//        initView();
-//        initListener();
+        showLogin();
     }
 
     @Override
@@ -44,62 +41,27 @@ public class LoginActivity extends BaseActivity {
         return R.layout.activity_login;
     }
 
-    private void initView(){
-        etUsername = findViewById(R.id.login_et_username);
-        etPassword = findViewById(R.id.login_et_password);
-        btnLogin = findViewById(R.id.login_btn);
-
-    }
-
-    private void initListener(){
-        btnLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                login();
-            }
-        });
-    }
-
-    private void login(){
-        String user = etUsername.getText().toString();
-        String pswd = etPassword.getText().toString();
-        if (TextUtils.isEmpty(user) || TextUtils.isEmpty(pswd)){
-            ToastUtils.show(R.string.login_toast);
-            return;
+    public void showLogin() {
+        if (loginFragment == null) {
+            loginFragment = new LoginFragment();
         }
-
-        NetworkManager.getManager().getServer().login(user,pswd)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<LoginModel>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-
-                    }
-
-                    @Override
-                    public void onNext(LoginModel loginModel) {
-                        Log.i(TAG,new Gson().toJson(loginModel));
-                        if (loginModel.getErrorCode() != Constants.NET_SUCCESS){
-                            ToastUtils.show(loginModel.getErrorMsg());
-                        }else {
-                            ToastUtils.show(R.string.login_success);
-                            LoginUtil.getInstance().setLoginInfo(new Gson().toJson(loginModel));
-//                            Intent intent = new Intent(LoginActivity.this,MainActivity.class);
-//                            startActivity(intent);
-                            finish();
-                        }
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        e.printStackTrace();
-                    }
-
-                    @Override
-                    public void onComplete() {
-
-                    }
-                });
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.add(R.id.login_frag, loginFragment);
+        if (registerFragment != null) {
+            transaction.hide(registerFragment);
+        }
+        transaction.commit();
     }
+
+    public void showRegister() {
+        if (registerFragment == null) {
+            registerFragment = new RegisterFragment();
+        }
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.hide(loginFragment);
+        transaction.add(R.id.login_frag, registerFragment);
+//        transaction.show(registerFragment);
+        transaction.commit();
+    }
+
 }

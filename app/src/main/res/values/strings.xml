@@ -9,11 +9,14 @@
     <string name="share">分享</string>
     <string name="other">用浏览器打开</string>
     <string name="login">登录</string>
+    <string name="login_register">还没有账号？去注册 ></string>
+    <string name="register">注册</string>
     <string name="login_toast">请输入用户名或密码</string>
     <string name="login_success">登录成功</string>
     <string name="login_out">请先登录</string>
     <string name="login_username_hint">请输入用户名</string>
     <string name="login_password_hint">请输入密码</string>
+    <string name="login_repassword_hint">请再次输入密码</string>
     <string name="collect_success">收藏成功</string>
     <string name="uncollect_success">取消收藏成功</string>
 </resources>
