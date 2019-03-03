@@ -1,47 +1,90 @@
 package lxy.com.wanandroid;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.internal.BottomNavigationItemView;
 import android.support.design.internal.BottomNavigationMenuView;
 import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.lang.reflect.Field;
 
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import lxy.com.wanandroid.base.BaseActivity;
-import lxy.com.wanandroid.home.view.HomeFragment;
+import lxy.com.wanandroid.base.Constants;
+import lxy.com.wanandroid.collect.CollectActivity;
+import lxy.com.wanandroid.home.HomeFragment;
 import lxy.com.wanandroid.knowledge.KnowledgeFragment;
-import lxy.com.wanandroid.officeaccount.OfficeAccountFragment;
+import lxy.com.wanandroid.login.LoginActivity;
+import lxy.com.wanandroid.login.LoginEvent;
+import lxy.com.wanandroid.login.LoginModel;
+import lxy.com.wanandroid.login.LoginUtil;
+import lxy.com.wanandroid.me.MeFragment;
+import lxy.com.wanandroid.network.NetworkManager;
 import lxy.com.wanandroid.project.ProjectFragment;
 
 
 /**
  * @author lxy
  */
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private BottomNavigationView tabLayout;
     private HomeFragment homeFragment;
     private KnowledgeFragment knowledgeFragment;
-    private OfficeAccountFragment officeAccountFragment;
+    private MeFragment meFragment;
     private ProjectFragment projectFragment;
+    private DrawerLayout drawer;
+    private View llNavHeader;
+    private TextView tvUserName;
+    private TextView tvUserEmail;
 
     @Override
     protected void initOptions() {
+        EventBus.getDefault().register(this);
         initView();
         initListener();
         addFragment(homeFragment,"HomeFragment");
     }
 
     private void initView() {
+        drawer = findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+
+
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
+        llNavHeader = navigationView.getHeaderView(0);
+        tvUserName = llNavHeader.findViewById(R.id.user_name);
+        tvUserEmail = llNavHeader.findViewById(R.id.user_email);
+
         tabLayout = findViewById(R.id.home_activity_navigate);
         disableShiftMode(tabLayout);
         homeFragment = new HomeFragment();
         knowledgeFragment = new KnowledgeFragment();
-        officeAccountFragment = new OfficeAccountFragment();
+        meFragment = new MeFragment();
         projectFragment = new ProjectFragment();
     }
 
@@ -59,9 +102,9 @@ public class MainActivity extends BaseActivity {
                         hiddenAllFragment();
                         addFragment(homeFragment,"HomeFragment");
                         break;
-                    case R.id.navigation_official_accounts:
+                    case R.id.navigation_me:
                         hiddenAllFragment();
-                        addFragment(officeAccountFragment,"OfficeAccountFragment");
+                        addFragment(meFragment,"MeFragment");
                         break;
                     case R.id.navigation_dashboard:
                         hiddenAllFragment();
@@ -76,6 +119,16 @@ public class MainActivity extends BaseActivity {
 
                 }
                 return true;
+            }
+        });
+
+        llNavHeader.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!LoginUtil.getInstance().checkLogin()){
+                    Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                }
             }
         });
     }
@@ -121,5 +174,101 @@ public class MainActivity extends BaseActivity {
         } catch (NoSuchFieldException | IllegalAccessException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void changeLogin(LoginEvent event){
+        if (event.isHasSuccess()){
+            tvUserName.setText(LoginUtil.getInstance().getLoginModel().getData().getUsername());
+            tvUserEmail.setText(LoginUtil.getInstance().getLoginModel().getData().getEmail());
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_hot) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.nav_collect) {
+            Intent intent = new Intent(MainActivity.this,CollectActivity.class);
+            startActivity(intent);
+        } else if (id == R.id.nav_login_out){
+            logout();
+
+        } else if (id == R.id.nav_){
+
+        } else if (id == R.id.nav_set){
+
+        }
+
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
+
+    private void logout() {
+        NetworkManager.getManager().getServer().logout()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<LoginModel>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(LoginModel model) {
+                        if (model.getErrorCode() == Constants.NET_SUCCESS){
+                            LoginUtil.getInstance().clearLoginInfo();
+                            tvUserEmail.setText("");
+                            tvUserName.setText(R.string.login_yet);
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
     }
 }

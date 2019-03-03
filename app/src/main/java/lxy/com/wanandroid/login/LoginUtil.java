@@ -2,6 +2,11 @@ package lxy.com.wanandroid.login;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.text.TextUtils;
+
+import com.google.gson.Gson;
+
+import org.greenrobot.eventbus.EventBus;
 
 import lxy.com.wanandroid.base.WanApplication;
 
@@ -45,6 +50,26 @@ public class LoginUtil {
         SharedPreferences.Editor editor = sp.edit();
         editor.putBoolean("isLogin",true);
         editor.putString("loginInfo",loginInfo);
+        editor.apply();
+        EventBus.getDefault().post(new LoginEvent(true));
+    }
+
+    public LoginModel getLoginModel(){
+        SharedPreferences sp = WanApplication.getContext().getSharedPreferences(SP_LOGIN, Context.MODE_PRIVATE);
+        String userInfo = sp.getString("loginInfo","");
+        if (TextUtils.isEmpty(userInfo)){
+            return new LoginModel();
+        }else {
+            return new Gson().fromJson(userInfo,LoginModel.class);
+        }
+
+    }
+
+    public void clearLoginInfo() {
+        SharedPreferences sp = WanApplication.getContext().getSharedPreferences(SP_LOGIN, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putBoolean("isLogin",false);
+        editor.putString("loginInfo","");
         editor.apply();
     }
 }

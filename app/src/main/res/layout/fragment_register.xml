@@ -15,7 +15,7 @@
             android:layout_height="wrap_content">
 
             <android.support.design.widget.TextInputEditText
-                android:id="@+id/login_et_username"
+                android:id="@+id/register_et_username"
                 android:hint="@string/login_username_hint"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
@@ -27,7 +27,7 @@
             android:layout_height="wrap_content">
 
             <android.support.design.widget.TextInputEditText
-                android:id="@+id/login_et_password"
+                android:id="@+id/register_et_password"
                 android:hint="@string/login_password_hint"
                 android:inputType="textPassword"
                 android:layout_width="match_parent"
@@ -39,7 +39,7 @@
             android:layout_height="wrap_content">
 
             <android.support.design.widget.TextInputEditText
-                android:id="@+id/login_et_repassword"
+                android:id="@+id/register_et_repassword"
                 android:hint="@string/login_repassword_hint"
                 android:inputType="textPassword"
                 android:layout_width="match_parent"
@@ -47,7 +47,7 @@
         </android.support.design.widget.TextInputLayout>
 
         <Button
-            android:id="@+id/login_btn"
+            android:id="@+id/register_btn"
             android:text="@string/register"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />

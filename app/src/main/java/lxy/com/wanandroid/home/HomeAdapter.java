@@ -1,12 +1,9 @@
 package lxy.com.wanandroid.home;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
-import android.view.View;
-import android.widget.AdapterView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
@@ -20,9 +17,6 @@ import io.reactivex.schedulers.Schedulers;
 import lxy.com.wanandroid.R;
 import lxy.com.wanandroid.base.ResponseModel;
 import lxy.com.wanandroid.base.ToastUtils;
-import lxy.com.wanandroid.baseadapter.MultiTypeBaseAdapter;
-import lxy.com.wanandroid.baseadapter.MultiTypeSupport;
-import lxy.com.wanandroid.baseadapter.ViewHolder;
 import lxy.com.wanandroid.home.model.ArticleModel;
 import lxy.com.wanandroid.login.LoginActivity;
 import lxy.com.wanandroid.network.NetworkManager;
@@ -80,7 +74,7 @@ public class HomeAdapter extends BaseQuickAdapter<ArticleModel,BaseViewHolder> {
                     public void onNext(ResponseModel model) {
                         try {
                             if (model.getErrorCode() != 0) {
-                                ToastUtils.show(R.string.login_out);
+                                ToastUtils.show(R.string.login_yet);
                                 Intent intent = new Intent(mContext, LoginActivity.class);
                                 mContext.startActivity(intent);
                             } else {
@@ -121,7 +115,7 @@ public class HomeAdapter extends BaseQuickAdapter<ArticleModel,BaseViewHolder> {
                     public void onNext(ResponseModel model) {
                         try {
                             if (model.getErrorCode() != 0) {
-                                ToastUtils.show(R.string.login_out);
+                                ToastUtils.show(R.string.login_yet);
                                 Intent intent = new Intent(mContext, LoginActivity.class);
                                 mContext.startActivity(intent);
                             } else {

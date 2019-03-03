@@ -77,7 +77,7 @@ public class HomeArticleAdapter extends BaseAdapter<ArticleModel> {
                     public void onNext(ResponseModel model) {
                         try {
                             if (model.getErrorCode() != 0) {
-                                ToastUtils.show(context, R.string.login_out);
+                                ToastUtils.show(context, R.string.login_yet);
                                 Intent intent = new Intent(context, LoginActivity.class);
                                 context.startActivity(intent);
                             } else {
@@ -118,7 +118,7 @@ public class HomeArticleAdapter extends BaseAdapter<ArticleModel> {
                     public void onNext(ResponseModel model) {
                         try {
                             if (model.getErrorCode() != 0) {
-                                ToastUtils.show(context, R.string.login_out);
+                                ToastUtils.show(context, R.string.login_yet);
                                 Intent intent = new Intent(context, LoginActivity.class);
                                 context.startActivity(intent);
                             } else {

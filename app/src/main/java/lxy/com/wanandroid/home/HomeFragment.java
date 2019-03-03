@@ -1,4 +1,4 @@
-package lxy.com.wanandroid.home.view;
+package lxy.com.wanandroid.home;
 
 import android.annotation.TargetApi;
 import android.content.Intent;
@@ -164,12 +164,15 @@ public class HomeFragment extends Fragment {
                             totalPage = model.getData().getPageCount();
                             ++page;
                             articleAdapter.notifyDataSetChanged();
+                        }else {
+                            refreshLayout.setRefreshing(false);
                         }
                     }
 
                     @Override
                     public void onError(Throwable e) {
                         ToastUtils.show(e.getMessage());
+                        refreshLayout.setRefreshing(false);
                     }
 
                     @Override

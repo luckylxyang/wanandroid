@@ -2,6 +2,7 @@ package lxy.com.wanandroid.network;
 
 import io.reactivex.Observable;
 import lxy.com.wanandroid.base.ResponseModel;
+import lxy.com.wanandroid.collect.CollectModel;
 import lxy.com.wanandroid.home.model.ArticleModel;
 import lxy.com.wanandroid.home.model.BannerModel;
 import lxy.com.wanandroid.knowledge.KnowledgeModel;
@@ -36,6 +37,26 @@ public interface NetworkAPI {
     @FormUrlEncoded
     Observable<LoginModel> login(@Field("username") String username,
                                  @Field("password") String password);
+
+    /**
+     * http://www.wanandroid.com/user/logout/json
+     * @return
+     */
+    @GET("user/logout/json")
+    Observable<LoginModel> logout();
+
+    /**
+     * http://www.wanandroid.com/user/register
+     * @param username
+     * @param password
+     * @param repassword
+     * @return
+     */
+    @POST("user/register")
+    @FormUrlEncoded
+    Observable<LoginModel> register(@Field("username") String username,
+                                    @Field("password") String password,
+                                    @Field("repassword") String repassword);
 
     /**
      * http://www.wanandroid.com/banner/json
@@ -109,5 +130,12 @@ public interface NetworkAPI {
     @POST("lg/uncollect_originId/{id}/json")
     Observable<ResponseModel> unCollectArticle(@Path("id") int id);
 
+    /**
+     * http://www.wanandroid.com/lg/collect/list/0/json
+     * @param page
+     * @return
+     */
+    @GET("/lg/collect/list/{page}/json")
+    Observable<CollectModel> getMyCollectList(@Path("page") int page);
 
 }

@@ -42,26 +42,37 @@ public class LoginActivity extends BaseActivity {
     }
 
     public void showLogin() {
+
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         if (loginFragment == null) {
             loginFragment = new LoginFragment();
+            transaction.add(R.id.login_frag, loginFragment);
+        } else {
+            transaction.show(loginFragment);
         }
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.add(R.id.login_frag, loginFragment);
         if (registerFragment != null) {
             transaction.hide(registerFragment);
         }
+        transaction.setCustomAnimations(FragmentTransaction.TRANSIT_ENTER_MASK, FragmentTransaction.TRANSIT_EXIT_MASK);
         transaction.commit();
+        setToolbarTitle(getString(R.string.login));
+        Log.i(TAG, getSupportFragmentManager().getFragments().size() + "");
     }
 
     public void showRegister() {
-        if (registerFragment == null) {
-            registerFragment = new RegisterFragment();
-        }
+
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.hide(loginFragment);
-        transaction.add(R.id.login_frag, registerFragment);
-//        transaction.show(registerFragment);
+        transaction.setCustomAnimations(R.anim.fragment_enter, R.anim.fragment_exit);
+        if (registerFragment == null) {
+            registerFragment = new RegisterFragment();
+            transaction.add(R.id.login_frag, registerFragment);
+        } else {
+            transaction.show(registerFragment);
+        }
         transaction.commit();
+        setToolbarTitle(getString(R.string.register));
+        Log.i(TAG, getSupportFragmentManager().getFragments().size() + "");
     }
 
 }
