@@ -96,7 +96,6 @@ public class ProjectFragment extends Fragment {
 
                     @Override
                     public void onNext(ResponseModel model) {
-                        ToastUtils.show(getContext(),model.getErrorMsg());
                         Log.i("homeArticle",model.getData().getSize() + " hjkkhlk" );
                         if (model.getErrorCode() == Constants.NET_SUCCESS){
                             if (page == 0){

@@ -18,12 +18,14 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     private FrameLayout flContext;
     protected Toolbar toolbar;
+    protected Bundle saveBundle;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_base);
+        saveBundle = savedInstanceState;
 
         init();
         addContextView();

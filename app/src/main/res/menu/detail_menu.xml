@@ -7,6 +7,11 @@
         android:icon="@drawable/ic_detail_refresh"
         app:showAsAction="ifRoom"/>
 
+    <item android:id="@+id/detail_dot"
+        android:title="刷新"
+        android:icon="@drawable/ic_toolbar_dot"
+        app:showAsAction="ifRoom"/>
+
     <item android:id="@+id/detail_love"
         android:title="@string/like"
         app:showAsAction="never" />

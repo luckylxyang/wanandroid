@@ -1,24 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <WebView
-        android:id="@+id/activity_detail_web"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    </WebView>
+        <WebView
+            android:id="@+id/activity_detail_web"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-    <com.wang.avi.AVLoadingIndicatorView
-        android:id="@+id/detail_activity_loading"
-        style="@style/AVLoadingIndicatorView.Small"
-        android:visibility="visible"
-        app:indicatorName="BallSpinFadeLoaderIndicator"
-        app:indicatorColor="@color/colorPrimary"
-        android:layout_centerInParent="true"
-        android:layout_width="40dp"
-        android:layout_height="40dp" />
+        </WebView>
 
-</RelativeLayout>
+        <com.wang.avi.AVLoadingIndicatorView
+            android:id="@+id/detail_activity_loading"
+            style="@style/AVLoadingIndicatorView.Small"
+            android:visibility="visible"
+            app:indicatorName="BallSpinFadeLoaderIndicator"
+            app:indicatorColor="@color/colorPrimary"
+            android:layout_gravity="center"
+            android:layout_width="40dp"
+            android:layout_height="40dp" />
+
+        <ImageView
+            android:id="@+id/detail_activity_error"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_net_error"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </FrameLayout>
+
+</android.support.design.widget.CoordinatorLayout>

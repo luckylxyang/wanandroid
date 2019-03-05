@@ -13,20 +13,24 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity"
+            android:configChanges="orientation">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ArticleDetailActivity" />
+        <activity android:name=".ArticleDetailActivity"
+            android:configChanges="orientation"/>
         <activity android:name=".login.LoginActivity" />
         <activity android:name=".knowledge.KnowledgeChildActivity" />
         <activity
             android:name=".collect.CollectActivity"
             android:label="@string/activity_collect"
             android:theme="@style/AppTheme"></activity>
+        <activity android:name=".search.SearchActivity" />
+        <activity android:name=".search.HotActivity" />
     </application>
 
 </manifest>

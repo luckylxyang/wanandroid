@@ -8,14 +8,21 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomSheetBehavior;
+import android.support.design.widget.BottomSheetDialog;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
 import android.webkit.WebChromeClient;
+import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.ViewAnimator;
 
 import com.google.gson.Gson;
@@ -43,6 +50,10 @@ public class ArticleDetailActivity extends BaseActivity {
     private AVLoadingIndicatorView loadingView;
     private ArticleModel model;
     private BannerModel.DataBean bannerModel;
+    private BottomSheetDialog sheetDialog;
+    private ImageView ivError;
+    private boolean isError = false;
+    private BottomSheetBehavior behavior;
 
 
     @Override
@@ -67,14 +78,27 @@ public class ArticleDetailActivity extends BaseActivity {
             model = new Gson().fromJson(url, ArticleModel.class);
             getSupportActionBar().setTitle(model.getTitle());
             webView.loadUrl(model.getLink());
+            if (model.isCollect()){
+                ((TextView)toolbar.findViewById(R.id.detail_love)).setText("取消收藏");
+            }
         }else {
             bannerModel = new Gson().fromJson(url,BannerModel.DataBean.class);
             getSupportActionBar().setTitle(bannerModel.getTitle());
             webView.loadUrl(bannerModel.getUrl());
         }
-
-
+        ivError = findViewById(R.id.detail_activity_error);
         initWebView();
+        initDialog();
+    }
+
+    private void initDialog() {
+        sheetDialog = new BottomSheetDialog(this);
+        View view = View.inflate(this,R.layout.detail_bottom_sheet,null);
+        sheetDialog.setContentView(view);
+        behavior = BottomSheetBehavior.from(view.findViewById(R.id.bottom_sheet));
+        behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+//        sheetDialog.show();
+
     }
 
     private void initListener() {
@@ -92,7 +116,18 @@ public class ArticleDetailActivity extends BaseActivity {
                     break;
                 case R.id.detail_refresh:
                     refreshWebPage();
+                    isError = false;
+                    loadingView.show();
                     webView.reload();
+                    break;
+                case R.id.detail_dot:
+
+                    if (behavior.getState() == BottomSheetBehavior.STATE_HIDDEN){
+                        behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                    }else if (behavior.getState() == BottomSheetBehavior.STATE_EXPANDED){
+                        behavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+                    }
+
                     break;
                 default:
                     break;
@@ -110,10 +145,14 @@ public class ArticleDetailActivity extends BaseActivity {
 
 
     private void initWebView() {
+        WebSettings settings = webView.getSettings();
+        settings.setJavaScriptEnabled(true);
         webView.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
                 view.loadUrl(request.getUrl().getPath());
+                webView.setVisibility(View.VISIBLE);
+                loadingView.show();
                 return true;
             }
 
@@ -121,12 +160,31 @@ public class ArticleDetailActivity extends BaseActivity {
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);
                 loadingView.show();
+                ivError.setVisibility(View.GONE);
             }
 
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
                 loadingView.hide();
+                if (isError){
+                    ivError.setVisibility(View.VISIBLE);
+                    view.setVisibility(View.INVISIBLE);
+                }
+            }
+
+            @Override
+            public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
+                super.onReceivedError(view, request, error);
+                isError = true;
+
+            }
+
+            @Override
+            public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
+                super.onReceivedError(view, errorCode, description, failingUrl);
+                isError = true;
+
             }
         });
     }
@@ -135,5 +193,17 @@ public class ArticleDetailActivity extends BaseActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         toolbar.inflateMenu(R.menu.detail_menu);
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (event.getAction() == KeyEvent.ACTION_DOWN){
+            if (webView.canGoBack()){
+                webView.goBack();
+                return true;
+            }
+        }
+        return super.onKeyDown(keyCode, event);
+
     }
 }

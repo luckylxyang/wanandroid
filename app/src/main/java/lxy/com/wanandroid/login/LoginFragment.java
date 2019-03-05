@@ -96,8 +96,6 @@ public class LoginFragment extends Fragment {
                         }else {
                             ToastUtils.show(R.string.login_success);
                             LoginUtil.getInstance().setLoginInfo(new Gson().toJson(loginModel));
-//                            Intent intent = new Intent(LoginActivity.this,MainActivity.class);
-//                            startActivity(intent);
                             getActivity().finish();
                         }
                     }

@@ -1,6 +1,7 @@
 package lxy.com.wanandroid.baseadapter;
 
 import android.content.Context;
+import android.support.annotation.LayoutRes;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,7 +29,7 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<ViewHolder> {
     private int ITEM_COMMON = 1;
     private int ITEM_FOOTER = 2;
 
-    public BaseAdapter(Context context, List<T> list, int layoutId) {
+    public BaseAdapter(Context context, List<T> list,@LayoutRes int layoutId) {
         this.context = context;
         this.list = list;
         this.layoutId = layoutId;

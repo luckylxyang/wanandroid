@@ -2,6 +2,7 @@ package lxy.com.wanandroid;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.internal.BottomNavigationItemView;
 import android.support.design.internal.BottomNavigationMenuView;
@@ -39,6 +40,7 @@ import lxy.com.wanandroid.login.LoginUtil;
 import lxy.com.wanandroid.me.MeFragment;
 import lxy.com.wanandroid.network.NetworkManager;
 import lxy.com.wanandroid.project.ProjectFragment;
+import lxy.com.wanandroid.search.HotActivity;
 
 
 /**
@@ -55,13 +57,37 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     private View llNavHeader;
     private TextView tvUserName;
     private TextView tvUserEmail;
+    private String TAGFrag = "HomeFragment";
 
     @Override
     protected void initOptions() {
+
         EventBus.getDefault().register(this);
         initView();
         initListener();
-        addFragment(homeFragment,"HomeFragment");
+        if (saveBundle != null){
+            TAGFrag = saveBundle.getString("showFrag","HomeFragment");
+
+        }
+        switch (TAGFrag){
+            case "HomeFragment":
+                hiddenAllFragment();
+                addFragment(homeFragment,"HomeFragment");
+                break;
+            case "MeFragment":
+                hiddenAllFragment();
+                addFragment(meFragment,"MeFragment");
+                break;
+            case "KnowledgeFragment":
+                hiddenAllFragment();
+                addFragment(knowledgeFragment,"KnowledgeFragment");
+                break;
+            case "ProjectFragment":
+                hiddenAllFragment();
+                addFragment(projectFragment,"ProjectFragment");
+                break;
+        }
+
     }
 
     private void initView() {
@@ -148,6 +174,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         }else {
             transition.show(frag);
         }
+        TAGFrag = tag;
         transition.commit();
     }
 
@@ -215,6 +242,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_hot) {
+            Intent intent = new Intent(this, HotActivity.class);
+            startActivity(intent);
             return true;
         }
 
@@ -240,6 +269,13 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("showFrag",TAGFrag);
+    }
+
 
     private void logout() {
         NetworkManager.getManager().getServer().logout()

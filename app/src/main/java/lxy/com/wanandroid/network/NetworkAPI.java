@@ -7,6 +7,7 @@ import lxy.com.wanandroid.home.model.ArticleModel;
 import lxy.com.wanandroid.home.model.BannerModel;
 import lxy.com.wanandroid.knowledge.KnowledgeModel;
 import lxy.com.wanandroid.login.LoginModel;
+import lxy.com.wanandroid.search.HotModel;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Field;
@@ -137,5 +138,12 @@ public interface NetworkAPI {
      */
     @GET("/lg/collect/list/{page}/json")
     Observable<CollectModel> getMyCollectList(@Path("page") int page);
+
+    /**
+     * http://www.wanandroid.com/hotkey/json
+     * @return
+     */
+    @GET("hotkey/json")
+    Observable<HotModel> getHotTag();
 
 }
