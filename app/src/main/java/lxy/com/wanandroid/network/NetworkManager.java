@@ -17,7 +17,7 @@ public class NetworkManager {
 
     private static NetworkManager manager;
     private OkHttpClient client;
-    private String baseUrl = "http://www.wanandroid.com/";
+    private String baseUrl = "https://www.wanandroid.com/";
 
     private NetworkManager(){
         init();

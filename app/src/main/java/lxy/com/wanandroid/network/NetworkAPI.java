@@ -146,4 +146,15 @@ public interface NetworkAPI {
     @GET("hotkey/json")
     Observable<HotModel> getHotTag();
 
+    /**
+     * https://www.wanandroid.com/article/query/0/json
+     * @param page
+     * @param key
+     * @return
+     */
+    @POST("/article/query/{page}/json")
+    @FormUrlEncoded
+    Observable<ResponseModel> queryByKey(@Path("page") int page,
+                                         @Field("k") String key);
+
 }

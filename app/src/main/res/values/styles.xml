@@ -12,6 +12,12 @@
         <item name="colorControlNormal">@color/white</item>
         <item name="overlapAnchor">false</item>
     </style>
+    
+    <style name="swipe_theme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:colorBackgroundCacheHint">@null</item>
+        <item name="android:windowIsTranslucent">true</item>
+    </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 

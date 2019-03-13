@@ -2,10 +2,11 @@ package lxy.com.wanandroid.knowledge;
 
 import android.annotation.TargetApi;
 import android.content.Intent;
-import android.net.NetworkRequest;
 import android.os.Build;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
+import android.view.MotionEvent;
 import android.view.View;
 
 import com.google.gson.Gson;
@@ -32,7 +33,7 @@ import lxy.com.wanandroid.network.NetworkManager;
  * date: 2019/2/27
  */
 
-public class KnowledgeChildActivity extends BaseActivity {
+public class KnowledgeChildActivity extends BaseActivity{
 
     private RecyclerView rvKnowledge;
     private int page = 0;
@@ -83,6 +84,7 @@ public class KnowledgeChildActivity extends BaseActivity {
     }
 
     private void initView(){
+
         rvKnowledge = findViewById(R.id.knowledge_child_recycle);
         dataList = new ArrayList<>();
         adapter = new HomeArticleAdapter(this,dataList,R.layout.item_home_article);
@@ -124,4 +126,5 @@ public class KnowledgeChildActivity extends BaseActivity {
                     }
                 });
     }
+
 }

@@ -1,15 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <lxy.com.wanandroid.knowledge.FlowLayout
-        android:id="@+id/hot_flow"
-        android:layout_marginHorizontal="10dp"
-        android:layout_marginVertical="15dp"
+    <ScrollView
+        android:id="@+id/hot_scroll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-    </lxy.com.wanandroid.knowledge.FlowLayout>
-</android.support.constraint.ConstraintLayout>
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <lxy.com.wanandroid.knowledge.FlowLayout
+                android:id="@+id/hot_flow"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            </lxy.com.wanandroid.knowledge.FlowLayout>
+
+            <TextView
+                android:text="@string/search_history"
+                android:textSize="14sp"
+                android:layout_marginVertical="15dp"
+                android:layout_marginStart="10dp"
+                android:textColor="@color/textBlack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <lxy.com.wanandroid.knowledge.FlowLayout
+                android:id="@+id/hot_flow_history"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            </lxy.com.wanandroid.knowledge.FlowLayout>
+        </LinearLayout>
+    </ScrollView>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/hot_recycler"
+        android:background="@color/gray"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </android.support.v7.widget.RecyclerView>
+
+</FrameLayout>

@@ -6,14 +6,17 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.util.DisplayMetrics;
 import android.view.KeyEvent;
 import android.view.Menu;
+import android.view.MotionEvent;
 import android.view.View;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceError;
@@ -33,6 +36,7 @@ import org.json.JSONObject;
 import lxy.com.wanandroid.R;
 import lxy.com.wanandroid.base.BaseActivity;
 import lxy.com.wanandroid.base.Constants;
+import lxy.com.wanandroid.base.SwipeBackActivity;
 import lxy.com.wanandroid.home.model.ArticleModel;
 import lxy.com.wanandroid.home.model.BannerModel;
 import lxy.com.wanandroid.utils.DialogUtils;
@@ -43,7 +47,7 @@ import lxy.com.wanandroid.utils.DialogUtils;
  * @author lxy
  */
 
-public class ArticleDetailActivity extends BaseActivity {
+public class ArticleDetailActivity extends SwipeBackActivity {
 
     private WebView webView;
     private String url;
@@ -54,6 +58,7 @@ public class ArticleDetailActivity extends BaseActivity {
     private ImageView ivError;
     private boolean isError = false;
     private BottomSheetBehavior behavior;
+    private View decorView;
 
 
     @Override
@@ -69,6 +74,7 @@ public class ArticleDetailActivity extends BaseActivity {
     }
 
     private void initView() {
+        decorView = getWindow().getDecorView();
         showToolbarBack(true);
         webView = findViewById(R.id.activity_detail_web);
         loadingView = findViewById(R.id.detail_activity_loading);
@@ -89,6 +95,7 @@ public class ArticleDetailActivity extends BaseActivity {
         ivError = findViewById(R.id.detail_activity_error);
         initWebView();
         initDialog();
+
     }
 
     private void initDialog() {
@@ -205,5 +212,50 @@ public class ArticleDetailActivity extends BaseActivity {
         }
         return super.onKeyDown(keyCode, event);
 
+    }
+
+    float startX = 0f;
+    float startY = 0f;
+    boolean canFinish = false;
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        switch (event.getAction()){
+            case MotionEvent.ACTION_DOWN:
+                startX = event.getX();
+                startY = event.getY();
+                break;
+            case MotionEvent.ACTION_MOVE:
+                float subX = event.getX() - startX;
+                if (subX > 0) {
+                    decorView.setX(subX);
+                }
+                isBack(event);
+                break;
+            case MotionEvent.ACTION_UP:
+                if (canFinish){
+                    finish();
+                }
+                break;
+        }
+        return super.onTouchEvent(event);
+    }
+
+    private void isBack(MotionEvent event){
+        float x = event.getX();
+        float y = event.getY();
+
+        if (startX > 100){
+            return ;
+        }
+        if (Math.abs(startY - y) > 100){
+            return ;
+        }
+        DisplayMetrics outMe = new DisplayMetrics();
+        getWindow().getWindowManager().getDefaultDisplay().getMetrics(outMe);
+        int width = outMe.widthPixels;
+        if (x - startX > width / 3){
+            canFinish = true;
+        }
+        return ;
     }
 }
