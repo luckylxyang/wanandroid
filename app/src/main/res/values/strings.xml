@@ -30,9 +30,10 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_tv_search">搜索</string>
-    <string name="action_tv_hot">热门</string>
+    <string name="action_tv_hot">热门搜索</string>
     <string name="activity_collect">我的收藏</string>
     <string name="search_hot">搜索...</string>
     <string name="search_history">历史搜索</string>
     <string name="search_result_no">未搜索到相关文章</string>
+    <string name="item_empty">暂无数据</string>
 </resources>

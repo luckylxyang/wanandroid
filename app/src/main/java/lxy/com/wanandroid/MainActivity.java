@@ -40,7 +40,7 @@ import lxy.com.wanandroid.login.LoginUtil;
 import lxy.com.wanandroid.me.MeFragment;
 import lxy.com.wanandroid.network.NetworkManager;
 import lxy.com.wanandroid.project.ProjectFragment;
-import lxy.com.wanandroid.search.HotActivity;
+import lxy.com.wanandroid.search.SearchActivity;
 
 
 /**
@@ -242,7 +242,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_hot) {
-            Intent intent = new Intent(this, HotActivity.class);
+            Intent intent = new Intent(this, SearchActivity.class);
             startActivity(intent);
             return true;
         }

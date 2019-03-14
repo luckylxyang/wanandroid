@@ -30,7 +30,6 @@
             android:label="@string/activity_collect"
             android:theme="@style/AppTheme"></activity>
         <activity android:name=".search.SearchActivity" />
-        <activity android:name=".search.HotActivity" />
     </application>
 
 </manifest>

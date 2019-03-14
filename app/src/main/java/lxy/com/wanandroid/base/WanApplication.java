@@ -3,6 +3,8 @@ package lxy.com.wanandroid.base;
 import android.app.Application;
 import android.content.Context;
 
+import lxy.com.wanandroid.db.DBHelper;
+
 /**
  * Creator : lxy
  * date: 2019/1/30

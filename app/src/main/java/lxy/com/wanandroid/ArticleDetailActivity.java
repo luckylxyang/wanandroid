@@ -33,13 +33,10 @@ import com.wang.avi.AVLoadingIndicatorView;
 
 import org.json.JSONObject;
 
-import lxy.com.wanandroid.R;
-import lxy.com.wanandroid.base.BaseActivity;
 import lxy.com.wanandroid.base.Constants;
 import lxy.com.wanandroid.base.SwipeBackActivity;
 import lxy.com.wanandroid.home.model.ArticleModel;
 import lxy.com.wanandroid.home.model.BannerModel;
-import lxy.com.wanandroid.utils.DialogUtils;
 
 /**
  * date: 2019/1/25
