@@ -17,7 +17,7 @@
         android:title="@string/title_project" />
 
     <item
-        android:id="@+id/navigation_me"
+        android:id="@+id/navigation_official_accounts"
         android:icon="@drawable/main_knowledge_system"
         android:title="@string/official_accounts" />
 </menu>

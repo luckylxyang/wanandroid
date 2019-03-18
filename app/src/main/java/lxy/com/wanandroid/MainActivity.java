@@ -13,6 +13,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,6 +31,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import lxy.com.wanandroid.base.BaseActivity;
 import lxy.com.wanandroid.base.Constants;
+import lxy.com.wanandroid.base.FragmentInterface;
 import lxy.com.wanandroid.collect.CollectActivity;
 import lxy.com.wanandroid.home.HomeFragment;
 import lxy.com.wanandroid.knowledge.KnowledgeFragment;
@@ -37,9 +39,10 @@ import lxy.com.wanandroid.login.LoginActivity;
 import lxy.com.wanandroid.login.LoginEvent;
 import lxy.com.wanandroid.login.LoginModel;
 import lxy.com.wanandroid.login.LoginUtil;
-import lxy.com.wanandroid.me.MeFragment;
+import lxy.com.wanandroid.officeAccount.OfficeAccountActivity;
 import lxy.com.wanandroid.network.NetworkManager;
 import lxy.com.wanandroid.project.ProjectFragment;
+import lxy.com.wanandroid.search.HotActivity;
 import lxy.com.wanandroid.search.SearchActivity;
 
 
@@ -51,7 +54,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     private BottomNavigationView tabLayout;
     private HomeFragment homeFragment;
     private KnowledgeFragment knowledgeFragment;
-    private MeFragment meFragment;
     private ProjectFragment projectFragment;
     private DrawerLayout drawer;
     private View llNavHeader;
@@ -65,26 +67,22 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         EventBus.getDefault().register(this);
         initView();
         initListener();
-        if (saveBundle != null){
-            TAGFrag = saveBundle.getString("showFrag","HomeFragment");
+        if (saveBundle != null) {
+            TAGFrag = saveBundle.getString("showFrag", "HomeFragment");
 
         }
-        switch (TAGFrag){
+        switch (TAGFrag) {
             case "HomeFragment":
                 hiddenAllFragment();
-                addFragment(homeFragment,"HomeFragment");
-                break;
-            case "MeFragment":
-                hiddenAllFragment();
-                addFragment(meFragment,"MeFragment");
+                addFragment(homeFragment, "HomeFragment");
                 break;
             case "KnowledgeFragment":
                 hiddenAllFragment();
-                addFragment(knowledgeFragment,"KnowledgeFragment");
+                addFragment(knowledgeFragment, "KnowledgeFragment");
                 break;
             case "ProjectFragment":
                 hiddenAllFragment();
-                addFragment(projectFragment,"ProjectFragment");
+                addFragment(projectFragment, "ProjectFragment");
                 break;
         }
 
@@ -98,7 +96,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         toggle.syncState();
 
 
-
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
@@ -110,7 +107,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         disableShiftMode(tabLayout);
         homeFragment = new HomeFragment();
         knowledgeFragment = new KnowledgeFragment();
-        meFragment = new MeFragment();
         projectFragment = new ProjectFragment();
     }
 
@@ -119,26 +115,41 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         return R.layout.activity_main;
     }
 
-    private void initListener(){
+    long firstClick = 0L;
+
+    private void initListener() {
+
         tabLayout.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()){
+                switch (item.getItemId()) {
                     case R.id.navigation_home:
+                        if (TAGFrag.equals("HomeFragment")){
+                            smoothToTop(homeFragment);
+                            break;
+                        }
                         hiddenAllFragment();
-                        addFragment(homeFragment,"HomeFragment");
+                        addFragment(homeFragment, "HomeFragment");
                         break;
-                    case R.id.navigation_me:
-                        hiddenAllFragment();
-                        addFragment(meFragment,"MeFragment");
+                    case R.id.navigation_official_accounts:
+                        Intent intent = new Intent(MainActivity.this, OfficeAccountActivity.class);
+                        startActivity(intent);
                         break;
                     case R.id.navigation_dashboard:
+                        if (TAGFrag.equals("KnowledgeFragment")){
+                            smoothToTop(knowledgeFragment);
+                            break;
+                        }
                         hiddenAllFragment();
-                        addFragment(knowledgeFragment,"KnowledgeFragment");
+                        addFragment(knowledgeFragment, "KnowledgeFragment");
                         break;
                     case R.id.navigation_notifications:
+                        if (TAGFrag.equals("ProjectFragment")){
+                            smoothToTop(projectFragment);
+                            break;
+                        }
                         hiddenAllFragment();
-                        addFragment(projectFragment,"ProjectFragment");
+                        addFragment(projectFragment, "ProjectFragment");
                         break;
                     default:
                         break;
@@ -151,7 +162,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         llNavHeader.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!LoginUtil.getInstance().checkLogin()){
+                if (!LoginUtil.getInstance().checkLogin()) {
                     Intent intent = new Intent(MainActivity.this, LoginActivity.class);
                     startActivity(intent);
                 }
@@ -159,7 +170,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         });
     }
 
-    private void hiddenAllFragment(){
+    private void hiddenAllFragment() {
         FragmentTransaction transition = getSupportFragmentManager().beginTransaction();
         for (Fragment frag : getSupportFragmentManager().getFragments()) {
             transition.hide(frag);
@@ -167,19 +178,30 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         transition.commit();
     }
 
-    private void addFragment(Fragment frag,String tag){
+    private void addFragment(Fragment frag, String tag) {
         FragmentTransaction transition = getSupportFragmentManager().beginTransaction();
-        if (!getSupportFragmentManager().getFragments().contains(frag)){
-            transition.add(R.id.home_activity_content,frag,tag);
-        }else {
+        if (!getSupportFragmentManager().getFragments().contains(frag)) {
+            transition.add(R.id.home_activity_content, frag, tag);
+        } else {
             transition.show(frag);
         }
         TAGFrag = tag;
         transition.commit();
     }
 
+    private void smoothToTop(FragmentInterface frag){
+        long second = System.currentTimeMillis();
+        Log.i("second",second - firstClick + "");
+        if (second - firstClick < 1500) {
+            homeFragment.smoothToTop();
+        }else {
+            firstClick = second;
+        }
+    }
+
     /**
      * Java反射得到BottomNavigationMenuView，关闭item >= 4 时的默认效果
+     *
      * @param navigationView
      */
     @SuppressLint("RestrictedApi")
@@ -210,8 +232,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void changeLogin(LoginEvent event){
-        if (event.isHasSuccess()){
+    public void changeLogin(LoginEvent event) {
+        if (event.isHasSuccess()) {
             tvUserName.setText(LoginUtil.getInstance().getLoginModel().getData().getUsername());
             tvUserEmail.setText(LoginUtil.getInstance().getLoginModel().getData().getEmail());
         }
@@ -242,6 +264,10 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_hot) {
+            Intent intent = new Intent(this, HotActivity.class);
+            startActivity(intent);
+            return true;
+        } else if (id == R.id.action_search) {
             Intent intent = new Intent(this, SearchActivity.class);
             startActivity(intent);
             return true;
@@ -255,14 +281,14 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         int id = item.getItemId();
 
         if (id == R.id.nav_collect) {
-            Intent intent = new Intent(MainActivity.this,CollectActivity.class);
+            Intent intent = new Intent(MainActivity.this, CollectActivity.class);
             startActivity(intent);
-        } else if (id == R.id.nav_login_out){
+        } else if (id == R.id.nav_login_out) {
             logout();
 
-        } else if (id == R.id.nav_){
+        } else if (id == R.id.nav_) {
 
-        } else if (id == R.id.nav_set){
+        } else if (id == R.id.nav_set) {
 
         }
 
@@ -273,7 +299,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putString("showFrag",TAGFrag);
+        outState.putString("showFrag", TAGFrag);
     }
 
 
@@ -289,7 +315,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
                     @Override
                     public void onNext(LoginModel model) {
-                        if (model.getErrorCode() == Constants.NET_SUCCESS){
+                        if (model.getErrorCode() == Constants.NET_SUCCESS) {
                             LoginUtil.getInstance().clearLoginInfo();
                             tvUserEmail.setText("");
                             tvUserName.setText(R.string.login_yet);

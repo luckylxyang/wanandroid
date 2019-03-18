@@ -4,7 +4,7 @@
     <string name="title_home">首页</string>
     <string name="title_knowledge_system">知识体系</string>
     <string name="title_project">项目</string>
-    <string name="official_accounts">我</string>
+    <string name="official_accounts">公众号</string>
     <string name="like">收藏</string>
     <string name="share">分享</string>
     <string name="other">用浏览器打开</string>
@@ -36,4 +36,5 @@
     <string name="search_history">历史搜索</string>
     <string name="search_result_no">未搜索到相关文章</string>
     <string name="item_empty">暂无数据</string>
+    <string name="hot_website">常用网站</string>
 </resources>

@@ -5,8 +5,6 @@ import android.content.Intent;
 import android.os.Build;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.DisplayMetrics;
-import android.view.MotionEvent;
 import android.view.View;
 
 import com.google.gson.Gson;
@@ -18,12 +16,13 @@ import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
-import lxy.com.wanandroid.ArticleDetailActivity;
+import lxy.com.wanandroid.detail.ArticleDetailActivity;
 import lxy.com.wanandroid.R;
 import lxy.com.wanandroid.base.BaseActivity;
 import lxy.com.wanandroid.base.Constants;
 import lxy.com.wanandroid.base.ResponseModel;
 import lxy.com.wanandroid.baseadapter.BaseAdapter;
+import lxy.com.wanandroid.detail.DetailModel;
 import lxy.com.wanandroid.home.HomeArticleAdapter;
 import lxy.com.wanandroid.home.model.ArticleModel;
 import lxy.com.wanandroid.network.NetworkManager;
@@ -76,8 +75,11 @@ public class KnowledgeChildActivity extends BaseActivity{
             @Override
             public void onClick(View view, int position) {
                 Intent intent = new Intent(KnowledgeChildActivity.this, ArticleDetailActivity.class);
-                intent.putExtra("type",Constants.TYPE_ARTICLE);
-                intent.putExtra("article",new Gson().toJson(dataList.get(position)));
+                DetailModel model = new DetailModel();
+                model.setId(dataList.get(position).getId());
+                model.setLink(dataList.get(position).getLink());
+                model.setName(dataList.get(position).getTitle());
+                intent.putExtra("article",new Gson().toJson(model));
                 startActivity(intent);
             }
         });

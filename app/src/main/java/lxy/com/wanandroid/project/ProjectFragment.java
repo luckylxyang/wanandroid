@@ -22,6 +22,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import lxy.com.wanandroid.R;
 import lxy.com.wanandroid.base.Constants;
+import lxy.com.wanandroid.base.FragmentInterface;
 import lxy.com.wanandroid.base.ResponseModel;
 import lxy.com.wanandroid.base.ToastUtils;
 import lxy.com.wanandroid.home.HomeAdapter;
@@ -33,7 +34,7 @@ import lxy.com.wanandroid.network.NetworkManager;
  * date: 2019/1/29
  */
 
-public class ProjectFragment extends Fragment {
+public class ProjectFragment extends Fragment implements FragmentInterface{
 
     private RecyclerView recyclerView;
     private HomeAdapter articleAdapter;
@@ -117,5 +118,10 @@ public class ProjectFragment extends Fragment {
                     public void onComplete() {
                     }
                 });
+    }
+
+    @Override
+    public void smoothToTop() {
+        recyclerView.scrollToPosition(0);
     }
 }

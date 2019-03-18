@@ -3,8 +3,11 @@ package lxy.com.wanandroid.knowledge;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ScrollView;
+import android.widget.Scroller;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,9 +16,17 @@ import java.util.List;
  * Created by 刘晓阳 on 2017/8/29.
  */
 
-public class FlowLayout extends ViewGroup {
+public class FlowLayout extends ViewGroup implements View.OnTouchListener{
 
     List<ViewPos> vPos = new ArrayList<>();
+    private Scroller mScroller;
+    private float scrollX = 0;
+
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+
+        return false;
+    }
 
 
     public interface OnItemClickListener {
@@ -32,7 +43,10 @@ public class FlowLayout extends ViewGroup {
 
     public FlowLayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        mScroller = new Scroller(context);
     }
+
+
 
 
 
@@ -118,8 +132,7 @@ public class FlowLayout extends ViewGroup {
         }
     }
 
-    public LayoutParams generateLayoutParams(AttributeSet attrs)
-    {
+    public LayoutParams generateLayoutParams(AttributeSet attrs) {
         return new MarginLayoutParams(getContext(), attrs);
     }
 

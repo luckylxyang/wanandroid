@@ -7,7 +7,9 @@ import lxy.com.wanandroid.home.model.ArticleModel;
 import lxy.com.wanandroid.home.model.BannerModel;
 import lxy.com.wanandroid.knowledge.KnowledgeModel;
 import lxy.com.wanandroid.login.LoginModel;
+import lxy.com.wanandroid.officeAccount.OfficeAccountModel;
 import lxy.com.wanandroid.search.HotModel;
+import lxy.com.wanandroid.search.WebsiteModel;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Field;
@@ -157,4 +159,26 @@ public interface NetworkAPI {
     Observable<ResponseModel> queryByKey(@Path("page") int page,
                                          @Field("k") String key);
 
+    /**
+     * https://www.wanandroid.com/friend/json
+     * 常用网址
+     * @return
+     */
+    @GET("friend/json")
+    Observable<WebsiteModel> getFriendWeb();
+
+    /**
+     * https://wanandroid.com/wxarticle/chapters/json
+     * @return
+     */
+    @GET("wxarticle/chapters/json")
+    Observable<OfficeAccountModel> getOfficeAccountList();
+
+    /**
+     * https://wanandroid.com/wxarticle/list/408/1/json
+     * @return
+     */
+    @GET("wxarticle/list/{id}/{page}/json")
+    Observable<ResponseModel> getOfficeAccountArticle(@Path("id") int id,
+                                                      @Path("page") int page);
 }

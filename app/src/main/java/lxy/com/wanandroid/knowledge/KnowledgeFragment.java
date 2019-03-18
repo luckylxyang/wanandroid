@@ -1,15 +1,12 @@
 package lxy.com.wanandroid.knowledge;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,14 +20,8 @@ import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
-import lxy.com.wanandroid.ArticleDetailActivity;
 import lxy.com.wanandroid.R;
-import lxy.com.wanandroid.baseadapter.BaseAdapter;
-import lxy.com.wanandroid.base.Constants;
-import lxy.com.wanandroid.base.ResponseModel;
-import lxy.com.wanandroid.base.ToastUtils;
-import lxy.com.wanandroid.home.HomeArticleAdapter;
-import lxy.com.wanandroid.home.model.ArticleModel;
+import lxy.com.wanandroid.base.FragmentInterface;
 import lxy.com.wanandroid.network.NetworkManager;
 
 /**
@@ -38,7 +29,7 @@ import lxy.com.wanandroid.network.NetworkManager;
  * date: 2019/1/26
  */
 
-public class KnowledgeFragment extends Fragment {
+public class KnowledgeFragment extends Fragment implements FragmentInterface{
 
     private RecyclerView recyclerView;
     private KnowledgeAdapter articleAdapter;
@@ -110,5 +101,10 @@ public class KnowledgeFragment extends Fragment {
 
                     }
                 });
+    }
+
+    @Override
+    public void smoothToTop() {
+        recyclerView.scrollToPosition(0);
     }
 }

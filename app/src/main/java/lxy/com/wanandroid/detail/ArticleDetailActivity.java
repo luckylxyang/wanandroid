@@ -1,4 +1,4 @@
-package lxy.com.wanandroid;
+package lxy.com.wanandroid.detail;
 
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
@@ -33,6 +33,7 @@ import com.wang.avi.AVLoadingIndicatorView;
 
 import org.json.JSONObject;
 
+import lxy.com.wanandroid.R;
 import lxy.com.wanandroid.base.Constants;
 import lxy.com.wanandroid.base.SwipeBackActivity;
 import lxy.com.wanandroid.home.model.ArticleModel;
@@ -49,13 +50,14 @@ public class ArticleDetailActivity extends SwipeBackActivity {
     private WebView webView;
     private String url;
     private AVLoadingIndicatorView loadingView;
-    private ArticleModel model;
-    private BannerModel.DataBean bannerModel;
+//    private ArticleModel model;
+//    private BannerModel.DataBean bannerModel;
     private BottomSheetDialog sheetDialog;
     private ImageView ivError;
     private boolean isError = false;
     private BottomSheetBehavior behavior;
     private View decorView;
+    private DetailModel model;
 
 
     @Override
@@ -77,18 +79,10 @@ public class ArticleDetailActivity extends SwipeBackActivity {
         loadingView = findViewById(R.id.detail_activity_loading);
         String type = getIntent().getStringExtra("type");
         url = getIntent().getStringExtra("article");
-        if (Constants.TYPE_ARTICLE.equals(type)){
-            model = new Gson().fromJson(url, ArticleModel.class);
-            getSupportActionBar().setTitle(model.getTitle());
-            webView.loadUrl(model.getLink());
-            if (model.isCollect()){
-                ((TextView)toolbar.findViewById(R.id.detail_love)).setText("取消收藏");
-            }
-        }else {
-            bannerModel = new Gson().fromJson(url,BannerModel.DataBean.class);
-            getSupportActionBar().setTitle(bannerModel.getTitle());
-            webView.loadUrl(bannerModel.getUrl());
-        }
+        model = new Gson().fromJson(url, DetailModel.class);
+        getSupportActionBar().setTitle(model.getName());
+        webView.loadUrl(model.getLink());
+
         ivError = findViewById(R.id.detail_activity_error);
         initWebView();
         initDialog();

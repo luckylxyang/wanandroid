@@ -3,15 +3,9 @@ package lxy.com.wanandroid.collect;
 import android.annotation.TargetApi;
 import android.content.Intent;
 import android.os.Build;
-import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 
 import com.google.gson.Gson;
@@ -27,17 +21,14 @@ import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
-import lxy.com.wanandroid.ArticleDetailActivity;
+import lxy.com.wanandroid.detail.ArticleDetailActivity;
 import lxy.com.wanandroid.R;
 import lxy.com.wanandroid.base.BaseActivity;
 import lxy.com.wanandroid.base.Constants;
-import lxy.com.wanandroid.base.ResponseModel;
 import lxy.com.wanandroid.base.ToastUtils;
-import lxy.com.wanandroid.home.HomeAdapter;
-import lxy.com.wanandroid.home.model.ArticleModel;
+import lxy.com.wanandroid.detail.DetailModel;
 import lxy.com.wanandroid.login.LoginActivity;
 import lxy.com.wanandroid.login.LoginEvent;
-import lxy.com.wanandroid.login.LoginUtil;
 import lxy.com.wanandroid.network.NetworkManager;
 
 public class CollectActivity extends BaseActivity {
@@ -104,8 +95,11 @@ public class CollectActivity extends BaseActivity {
         });
         articleAdapter.setOnItemListener((view, position) -> {
             Intent intent = new Intent(CollectActivity.this, ArticleDetailActivity.class);
-            intent.putExtra("type",Constants.TYPE_ARTICLE);
-            intent.putExtra("article",new Gson().toJson(homeList.get(position)));
+            DetailModel model = new DetailModel();
+            model.setId(homeList.get(position).getId());
+            model.setLink(homeList.get(position).getLink());
+            model.setName(homeList.get(position).getTitle());
+            intent.putExtra("article",new Gson().toJson(model));
             startActivity(intent);
         });
     }

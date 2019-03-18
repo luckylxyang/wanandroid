@@ -3,7 +3,11 @@ package lxy.com.wanandroid.home;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.support.annotation.Nullable;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
+import android.text.style.BackgroundColorSpan;
+import android.text.style.ForegroundColorSpan;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
@@ -40,14 +44,18 @@ public class HomeAdapter extends BaseQuickAdapter<ArticleModel,BaseViewHolder> {
 
         StringBuffer tag = new StringBuffer();
         for (int i = 0; i < articleModel.getTags().size(); i++) {
+            if (i > 0){
+                tag.append(" & ");
+            }
             ArticleModel.TagsBean tagsBean = articleModel.getTags().get(i);
-            tag.append(tagsBean.getName() + "&");
+            tag.append(tagsBean.getName());
         }
-        if (!TextUtils.isEmpty(tag)) {
-            helper.setText(R.id.item_home_article_tag, tag.substring(0, tag.length() - 1));
-        }
+        helper.setText(R.id.item_home_article_tag, tag.toString());
+        hasTitleHighLight(helper,articleModel.getTitle());
         if (articleModel.isCollect()){
             helper.setImageResource(R.id.item_home_article_like,R.drawable.ic_article_like);
+        }else {
+            helper.setImageResource(R.id.item_home_article_like,R.drawable.ic_article_unlike);
         }
         helper.setOnClickListener(R.id.item_home_article_like, v -> {
             if (articleModel.isCollect()){
@@ -56,6 +64,19 @@ public class HomeAdapter extends BaseQuickAdapter<ArticleModel,BaseViewHolder> {
                 collectArticle(helper,articleModel);
             }
         });
+    }
+
+    private void hasTitleHighLight(BaseViewHolder helper, String title) {
+        if (!title.contains("<em class=")) {
+            helper.setText(R.id.item_home_article_title,title);
+            return;
+        }
+        SpannableStringBuilder builder = new SpannableStringBuilder(title);
+        int start = title.indexOf("<");
+        int end = title.lastIndexOf( ">") + 1;
+        builder.setSpan(new ForegroundColorSpan(mContext.getResources().getColor(R.color.colorPrimary)),
+                start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        helper.setText(R.id.item_home_article_title,builder);
     }
 
 

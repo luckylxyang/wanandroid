@@ -31,7 +31,7 @@ import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
-import lxy.com.wanandroid.ArticleDetailActivity;
+import lxy.com.wanandroid.detail.ArticleDetailActivity;
 import lxy.com.wanandroid.R;
 import lxy.com.wanandroid.base.BaseActivity;
 import lxy.com.wanandroid.base.Constants;
@@ -140,7 +140,6 @@ public class SearchActivity extends BaseActivity {
                             totalPage = model.getData().getPageCount();
                             page++;
                             if (list.size() == 0) {
-
                                 ToastUtils.show(getString(R.string.search_result_no));
                             }
                         } else {

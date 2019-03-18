@@ -28,17 +28,13 @@ import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
-import lxy.com.wanandroid.ArticleDetailActivity;
+import lxy.com.wanandroid.base.FragmentInterface;
+import lxy.com.wanandroid.detail.ArticleDetailActivity;
 import lxy.com.wanandroid.R;
-import lxy.com.wanandroid.baseadapter.BaseAdapter;
 import lxy.com.wanandroid.base.Constants;
 import lxy.com.wanandroid.base.ResponseModel;
 import lxy.com.wanandroid.base.ToastUtils;
-import lxy.com.wanandroid.baseadapter.MultiTypeSupport;
-import lxy.com.wanandroid.home.GlideImageLoader;
-import lxy.com.wanandroid.home.HomeAdapter;
-import lxy.com.wanandroid.home.HomeArticleAdapter;
-import lxy.com.wanandroid.home.HomeMultiAdapter;
+import lxy.com.wanandroid.detail.DetailModel;
 import lxy.com.wanandroid.home.model.ArticleModel;
 import lxy.com.wanandroid.home.model.BannerModel;
 import lxy.com.wanandroid.network.NetworkManager;
@@ -48,7 +44,7 @@ import lxy.com.wanandroid.network.NetworkManager;
  * date: 2019/1/15
  */
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements FragmentInterface {
 
 
     private SwipeRefreshLayout refreshLayout;
@@ -105,8 +101,11 @@ public class HomeFragment extends Fragment {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 Intent intent = new Intent(getContext(),ArticleDetailActivity.class);
-                intent.putExtra("type",Constants.TYPE_ARTICLE);
-                intent.putExtra("article",new Gson().toJson(homeList.get(position)));
+                DetailModel model = new DetailModel();
+                model.setId(homeList.get(position).getId());
+                model.setLink(homeList.get(position).getLink());
+                model.setName(homeList.get(position).getTitle());
+                intent.putExtra("article",new Gson().toJson(model));
                 startActivity(intent);
             }
         });
@@ -135,8 +134,11 @@ public class HomeFragment extends Fragment {
             @Override
             public void OnBannerClick(int position) {
                 Intent intent = new Intent(getContext(),ArticleDetailActivity.class);
-                intent.putExtra("type",Constants.TYPE_BANNER);
-                intent.putExtra("article",new Gson().toJson(bannerList.get(position)));
+                DetailModel model = new DetailModel();
+                model.setId(bannerList.get(position).getId());
+                model.setLink(bannerList.get(position).getUrl());
+                model.setName(bannerList.get(position).getTitle());
+                intent.putExtra("article",new Gson().toJson(model));
                 startActivity(intent);
             }
         });
@@ -210,5 +212,10 @@ public class HomeFragment extends Fragment {
 
                     }
                 });
+    }
+
+    @Override
+    public void smoothToTop() {
+        recyclerView.scrollToPosition(0);
     }
 }
