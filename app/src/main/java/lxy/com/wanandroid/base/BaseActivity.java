@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -18,7 +19,7 @@ import lxy.com.wanandroid.R;
  */
 public abstract class BaseActivity extends AppCompatActivity {
 
-    private FrameLayout flContext;
+    protected FrameLayout flContext;
     protected Toolbar toolbar;
     protected Bundle saveBundle;
 
@@ -52,7 +53,8 @@ public abstract class BaseActivity extends AppCompatActivity {
 
 
     public void addContextView(){
-        flContext.addView(View.inflate(this,setContextView(),null));
+        View view = LayoutInflater.from(this).inflate(setContextView(),null);
+        flContext.addView(view);
     }
 
     protected void showToolbarBack(boolean isShow){

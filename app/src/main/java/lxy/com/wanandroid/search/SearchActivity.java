@@ -38,6 +38,7 @@ import lxy.com.wanandroid.base.Constants;
 import lxy.com.wanandroid.base.ResponseModel;
 import lxy.com.wanandroid.base.ToastUtils;
 import lxy.com.wanandroid.db.DBHelper;
+import lxy.com.wanandroid.detail.DetailModel;
 import lxy.com.wanandroid.greendao.SearchHistoryModelDao;
 import lxy.com.wanandroid.home.HomeAdapter;
 import lxy.com.wanandroid.home.model.ArticleModel;
@@ -97,7 +98,7 @@ public class SearchActivity extends BaseActivity {
         rvResult = findViewById(R.id.hot_recycler);
         svTag = findViewById(R.id.hot_scroll);
         rvResult.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new HomeAdapter(R.layout.item_home_article, list);
+        adapter = new HomeAdapter(R.layout.item_home_article_image, list);
         rvResult.setAdapter(adapter);
         adapter.bindToRecyclerView(rvResult);
         adapter.setEmptyView(R.layout.item_empty);
@@ -106,8 +107,12 @@ public class SearchActivity extends BaseActivity {
 
         adapter.setOnItemClickListener(((adapter1, view, position) -> {
             Intent intent = new Intent(SearchActivity.this, ArticleDetailActivity.class);
-            intent.putExtra("type", Constants.TYPE_ARTICLE);
-            intent.putExtra("article", new Gson().toJson(list.get(position)));
+            DetailModel model = new DetailModel();
+            model.setId(list.get(position).getId());
+            model.setLink(list.get(position).getLink());
+            model.setName(list.get(position).getTitle());
+            model.setCollect(list.get(position).isCollect());
+            intent.putExtra("article",new Gson().toJson(model));
             startActivity(intent);
         }));
     }
@@ -142,6 +147,7 @@ public class SearchActivity extends BaseActivity {
                             if (list.size() == 0) {
                                 ToastUtils.show(getString(R.string.search_result_no));
                             }
+                            rvResult.scrollToPosition(0);
                         } else {
                             ToastUtils.show(model.getErrorMsg());
                         }
@@ -196,7 +202,7 @@ public class SearchActivity extends BaseActivity {
             flowLayout.addView(tv);
             tv.setOnClickListener(v -> {
                 mSearchView.setQuery(tv.getText(), true);
-                closeSoftInput();
+                mSearchView.clearFocus();
             });
         }
     }
@@ -232,14 +238,10 @@ public class SearchActivity extends BaseActivity {
             animatorOut();
             svTag.setVisibility(View.VISIBLE);
             querySearchHistory();
-            closeSoftInput();
             mSearchView.setFocusable(false);
+            mSearchView.clearFocus();
+//            closeSoftInput();
             return true;
-        });
-        mSearchView.setOnFocusChangeListener((v, hasFocus) -> {
-            if (!hasFocus) {
-                closeSoftInput();
-            }
         });
     }
 
@@ -282,7 +284,7 @@ public class SearchActivity extends BaseActivity {
             historyLayout.addView(tv);
             tv.setOnClickListener(v -> {
                 mSearchView.setQuery(tv.getText(), true);
-                closeSoftInput();
+                mSearchView.clearFocus();
             });
         }
     }

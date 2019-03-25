@@ -1,24 +1,34 @@
 package lxy.com.wanandroid.home;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
-import android.text.style.BackgroundColorSpan;
 import android.text.style.ForegroundColorSpan;
+import android.view.View;
+import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
+import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import lxy.com.wanandroid.R;
+import lxy.com.wanandroid.base.Constants;
 import lxy.com.wanandroid.base.ResponseModel;
 import lxy.com.wanandroid.base.ToastUtils;
 import lxy.com.wanandroid.home.model.ArticleModel;
@@ -31,6 +41,7 @@ import lxy.com.wanandroid.network.NetworkManager;
  */
 
 public class HomeAdapter extends BaseQuickAdapter<ArticleModel,BaseViewHolder> {
+
 
     public HomeAdapter(int layoutResId, @Nullable List<ArticleModel> data) {
         super(layoutResId, data);
@@ -64,6 +75,13 @@ public class HomeAdapter extends BaseQuickAdapter<ArticleModel,BaseViewHolder> {
                 collectArticle(helper,articleModel);
             }
         });
+        if (!TextUtils.isEmpty(articleModel.getEnvelopePic())) {
+            ImageView iv = helper.getView(R.id.item_home_article_image);
+            iv.setVisibility(View.VISIBLE);
+            Glide.with(mContext)
+                    .load(articleModel.getEnvelopePic())
+                    .into(iv);
+        }
     }
 
     private void hasTitleHighLight(BaseViewHolder helper, String title) {
@@ -71,11 +89,26 @@ public class HomeAdapter extends BaseQuickAdapter<ArticleModel,BaseViewHolder> {
             helper.setText(R.id.item_home_article_title,title);
             return;
         }
-        SpannableStringBuilder builder = new SpannableStringBuilder(title);
-        int start = title.indexOf("<");
-        int end = title.lastIndexOf( ">") + 1;
-        builder.setSpan(new ForegroundColorSpan(mContext.getResources().getColor(R.color.colorPrimary)),
-                start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        String pattern1 = "<";
+        Pattern compile = Pattern.compile(pattern1);
+        StringBuffer buffer = new StringBuffer(title);
+        Matcher matcher = compile.matcher(buffer);
+
+        List<Integer> indexs = new ArrayList<>();
+        while (buffer.indexOf("<") > -1) {
+            int start = buffer.indexOf("<");
+            int end = buffer.indexOf(">") + 1;
+            buffer.replace(start,end,"");
+            end = buffer.indexOf("<");
+            indexs.add(start);
+            indexs.add(end);
+            buffer.replace(end,end + 5,"");
+        }
+        SpannableStringBuilder builder = new SpannableStringBuilder(buffer);
+        for (int i = 0; i < indexs.size(); i = i + 2) {
+            builder.setSpan(new ForegroundColorSpan(mContext.getResources().getColor(R.color.colorPrimary)),
+                    indexs.get(i), indexs.get(i + 1), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
         helper.setText(R.id.item_home_article_title,builder);
     }
 
@@ -100,9 +133,8 @@ public class HomeAdapter extends BaseQuickAdapter<ArticleModel,BaseViewHolder> {
                                 mContext.startActivity(intent);
                             } else {
                                 ToastUtils.show( R.string.collect_success);
-                                holder.setImageResource(R.id.item_home_article_like, R.drawable.ic_article_like);
-                                articleModel.setCollect(true);
-                                HomeAdapter.this.notifyDataSetChanged();
+                                collectAnimator(holder,articleModel);
+
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -119,6 +151,38 @@ public class HomeAdapter extends BaseQuickAdapter<ArticleModel,BaseViewHolder> {
 
                     }
                 });
+    }
+
+    private void collectAnimator(BaseViewHolder holder, ArticleModel articleModel) {
+        View view = holder.getView(R.id.item_home_article_like);
+        ObjectAnimator animator = ObjectAnimator.ofFloat(view,"scaleX",1f,0f);
+        ObjectAnimator animator2 = ObjectAnimator.ofFloat(view,"scaleX",0f,1f);
+        animator.setDuration(300).start();
+        animator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                articleModel.setCollect(true);
+                HomeAdapter.this.notifyDataSetChanged();
+                animator2.setDuration(300).start();
+            }
+        });
+    }
+
+    private void unCollectAnimator(BaseViewHolder holder, ArticleModel articleModel) {
+        View view = holder.getView(R.id.item_home_article_like);
+        ObjectAnimator animator = ObjectAnimator.ofFloat(view,"scaleX",1f,0f);
+        ObjectAnimator animator2 = ObjectAnimator.ofFloat(view,"scaleX",0f,1f);
+        animator.setDuration(300).start();
+        animator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                articleModel.setCollect(false);
+                HomeAdapter.this.notifyDataSetChanged();
+                animator2.setDuration(300).start();
+            }
+        });
     }
 
     private void unCollectArticle(BaseViewHolder holder, ArticleModel articleModel){
@@ -141,9 +205,7 @@ public class HomeAdapter extends BaseQuickAdapter<ArticleModel,BaseViewHolder> {
                                 mContext.startActivity(intent);
                             } else {
                                 ToastUtils.show( R.string.uncollect_success);
-                                holder.setImageResource(R.id.item_home_article_like, R.drawable.ic_article_unlike);
-                                articleModel.setCollect(false);
-                                HomeAdapter.this.notifyDataSetChanged();
+                                unCollectAnimator(holder, articleModel);
                             }
                         } catch (Exception e) {
                             e.printStackTrace();

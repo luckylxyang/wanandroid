@@ -28,12 +28,15 @@ public class SaveCookieInterceptor implements Interceptor {
 
     @Override
     public Response intercept(Chain chain) throws IOException {
-        Response response = chain.proceed(chain.request());
+         Response response = chain.proceed(chain.request());
 //        Log.i(TAG,response.body().string());
         if (!response.headers("set-Cookie").isEmpty()){
-            List<String> cookies = response.headers("set-cookie");
-            String cookie = encodeCookie(cookies);
-            saveCookie(chain.request().url().toString(), chain.request().url().host(), cookie);
+            HashSet<String> cookies = new HashSet<>();
+
+            for (String header : response.headers("set-cookie")) {
+                cookies.add(header);
+            }
+            saveCookie(chain.request().url().toString(), chain.request().url().host(), cookies);
         }
         return response;
     }
@@ -67,18 +70,18 @@ public class SaveCookieInterceptor implements Interceptor {
      * 保存cookie到本地，这里我们分别为该url和host设置相同的cookie，其中host可选
      * 这样能使得该cookie的应用范围更广
      */
-    private void saveCookie(String url, String domain, String cookies) {
+    private void saveCookie(String url, String domain, HashSet cookies) {
         SharedPreferences sp = WanApplication.getContext().getSharedPreferences("cookies_prefs", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
 
         if (TextUtils.isEmpty(url)) {
             throw new NullPointerException("url is null.");
         } else {
-            editor.putString(url, cookies);
+            editor.putStringSet(url, cookies);
         }
 
         if (!TextUtils.isEmpty(domain)) {
-            editor.putString(domain, cookies);
+            editor.putStringSet(domain, cookies);
         }
         editor.apply();
     }

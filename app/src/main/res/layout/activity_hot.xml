@@ -15,12 +15,20 @@
         android:textColor="@color/textBlack"
         android:textSize="16sp" />
 
-    <lxy.com.wanandroid.knowledge.FlowLayout
-        android:id="@+id/hot_website"
+    <ScrollView
+        app:layout_constraintTop_toBottomOf="@id/friend_website"
+        android:layout_marginBottom="20dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingHorizontal="10dp"
-        app:layout_constraintTop_toBottomOf="@id/friend_website">
+        android:layout_height="wrap_content">
 
-    </lxy.com.wanandroid.knowledge.FlowLayout>
+        <lxy.com.wanandroid.knowledge.FlowLayout
+            android:id="@+id/hot_website"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="10dp"
+            >
+
+        </lxy.com.wanandroid.knowledge.FlowLayout>
+    </ScrollView>
+
 </android.support.constraint.ConstraintLayout>

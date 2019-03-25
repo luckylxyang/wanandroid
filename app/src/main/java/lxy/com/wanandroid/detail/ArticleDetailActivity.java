@@ -2,9 +2,12 @@ package lxy.com.wanandroid.detail;
 
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.net.http.SslError;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.PersistableBundle;
@@ -14,10 +17,13 @@ import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.webkit.SslErrorHandler;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
@@ -31,13 +37,16 @@ import android.widget.ViewAnimator;
 import com.google.gson.Gson;
 import com.wang.avi.AVLoadingIndicatorView;
 
-import org.json.JSONObject;
-
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import lxy.com.wanandroid.R;
-import lxy.com.wanandroid.base.Constants;
-import lxy.com.wanandroid.base.SwipeBackActivity;
-import lxy.com.wanandroid.home.model.ArticleModel;
-import lxy.com.wanandroid.home.model.BannerModel;
+import lxy.com.wanandroid.base.BaseActivity;
+import lxy.com.wanandroid.base.ResponseModel;
+import lxy.com.wanandroid.base.ToastUtils;
+import lxy.com.wanandroid.login.LoginActivity;
+import lxy.com.wanandroid.network.NetworkManager;
 
 /**
  * date: 2019/1/25
@@ -45,18 +54,13 @@ import lxy.com.wanandroid.home.model.BannerModel;
  * @author lxy
  */
 
-public class ArticleDetailActivity extends SwipeBackActivity {
+public class ArticleDetailActivity extends BaseActivity {
 
     private WebView webView;
     private String url;
     private AVLoadingIndicatorView loadingView;
-//    private ArticleModel model;
-//    private BannerModel.DataBean bannerModel;
-    private BottomSheetDialog sheetDialog;
     private ImageView ivError;
     private boolean isError = false;
-    private BottomSheetBehavior behavior;
-    private View decorView;
     private DetailModel model;
 
 
@@ -73,29 +77,19 @@ public class ArticleDetailActivity extends SwipeBackActivity {
     }
 
     private void initView() {
-        decorView = getWindow().getDecorView();
         showToolbarBack(true);
         webView = findViewById(R.id.activity_detail_web);
         loadingView = findViewById(R.id.detail_activity_loading);
-        String type = getIntent().getStringExtra("type");
         url = getIntent().getStringExtra("article");
         model = new Gson().fromJson(url, DetailModel.class);
         getSupportActionBar().setTitle(model.getName());
         webView.loadUrl(model.getLink());
-
         ivError = findViewById(R.id.detail_activity_error);
         initWebView();
-        initDialog();
 
-    }
+        like = model.isCollect();
+        invalidateOptionsMenu();
 
-    private void initDialog() {
-        sheetDialog = new BottomSheetDialog(this);
-        View view = View.inflate(this,R.layout.detail_bottom_sheet,null);
-        sheetDialog.setContentView(view);
-        behavior = BottomSheetBehavior.from(view.findViewById(R.id.bottom_sheet));
-        behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-//        sheetDialog.show();
 
     }
 
@@ -103,7 +97,10 @@ public class ArticleDetailActivity extends SwipeBackActivity {
         toolbar.setOnMenuItemClickListener(menuItem -> {
             switch (menuItem.getItemId()) {
                 case R.id.detail_love:
-
+                    collect();
+                    break;
+                case R.id.detail_no_love:
+                    unCollect();
                     break;
                 case R.id.detail_share:
                     break;
@@ -112,21 +109,7 @@ public class ArticleDetailActivity extends SwipeBackActivity {
                     Intent intent = new Intent(Intent.ACTION_VIEW,uri);
                     startActivity(intent);
                     break;
-                case R.id.detail_refresh:
-                    refreshWebPage();
-                    isError = false;
-                    loadingView.show();
-                    webView.reload();
-                    break;
-                case R.id.detail_dot:
 
-                    if (behavior.getState() == BottomSheetBehavior.STATE_HIDDEN){
-                        behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-                    }else if (behavior.getState() == BottomSheetBehavior.STATE_EXPANDED){
-                        behavior.setState(BottomSheetBehavior.STATE_HIDDEN);
-                    }
-
-                    break;
                 default:
                     break;
             }
@@ -134,21 +117,101 @@ public class ArticleDetailActivity extends SwipeBackActivity {
         });
     }
 
-    private void refreshWebPage() {
-        View view = toolbar.findViewById(R.id.detail_refresh);
-        ObjectAnimator animator = ObjectAnimator.ofFloat(view,"rotation",0,359);
-        animator.setDuration(500);
-        animator.start();
+    private void collect() {
+        NetworkManager.getManager().getServer().collectArticleInSite(model.getId())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<ResponseModel>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @SuppressLint("ResourceType")
+                    @Override
+                    public void onNext(ResponseModel model) {
+                        try {
+                            if (model.getErrorCode() != 0) {
+                                ToastUtils.show(R.string.login_yet);
+                                Intent intent = new Intent(ArticleDetailActivity.this, LoginActivity.class);
+                                startActivity(intent);
+                            } else {
+                                ToastUtils.show( R.string.collect_success);
+                                like = true;
+                                invalidateOptionsMenu();
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        e.printStackTrace();
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
     }
 
+    private void unCollect(){
+        NetworkManager.getManager().getServer().unCollectArticle(model.getId())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<ResponseModel>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @SuppressLint("ResourceType")
+                    @Override
+                    public void onNext(ResponseModel model) {
+                        try {
+                            if (model.getErrorCode() != 0) {
+                                ToastUtils.show(R.string.login_yet);
+                                Intent intent = new Intent(ArticleDetailActivity.this, LoginActivity.class);
+                                startActivity(intent);
+                            } else {
+                                ToastUtils.show( R.string.uncollect_success);
+                                like = false;
+                                invalidateOptionsMenu();
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        e.printStackTrace();
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
 
     private void initWebView() {
         WebSettings settings = webView.getSettings();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            settings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
+            //或者
+//            settings.setMixedContentMode(WebSettings.MIXED_CONTENT_COMPATIBILITY_MODE);
+        }
         settings.setJavaScriptEnabled(true);
+        // 自动加载图片
+        settings.setLoadsImagesAutomatically(true);
+        settings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
         webView.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
-                view.loadUrl(request.getUrl().getPath());
+                view.loadUrl(request.getUrl().toString());
                 webView.setVisibility(View.VISIBLE);
                 loadingView.show();
                 return true;
@@ -184,6 +247,11 @@ public class ArticleDetailActivity extends SwipeBackActivity {
                 isError = true;
 
             }
+
+            @Override
+            public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
+                handler.proceed();
+            }
         });
     }
 
@@ -191,6 +259,19 @@ public class ArticleDetailActivity extends SwipeBackActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         toolbar.inflateMenu(R.menu.detail_menu);
         return super.onCreateOptionsMenu(menu);
+    }
+
+    boolean like;
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        if (like){
+            menu.findItem(R.id.detail_love).setVisible(false);
+            menu.findItem(R.id.detail_no_love).setVisible(true);
+        }else {
+            menu.findItem(R.id.detail_love).setVisible(true);
+            menu.findItem(R.id.detail_no_love).setVisible(false);
+        }
+        return super.onPrepareOptionsMenu(menu);
     }
 
     @Override
@@ -205,48 +286,10 @@ public class ArticleDetailActivity extends SwipeBackActivity {
 
     }
 
-    float startX = 0f;
-    float startY = 0f;
-    boolean canFinish = false;
     @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        switch (event.getAction()){
-            case MotionEvent.ACTION_DOWN:
-                startX = event.getX();
-                startY = event.getY();
-                break;
-            case MotionEvent.ACTION_MOVE:
-                float subX = event.getX() - startX;
-                if (subX > 0) {
-                    decorView.setX(subX);
-                }
-                isBack(event);
-                break;
-            case MotionEvent.ACTION_UP:
-                if (canFinish){
-                    finish();
-                }
-                break;
-        }
-        return super.onTouchEvent(event);
-    }
-
-    private void isBack(MotionEvent event){
-        float x = event.getX();
-        float y = event.getY();
-
-        if (startX > 100){
-            return ;
-        }
-        if (Math.abs(startY - y) > 100){
-            return ;
-        }
-        DisplayMetrics outMe = new DisplayMetrics();
-        getWindow().getWindowManager().getDefaultDisplay().getMetrics(outMe);
-        int width = outMe.widthPixels;
-        if (x - startX > width / 3){
-            canFinish = true;
-        }
-        return ;
+    protected void onDestroy() {
+        super.onDestroy();
+        flContext.removeView(webView);
+        webView.destroy();
     }
 }

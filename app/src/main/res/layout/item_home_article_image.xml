@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_marginHorizontal="10dp"
+    android:layout_marginTop="10dp"
+    android:background="@drawable/item_card_circle"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/item_home_article_image"
+        android:padding="4dp"
+        android:layout_centerVertical="true"
+        android:visibility="gone"
+        android:layout_width="100dp"
+        android:layout_height="150dp" />
+
+    <TextView
+        android:id="@+id/item_home_article_author"
+        android:textSize="16sp"
+        android:textColor="@color/textGray"
+        android:layout_toRightOf="@id/item_home_article_image"
+        android:layout_margin="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="帅气的晓"/>
+
+    <TextView
+        android:id="@+id/item_home_article_time"
+        android:textSize="16sp"
+        android:textColor="@color/textGray"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="20dp"
+        android:layout_alignBottom="@id/item_home_article_author"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="2天前"/>
+
+    <TextView
+        android:id="@+id/item_home_article_title"
+        android:textSize="18sp"
+        android:textColor="@color/textBlack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/item_home_article_author"
+        android:layout_alignLeft="@id/item_home_article_author"
+        android:layout_marginRight="20dp"
+        tools:text="我是快乐的分割线"
+        />
+
+    <TextView
+        android:id="@+id/item_home_article_tag"
+        android:textSize="18sp"
+        android:textColor="@color/textBlue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/item_home_article_title"
+        android:layout_alignLeft="@id/item_home_article_author"
+        android:layout_marginTop="10dp"
+        tools:text="@string/app_name"/>
+
+    <ImageView
+        android:id="@+id/item_home_article_like"
+        android:src="@drawable/ic_article_unlike"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="15dp"
+        android:layout_marginTop="10dp"
+        android:layout_below="@id/item_home_article_title"
+        android:layout_width="28dp"
+        android:layout_height="28dp" />
+</RelativeLayout>

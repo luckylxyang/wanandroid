@@ -1,13 +1,19 @@
 package lxy.com.wanandroid.home.model;
 
+import android.text.TextUtils;
+
+import com.chad.library.adapter.base.entity.MultiItemEntity;
+
 import java.util.List;
+
+import lxy.com.wanandroid.base.Constants;
 
 /**
  * @author  : lxy
  * date: 2019/1/15
  */
 
-public class ArticleModel {
+public class ArticleModel implements MultiItemEntity{
 
 
     /**
@@ -242,6 +248,15 @@ public class ArticleModel {
 
     public void setTags(List<TagsBean> tags) {
         this.tags = tags;
+    }
+
+    @Override
+    public int getItemType() {
+        if (TextUtils.isEmpty(envelopePic)){
+            return Constants.TYPE_TEXT;
+        }else {
+            return Constants.TYPE_IMAGE;
+        }
     }
 
     public static class TagsBean {

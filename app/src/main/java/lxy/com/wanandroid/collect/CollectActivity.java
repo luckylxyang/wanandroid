@@ -99,6 +99,7 @@ public class CollectActivity extends BaseActivity {
             model.setId(homeList.get(position).getId());
             model.setLink(homeList.get(position).getLink());
             model.setName(homeList.get(position).getTitle());
+            model.setCollect(true);
             intent.putExtra("article",new Gson().toJson(model));
             startActivity(intent);
         });

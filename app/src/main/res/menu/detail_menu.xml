@@ -2,18 +2,13 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item android:id="@+id/detail_refresh"
-        android:title="刷新"
-        android:icon="@drawable/ic_detail_refresh"
-        app:showAsAction="ifRoom"/>
-
-    <item android:id="@+id/detail_dot"
-        android:title="刷新"
-        android:icon="@drawable/ic_toolbar_dot"
-        app:showAsAction="ifRoom"/>
-
     <item android:id="@+id/detail_love"
         android:title="@string/like"
+        app:showAsAction="never" />
+
+    <item android:id="@+id/detail_no_love"
+        android:title="@string/unlike"
+        android:visible="false"
         app:showAsAction="never" />
 
     <item android:id="@+id/detail_share"

@@ -13,4 +13,7 @@ public class Constants {
     public final static String TYPE_ARTICLE = "ARTICLE";
     public final static String TYPE_BANNER = "BANNER";
 
+    public final static int TYPE_IMAGE = 1;
+    public final static int TYPE_TEXT = 2;
+
 }

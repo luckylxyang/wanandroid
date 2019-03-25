@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.text.TextUtils;
 
 import java.io.IOException;
+import java.util.HashSet;
 
 import lxy.com.wanandroid.base.WanApplication;
 import okhttp3.Interceptor;
@@ -24,23 +25,23 @@ public class AddCookieInterceptor implements Interceptor {
     public Response intercept(Chain chain) throws IOException {
         Request request = chain.request();
         Request.Builder builder = request.newBuilder();
-        String cookie = getCookie(request.url().toString(), request.url().host());
-        if (!TextUtils.isEmpty(cookie)) {
-            builder.addHeader("Cookie", cookie);
+        HashSet cookies = getCookie(request.url().toString(), request.url().host());
+
+        for (Object header : cookies) {
+            builder.addHeader("Cookie",(String)header);
         }
 
         return chain.proceed(builder.build());
     }
 
-    private String getCookie(String url, String domain) {
+    private HashSet getCookie(String url, String domain) {
         SharedPreferences sp = WanApplication.getContext().getSharedPreferences(COOKIE_PREF, Context.MODE_PRIVATE);
-        if (!TextUtils.isEmpty(url) && sp.contains(url) && !TextUtils.isEmpty(sp.getString(url, ""))) {
-            return sp.getString(url, "");
+        if (!TextUtils.isEmpty(url) && sp.contains(url)) {
+            return (HashSet) sp.getStringSet(url,new HashSet<>());
         }
-        if (!TextUtils.isEmpty(domain) && sp.contains(domain) && !TextUtils.isEmpty(sp.getString(domain, ""))) {
-            return sp.getString(domain, "");
+        if (!TextUtils.isEmpty(domain) && sp.contains(domain) ) {
+            return (HashSet) sp.getStringSet(domain,new HashSet<>());
         }
-
-        return null;
+        return new HashSet<>();
     }
 }

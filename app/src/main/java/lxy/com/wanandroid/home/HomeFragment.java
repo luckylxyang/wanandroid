@@ -86,7 +86,7 @@ public class HomeFragment extends Fragment implements FragmentInterface {
         refreshLayout = view.findViewById(R.id.home_frag_refresh);
         recyclerView = view.findViewById(R.id.home_frag_recycle);
         homeList = new ArrayList<>();
-        articleAdapter = new HomeAdapter(R.layout.item_home_article,homeList);
+        articleAdapter = new HomeAdapter(R.layout.item_home_article_image,homeList);
 //        articleAdapter = new HomeArticleAdapter(getContext(),homeList,R.layout.item_home_article);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(articleAdapter);
@@ -105,6 +105,7 @@ public class HomeFragment extends Fragment implements FragmentInterface {
                 model.setId(homeList.get(position).getId());
                 model.setLink(homeList.get(position).getLink());
                 model.setName(homeList.get(position).getTitle());
+                model.setCollect(homeList.get(position).isCollect());
                 intent.putExtra("article",new Gson().toJson(model));
                 startActivity(intent);
             }

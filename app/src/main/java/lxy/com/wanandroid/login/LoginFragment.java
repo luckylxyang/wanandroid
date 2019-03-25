@@ -103,6 +103,7 @@ public class LoginFragment extends Fragment {
                     @Override
                     public void onError(Throwable e) {
                         e.printStackTrace();
+                        ToastUtils.show(e.getMessage());
                     }
 
                     @Override

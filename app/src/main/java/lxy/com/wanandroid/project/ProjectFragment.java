@@ -78,7 +78,7 @@ public class ProjectFragment extends Fragment implements FragmentInterface{
     private void initView(View view) {
         recyclerView = view.findViewById(R.id.project_recycle);
         homeList = new ArrayList<>();
-        articleAdapter = new HomeAdapter(R.layout.item_home_article,homeList);
+        articleAdapter = new HomeAdapter(R.layout.item_home_article_image,homeList);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(articleAdapter);
 

@@ -1,8 +1,18 @@
 package lxy.com.wanandroid.officeAccount;
 
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.View;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,29 +32,60 @@ import lxy.com.wanandroid.utils.WaitDialog;
  * date: 2019/3/17
  */
 
-public class OfficeAccountActivity extends BaseActivity {
+public class OfficeAccountActivity extends AppCompatActivity implements View.OnClickListener {
 
     private TabLayout tabLayout;
     private ViewPager viewPager;
     private ViewPagerAdapter adapter;
     private List<OfficeAccountModel.DataBean> dataBeans = new ArrayList<>();
-    @Override
-    public int setContextView() {
-        return R.layout.activity_office_account;
-    }
+    private List<OfficeAccountFragment> fragments = new ArrayList<>();
+    private FloatingActionButton fabTop;
+    private int fragIndex;
+    private Toolbar toolbar;
 
-
     @Override
-    protected void initOptions() {
-        setToolbarTitle(getString(R.string.official_accounts));
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_office_account);
+
         initView();
+        initListener();
         getListByServer();
     }
 
+
+    private void initListener() {
+        fabTop.setOnClickListener(this);
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                fragIndex = position;
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+    }
+
     private void initView() {
+        toolbar = findViewById(R.id.office_account_toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle(R.string.official_accounts);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar.setNavigationOnClickListener(v -> finish());
+
         tabLayout = findViewById(R.id.office_account_tab);
         viewPager = findViewById(R.id.office_account_viewpager);
-        adapter = new ViewPagerAdapter(getSupportFragmentManager(),dataBeans);
+        fabTop = findViewById(R.id.office_account_float);
+        adapter = new ViewPagerAdapter(getSupportFragmentManager());
+
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
     }
@@ -68,7 +109,7 @@ public class OfficeAccountActivity extends BaseActivity {
                         }
                         dataBeans.clear();
                         dataBeans.addAll(model.getData());
-                        adapter.notifyDataSetChanged();
+                        adapter.setDataBeans(dataBeans);
                     }
 
                     @Override
@@ -83,5 +124,20 @@ public class OfficeAccountActivity extends BaseActivity {
                 });
     }
 
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.office_account_float:
+                adapter.getItem(fragIndex).smoothToTop();
+                break;
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.office_account_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
 
 }

@@ -10,6 +10,15 @@ public class DetailModel {
     private int id;
     private String link;
     private String name;
+    private boolean collect;
+
+    public boolean isCollect() {
+        return collect;
+    }
+
+    public void setCollect(boolean collect) {
+        this.collect = collect;
+    }
 
     public int getId() {
         return id;
