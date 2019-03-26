@@ -106,12 +106,12 @@ public class CollectActivity extends BaseActivity {
     }
 
     private void initView() {
-        recyclerView = findViewById(R.id.project_recycle);
+        recyclerView = findViewById(R.id.knowledge_recycle);
         homeList = new ArrayList<>();
         articleAdapter = new CollectAdapter(this,homeList,R.layout.item_home_article);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(articleAdapter);
-        refreshLayout = findViewById(R.id.refresh);
+        refreshLayout = findViewById(R.id.knowledge_swipe);
         refreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorPrimary));
 
     }

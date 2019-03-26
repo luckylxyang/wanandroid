@@ -181,4 +181,19 @@ public interface NetworkAPI {
     @GET("wxarticle/list/{id}/{page}/json")
     Observable<ResponseModel> getOfficeAccountArticle(@Path("id") int id,
                                                       @Path("page") int page);
+
+    /**
+     * https://www.wanandroid.com/project/list/1/json?cid=294
+     * @return
+     */
+    @GET("project/list/{page}/json")
+    Observable<ResponseModel> getProjectList(@Path("page") int page,
+                                             @Query("cid") int cid);
+
+    /**
+     * https://www.wanandroid.com/project/tree/json
+     * @return
+     */
+    @GET("project/tree/json")
+    Observable<KnowledgeModel> getProjectTree();
 }

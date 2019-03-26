@@ -103,10 +103,21 @@ public class ArticleDetailActivity extends BaseActivity {
                     unCollect();
                     break;
                 case R.id.detail_share:
+                    StringBuffer buffer = new StringBuffer();
+                    buffer.append("这里有一篇好看的文章，")
+                            .append(model.getName())
+                            .append(model.getLink())
+                            .append("快来一起玩Android吧！！！");
+                    Intent i = new Intent(Intent.ACTION_SEND);
+                    i.setType("text/plain");
+                    i.putExtra(Intent.EXTRA_SUBJECT, "Share");
+                    i.putExtra(Intent.EXTRA_TEXT, buffer.toString());
+                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(Intent.createChooser(i, getTitle()));
                     break;
                 case R.id.detail_other:
                     Uri uri = Uri.parse(model.getLink());
-                    Intent intent = new Intent(Intent.ACTION_VIEW,uri);
+                    Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                     startActivity(intent);
                     break;
 
@@ -136,7 +147,7 @@ public class ArticleDetailActivity extends BaseActivity {
                                 Intent intent = new Intent(ArticleDetailActivity.this, LoginActivity.class);
                                 startActivity(intent);
                             } else {
-                                ToastUtils.show( R.string.collect_success);
+                                ToastUtils.show(R.string.collect_success);
                                 like = true;
                                 invalidateOptionsMenu();
                             }
@@ -157,7 +168,7 @@ public class ArticleDetailActivity extends BaseActivity {
                 });
     }
 
-    private void unCollect(){
+    private void unCollect() {
         NetworkManager.getManager().getServer().unCollectArticle(model.getId())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -176,7 +187,7 @@ public class ArticleDetailActivity extends BaseActivity {
                                 Intent intent = new Intent(ArticleDetailActivity.this, LoginActivity.class);
                                 startActivity(intent);
                             } else {
-                                ToastUtils.show( R.string.uncollect_success);
+                                ToastUtils.show(R.string.uncollect_success);
                                 like = false;
                                 invalidateOptionsMenu();
                             }
@@ -228,7 +239,7 @@ public class ArticleDetailActivity extends BaseActivity {
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
                 loadingView.hide();
-                if (isError){
+                if (isError) {
                     ivError.setVisibility(View.VISIBLE);
                     view.setVisibility(View.INVISIBLE);
                 }
@@ -262,12 +273,13 @@ public class ArticleDetailActivity extends BaseActivity {
     }
 
     boolean like;
+
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        if (like){
+        if (like) {
             menu.findItem(R.id.detail_love).setVisible(false);
             menu.findItem(R.id.detail_no_love).setVisible(true);
-        }else {
+        } else {
             menu.findItem(R.id.detail_love).setVisible(true);
             menu.findItem(R.id.detail_no_love).setVisible(false);
         }
@@ -276,8 +288,8 @@ public class ArticleDetailActivity extends BaseActivity {
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (event.getAction() == KeyEvent.ACTION_DOWN){
-            if (webView.canGoBack()){
+        if (event.getAction() == KeyEvent.ACTION_DOWN) {
+            if (webView.canGoBack()) {
                 webView.goBack();
                 return true;
             }

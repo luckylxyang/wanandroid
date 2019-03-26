@@ -145,7 +145,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                         break;
                     case R.id.navigation_notifications:
                         if (TAGFrag.equals("ProjectFragment")){
-                            smoothToTop(projectFragment);
                             break;
                         }
                         hiddenAllFragment();

@@ -38,7 +38,6 @@ public class OfficeAccountActivity extends AppCompatActivity implements View.OnC
     private ViewPager viewPager;
     private ViewPagerAdapter adapter;
     private List<OfficeAccountModel.DataBean> dataBeans = new ArrayList<>();
-    private List<OfficeAccountFragment> fragments = new ArrayList<>();
     private FloatingActionButton fabTop;
     private int fragIndex;
     private Toolbar toolbar;

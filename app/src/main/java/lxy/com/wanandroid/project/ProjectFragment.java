@@ -5,7 +5,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -27,6 +29,7 @@ import lxy.com.wanandroid.base.ResponseModel;
 import lxy.com.wanandroid.base.ToastUtils;
 import lxy.com.wanandroid.home.HomeAdapter;
 import lxy.com.wanandroid.home.model.ArticleModel;
+import lxy.com.wanandroid.knowledge.KnowledgeModel;
 import lxy.com.wanandroid.network.NetworkManager;
 
 /**
@@ -34,12 +37,11 @@ import lxy.com.wanandroid.network.NetworkManager;
  * date: 2019/1/29
  */
 
-public class ProjectFragment extends Fragment implements FragmentInterface{
+public class ProjectFragment extends Fragment{
 
-    private RecyclerView recyclerView;
-    private HomeAdapter articleAdapter;
-    private List<ArticleModel> homeList;
-    private int totalPage = 0;
+    private ProjectViewPagerAdapter adapter;
+    private TabLayout tabLayout;
+    private ViewPager viewPager;
 
     /** 文章页数 */
     private int page = 0;
@@ -61,51 +63,31 @@ public class ProjectFragment extends Fragment implements FragmentInterface{
     @TargetApi(Build.VERSION_CODES.M)
     private void initListener() {
 
-
-        recyclerView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
-            @Override
-            public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-                LinearLayoutManager manager = (LinearLayoutManager) recyclerView.getLayoutManager();
-                int lastVisibleItemPosition = manager.findLastVisibleItemPosition();
-                int total = articleAdapter.getItemCount();
-                if (page <= totalPage && lastVisibleItemPosition + 4 >= total){
-                    getArticleByServer();
-                }
-            }
-        });
     }
 
     private void initView(View view) {
-        recyclerView = view.findViewById(R.id.project_recycle);
-        homeList = new ArrayList<>();
-        articleAdapter = new HomeAdapter(R.layout.item_home_article_image,homeList);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.setAdapter(articleAdapter);
-
+        adapter = new ProjectViewPagerAdapter(getChildFragmentManager());
+        tabLayout = view.findViewById(R.id.project_tab);
+        viewPager = view.findViewById(R.id.project_viewpager);
+        tabLayout.setupWithViewPager(viewPager);
+        viewPager.setAdapter(adapter);
     }
 
     public void getArticleByServer(){
 
-        NetworkManager.getManager().getServer().getNewProject(page)
+        NetworkManager.getManager().getServer().getProjectTree()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<ResponseModel>() {
+                .subscribe(new Observer<KnowledgeModel>() {
                     @Override
                     public void onSubscribe(Disposable d) {
 
                     }
 
                     @Override
-                    public void onNext(ResponseModel model) {
-                        Log.i("homeArticle",model.getData().getSize() + " hjkkhlk" );
+                    public void onNext(KnowledgeModel model) {
                         if (model.getErrorCode() == Constants.NET_SUCCESS){
-                            if (page == 0){
-                                homeList.clear();
-                            }
-                            homeList.addAll(model.getData().getDatas());
-                            totalPage = model.getData().getPageCount();
-                            ++page;
-                            articleAdapter.notifyDataSetChanged();
+                            adapter.setDataBeans(model.getData());
                         }
                     }
 
@@ -120,8 +102,4 @@ public class ProjectFragment extends Fragment implements FragmentInterface{
                 });
     }
 
-    @Override
-    public void smoothToTop() {
-        recyclerView.scrollToPosition(0);
-    }
 }
