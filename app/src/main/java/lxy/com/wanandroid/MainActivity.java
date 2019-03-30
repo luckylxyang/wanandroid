@@ -2,6 +2,7 @@ package lxy.com.wanandroid;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.internal.BottomNavigationItemView;
@@ -13,11 +14,15 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatDelegate;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+
+import com.google.gson.Gson;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -32,6 +37,7 @@ import io.reactivex.schedulers.Schedulers;
 import lxy.com.wanandroid.base.BaseActivity;
 import lxy.com.wanandroid.base.Constants;
 import lxy.com.wanandroid.base.FragmentInterface;
+import lxy.com.wanandroid.base.ToastUtils;
 import lxy.com.wanandroid.collect.CollectActivity;
 import lxy.com.wanandroid.home.HomeFragment;
 import lxy.com.wanandroid.knowledge.KnowledgeFragment;
@@ -58,6 +64,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     private DrawerLayout drawer;
     private View llNavHeader;
     private TextView tvUserName;
+    private TextView tvHeader;
     private TextView tvUserEmail;
     private String TAGFrag = "HomeFragment";
 
@@ -69,8 +76,11 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         initListener();
         if (saveBundle != null) {
             TAGFrag = saveBundle.getString("showFrag", "HomeFragment");
-
         }
+        autoLogin();
+    }
+
+    private void loadFragment(){
         switch (TAGFrag) {
             case "HomeFragment":
                 hiddenAllFragment();
@@ -85,7 +95,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 addFragment(projectFragment, "ProjectFragment");
                 break;
         }
-
     }
 
     private void initView() {
@@ -102,6 +111,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         llNavHeader = navigationView.getHeaderView(0);
         tvUserName = llNavHeader.findViewById(R.id.user_name);
         tvUserEmail = llNavHeader.findViewById(R.id.user_email);
+        tvHeader = llNavHeader.findViewById(R.id.user_header);
 
         tabLayout = findViewById(R.id.home_activity_navigate);
         disableShiftMode(tabLayout);
@@ -235,6 +245,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         if (event.isHasSuccess()) {
             tvUserName.setText(LoginUtil.getInstance().getLoginModel().getData().getUsername());
             tvUserEmail.setText(LoginUtil.getInstance().getLoginModel().getData().getEmail());
+            tvHeader.setText(LoginUtil.getInstance().getLoginModel().getData().getUsername().substring(0,1));
         }
     }
 
@@ -256,12 +267,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_hot) {
             Intent intent = new Intent(this, HotActivity.class);
             startActivity(intent);
@@ -285,10 +291,14 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         } else if (id == R.id.nav_login_out) {
             logout();
 
-        } else if (id == R.id.nav_) {
-
         } else if (id == R.id.nav_set) {
-
+            int mode = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+            if(mode == Configuration.UI_MODE_NIGHT_NO) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+            }else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+            }
+                recreate();
         }
 
         drawer.closeDrawer(GravityCompat.START);
@@ -329,6 +339,50 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                     @Override
                     public void onComplete() {
 
+                    }
+                });
+    }
+
+    private void autoLogin(){
+        if (LoginUtil.getInstance().getLoginModel().getData() == null){
+            return;
+        }
+        String name = LoginUtil.getInstance().getLoginModel().getData().getUsername();
+        String pswd = LoginUtil.getInstance().getLoginModel().getData().getPassword();
+        if (TextUtils.isEmpty(name) || TextUtils.isEmpty(pswd)){
+            loadFragment();
+            return;
+        }
+
+        NetworkManager.getManager().getServer().login(name, pswd)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<LoginModel>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(LoginModel model) {
+                        if (model.getErrorCode() == 0){
+                            changeLogin(new LoginEvent(true));
+                            model.getData().setPassword(pswd);
+                            LoginUtil.getInstance().setLoginInfo(new Gson().toJson(model));
+                        }else {
+                            ToastUtils.show(model.getErrorMsg());
+                        }
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        loadFragment();
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        loadFragment();
                     }
                 });
     }

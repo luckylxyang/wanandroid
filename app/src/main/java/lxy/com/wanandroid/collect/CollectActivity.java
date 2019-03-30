@@ -45,7 +45,7 @@ public class CollectActivity extends BaseActivity {
 
     @Override
     public int setContextView() {
-        return R.layout.frag_project;
+        return R.layout.frag_knowledge;
     }
 
     @Override

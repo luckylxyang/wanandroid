@@ -76,72 +76,61 @@ public class HomeFragment extends Fragment implements FragmentInterface {
     }
 
     private void initView(View view) {
-        bannerList = new ArrayList<>();
-        banner = (Banner) getActivity().getLayoutInflater().inflate(R.layout.item_home_banner,null);
-        banner.setBannerStyle(BannerConfig.CIRCLE_INDICATOR)
-                .isAutoPlay(true)
-                .setIndicatorGravity(BannerConfig.RIGHT)
-                .setImageLoader(new GlideImageLoader());
 
         refreshLayout = view.findViewById(R.id.home_frag_refresh);
         recyclerView = view.findViewById(R.id.home_frag_recycle);
         homeList = new ArrayList<>();
         articleAdapter = new HomeAdapter(R.layout.item_home_article_image,homeList);
-//        articleAdapter = new HomeArticleAdapter(getContext(),homeList,R.layout.item_home_article);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(articleAdapter);
-        articleAdapter.setHeaderView(banner);
         refreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorPrimary));
+
+        bannerList = new ArrayList<>();
+        banner = (Banner) getActivity().getLayoutInflater().inflate(R.layout.item_home_banner,recyclerView,false);
+
+        banner.setBannerStyle(BannerConfig.CIRCLE_INDICATOR)
+                .isAutoPlay(true)
+                .setIndicatorGravity(BannerConfig.RIGHT)
+                .setImageLoader(new GlideImageLoader());
 
     }
 
     @TargetApi(Build.VERSION_CODES.M)
     private void initListener() {
-        articleAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                Intent intent = new Intent(getContext(),ArticleDetailActivity.class);
-                DetailModel model = new DetailModel();
-                model.setId(homeList.get(position).getId());
-                model.setLink(homeList.get(position).getLink());
-                model.setName(homeList.get(position).getTitle());
-                model.setCollect(homeList.get(position).isCollect());
-                intent.putExtra("article",new Gson().toJson(model));
-                startActivity(intent);
-            }
+        articleAdapter.setOnItemClickListener((adapter, view, position) -> {
+            Intent intent = new Intent(getContext(),ArticleDetailActivity.class);
+            DetailModel model = new DetailModel();
+            model.setId(homeList.get(position).getId());
+            model.setLink(homeList.get(position).getLink());
+            model.setName(homeList.get(position).getTitle());
+            model.setCollect(homeList.get(position).isCollect());
+            intent.putExtra("article",new Gson().toJson(model));
+            startActivity(intent);
         });
 
-        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                page = 0;
+        refreshLayout.setOnRefreshListener(() -> {
+            page = 0;
+            getArticleByServer();
+            getBannerByServer();
+        });
+
+        recyclerView.setOnScrollChangeListener((v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
+            LinearLayoutManager manager = (LinearLayoutManager) recyclerView.getLayoutManager();
+            int lastVisibleItemPosition = manager.findLastVisibleItemPosition();
+            int total = articleAdapter.getItemCount();
+            if (lastVisibleItemPosition + Constants.ITEM_NUM >= total && page <= totalPage){
                 getArticleByServer();
             }
         });
 
-        recyclerView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
-            @Override
-            public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-                LinearLayoutManager manager = (LinearLayoutManager) recyclerView.getLayoutManager();
-                int lastVisibleItemPosition = manager.findLastVisibleItemPosition();
-                int total = articleAdapter.getItemCount();
-                if (lastVisibleItemPosition + Constants.ITEM_NUM >= total && page <= totalPage){
-                    getArticleByServer();
-                }
-            }
-        });
-
-        banner.setOnBannerListener(new OnBannerListener() {
-            @Override
-            public void OnBannerClick(int position) {
-                Intent intent = new Intent(getContext(),ArticleDetailActivity.class);
-                DetailModel model = new DetailModel();
-                model.setId(bannerList.get(position).getId());
-                model.setLink(bannerList.get(position).getUrl());
-                model.setName(bannerList.get(position).getTitle());
-                intent.putExtra("article",new Gson().toJson(model));
-                startActivity(intent);
-            }
+        banner.setOnBannerListener(position -> {
+            Intent intent = new Intent(getContext(),ArticleDetailActivity.class);
+            DetailModel model = new DetailModel();
+            model.setId(bannerList.get(position).getId());
+            model.setLink(bannerList.get(position).getUrl());
+            model.setName(bannerList.get(position).getTitle());
+            intent.putExtra("article",new Gson().toJson(model));
+            startActivity(intent);
         });
     }
 
@@ -201,6 +190,8 @@ public class HomeFragment extends Fragment implements FragmentInterface {
                         bannerList.clear();
                         bannerList.addAll(model.getData());
                         banner.setImages(model.getData()).start();
+                        articleAdapter.addHeaderView(banner);
+                        articleAdapter.notifyDataSetChanged();
                     }
 
                     @Override

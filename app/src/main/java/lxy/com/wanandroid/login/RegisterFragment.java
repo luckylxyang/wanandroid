@@ -85,6 +85,7 @@ public class RegisterFragment extends Fragment {
                     public void onNext(LoginModel model) {
                         if (model.getErrorCode() == 0){
                             ToastUtils.show(R.string.login_success);
+                            model.getData().setPassword(pswd);
                             LoginUtil.getInstance().setLoginInfo(new Gson().toJson(model));
                         }else {
                             ToastUtils.show(model.getErrorMsg());

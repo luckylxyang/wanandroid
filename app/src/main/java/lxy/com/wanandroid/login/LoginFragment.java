@@ -56,19 +56,9 @@ public class LoginFragment extends Fragment {
     }
 
     private void initListener(){
-        btnLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                login();
-            }
-        });
+        btnLogin.setOnClickListener(v -> login());
 
-        tvRegister.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ((LoginActivity)getActivity()).showRegister();
-            }
-        });
+        tvRegister.setOnClickListener(v -> ((LoginActivity)getActivity()).showRegister());
     }
 
     private void login(){
@@ -95,6 +85,7 @@ public class LoginFragment extends Fragment {
                             ToastUtils.show(loginModel.getErrorMsg());
                         }else {
                             ToastUtils.show(R.string.login_success);
+                            loginModel.getData().setPassword(pswd);
                             LoginUtil.getInstance().setLoginInfo(new Gson().toJson(loginModel));
                             getActivity().finish();
                         }

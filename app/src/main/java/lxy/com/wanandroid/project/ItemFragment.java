@@ -78,8 +78,11 @@ public class ItemFragment extends Fragment {
     private void initView(View view) {
         rv = view.findViewById(R.id.office_account_rv);
         adapter = new HomeAdapter(R.layout.item_home_article_image,list);
+
         rv.setLayoutManager(new LinearLayoutManager(getContext()));
         rv.setAdapter(adapter);
+        adapter.bindToRecyclerView(rv);
+        adapter.setEmptyView(R.layout.item_empty);
         refreshLayout = view.findViewById(R.id.office_account_swipe);
         refreshLayout.setColorSchemeColors(getContext().getResources().getColor(R.color.colorPrimary));
 

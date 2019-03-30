@@ -62,7 +62,6 @@ public class LoginUtil {
         }else {
             return new Gson().fromJson(userInfo,LoginModel.class);
         }
-
     }
 
     public void clearLoginInfo() {

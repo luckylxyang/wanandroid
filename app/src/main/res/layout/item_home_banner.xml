@@ -2,8 +2,8 @@
 <com.youth.banner.Banner xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/item_home_article_banner"
     android:layout_width="match_parent"
-    android:layout_marginHorizontal="20dp"
+    android:layout_marginHorizontal="10dp"
     android:layout_marginTop="@dimen/dp_10"
-    android:layout_height="250dp">
+    android:layout_height="180dp">
 
 </com.youth.banner.Banner>
