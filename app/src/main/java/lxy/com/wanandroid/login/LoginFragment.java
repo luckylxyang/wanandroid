@@ -56,7 +56,12 @@ public class LoginFragment extends Fragment {
     }
 
     private void initListener(){
-        btnLogin.setOnClickListener(v -> login());
+        btnLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LoginFragment.this.login();
+            }
+        });
 
         tvRegister.setOnClickListener(v -> ((LoginActivity)getActivity()).showRegister());
     }

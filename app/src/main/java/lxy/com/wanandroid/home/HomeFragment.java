@@ -161,6 +161,7 @@ public class HomeFragment extends Fragment implements FragmentInterface {
                         }
                     }
 
+
                     @Override
                     public void onError(Throwable e) {
                         ToastUtils.show(e.getMessage());

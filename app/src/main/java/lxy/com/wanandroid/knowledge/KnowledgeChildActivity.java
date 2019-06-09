@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -21,9 +22,8 @@ import lxy.com.wanandroid.R;
 import lxy.com.wanandroid.base.BaseActivity;
 import lxy.com.wanandroid.base.Constants;
 import lxy.com.wanandroid.base.ResponseModel;
-import lxy.com.wanandroid.baseadapter.BaseAdapter;
 import lxy.com.wanandroid.detail.DetailModel;
-import lxy.com.wanandroid.home.HomeArticleAdapter;
+import lxy.com.wanandroid.home.HomeAdapter;
 import lxy.com.wanandroid.home.model.ArticleModel;
 import lxy.com.wanandroid.network.NetworkManager;
 
@@ -38,7 +38,7 @@ public class KnowledgeChildActivity extends BaseActivity{
     private int page = 0;
     private String name;
     private int cid = 0;
-    private HomeArticleAdapter adapter;
+    private HomeAdapter adapter;
     private List<ArticleModel> dataList;
     private int totalPage = 0;
 
@@ -59,29 +59,23 @@ public class KnowledgeChildActivity extends BaseActivity{
 
     @TargetApi(Build.VERSION_CODES.M)
     private void initListener() {
-        rvKnowledge.setOnScrollChangeListener(new View.OnScrollChangeListener() {
-            @Override
-            public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-                LinearLayoutManager manager = (LinearLayoutManager) rvKnowledge.getLayoutManager();
-                int lastVisibleItemPosition = manager.findLastVisibleItemPosition();
-                int total = adapter.getItemCount();
-                if (lastVisibleItemPosition + Constants.ITEM_NUM >= total && page <= totalPage){
-                    getDataByServer();
-                }
+        rvKnowledge.setOnScrollChangeListener((v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
+            LinearLayoutManager manager = (LinearLayoutManager) rvKnowledge.getLayoutManager();
+            int lastVisibleItemPosition = manager.findLastVisibleItemPosition();
+            int total = adapter.getItemCount();
+            if (lastVisibleItemPosition + Constants.ITEM_NUM >= total && page <= totalPage){
+                getDataByServer();
             }
         });
 
-        adapter.setOnItemListener(new BaseAdapter.OnItemClickListener() {
-            @Override
-            public void onClick(View view, int position) {
-                Intent intent = new Intent(KnowledgeChildActivity.this, ArticleDetailActivity.class);
-                DetailModel model = new DetailModel();
-                model.setId(dataList.get(position).getId());
-                model.setLink(dataList.get(position).getLink());
-                model.setName(dataList.get(position).getTitle());
-                intent.putExtra("article",new Gson().toJson(model));
-                startActivity(intent);
-            }
+        adapter.setOnItemClickListener((adapter, view, position) -> {
+            Intent intent = new Intent(KnowledgeChildActivity.this, ArticleDetailActivity.class);
+            DetailModel model = new DetailModel();
+            model.setId(dataList.get(position).getId());
+            model.setLink(dataList.get(position).getLink());
+            model.setName(dataList.get(position).getTitle());
+            intent.putExtra("article",new Gson().toJson(model));
+            startActivity(intent);
         });
     }
 
@@ -89,7 +83,7 @@ public class KnowledgeChildActivity extends BaseActivity{
 
         rvKnowledge = findViewById(R.id.knowledge_child_recycle);
         dataList = new ArrayList<>();
-        adapter = new HomeArticleAdapter(this,dataList,R.layout.item_home_article);
+        adapter = new HomeAdapter(R.layout.item_home_article, dataList);
         rvKnowledge.setLayoutManager(new LinearLayoutManager(this));
         rvKnowledge.setAdapter(adapter);
     }
