@@ -5,4 +5,5 @@ package lxy.com.sdk;
  * date: 2019/6/10
  */
 public class SensorsDataPrivate {
+
 }
