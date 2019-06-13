@@ -12,6 +12,8 @@ import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
+import android.view.View;
+import android.view.ViewTreeObserver;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -22,6 +24,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import lxy.com.sdk.click1.SensorsDataClickPrivate;
 
 /**
  * Creator : lxy
@@ -36,18 +40,25 @@ public class SensorsDataPrivate {
         mIgnoredActivities = new ArrayList<>();
     }
 
-    public static void ignoreAutoTrackActivity(Class<?> activity){
-        if (activity == null){
+    public static void ignoreAutoTrackActivity(Class<?> activity) {
+        if (activity == null) {
             return;
         }
         mIgnoredActivities.add(activity.hashCode());
     }
 
-    public static void registerActivityLifecycleCallbacks(Application application){
+    public static void registerActivityLifecycleCallbacks(Application application) {
         application.registerActivityLifecycleCallbacks(new Application.ActivityLifecycleCallbacks() {
+            private ViewTreeObserver.OnGlobalLayoutListener globalLayoutListener;
             @Override
-            public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
-
+            public void onActivityCreated(final Activity activity, Bundle savedInstanceState) {
+                final View rootView = activity.getWindow().getDecorView();
+                globalLayoutListener = new ViewTreeObserver.OnGlobalLayoutListener() {
+                    @Override
+                    public void onGlobalLayout() {
+                        SensorsDataClickPrivate.delegateViewsOnClickListener(activity, rootView);
+                    }
+                };
             }
 
             @Override
@@ -56,8 +67,13 @@ public class SensorsDataPrivate {
             }
 
             @Override
-            public void onActivityResumed(Activity activity) {
+            public void onActivityResumed(final Activity activity) {
+                // 页面浏览采集
                 trackAppViewScreen(activity);
+                // 点击事件采集
+                final View rootView = activity.getWindow().getDecorView();
+                rootView.getViewTreeObserver().addOnGlobalLayoutListener(globalLayoutListener);
+
             }
 
             @Override
@@ -67,6 +83,8 @@ public class SensorsDataPrivate {
 
             @Override
             public void onActivityStopped(Activity activity) {
+                final View rootView = activity.getWindow().getDecorView();
+                rootView.getViewTreeObserver().removeOnGlobalLayoutListener(globalLayoutListener);
 
             }
 
@@ -82,38 +100,46 @@ public class SensorsDataPrivate {
         });
     }
 
+    /**
+     * activity 页面浏览采集
+     *
+     * @param activity
+     */
     private static void trackAppViewScreen(Activity activity) {
         try {
-            if (activity == null){
+            if (activity == null) {
                 return;
             }
             // 如果该页面已经记录了
-            if (mIgnoredActivities.contains(activity.getClass().hashCode())){
+            if (mIgnoredActivities.contains(activity.getClass().hashCode())) {
                 return;
             }
             JSONObject object = new JSONObject();
-            object.put("activity",activity.getClass().getCanonicalName());
-            object.put("title",getActivityTitle(activity));
+            object.put("activity", activity.getClass().getCanonicalName());
+            object.put("title", getActivityTitle(activity));
             SensorsDataAPI.getInstance().track("AppViewScreen", object);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
+
+
+
     private static String getActivityTitle(Activity activity) {
         String title = null;
-        if (activity == null){
+        if (activity == null) {
             return null;
         }
         try {
             title = activity.getTitle().toString();
-            if (Build.VERSION.SDK_INT >= 11){
+            if (Build.VERSION.SDK_INT >= 11) {
                 String toolbarTitle = getToolbarTitle(activity);
-                if (!TextUtils.isEmpty(toolbarTitle)){
+                if (!TextUtils.isEmpty(toolbarTitle)) {
                     title = toolbarTitle;
                 }
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return title;
@@ -121,6 +147,7 @@ public class SensorsDataPrivate {
 
     /**
      * 获取 activity 的标题，需要设置 actionbar or supportActionBar
+     *
      * @param activity
      * @return
      */
@@ -142,13 +169,13 @@ public class SensorsDataPrivate {
                     }
                 }
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
     }
 
-    public static Map<String, Object> getDeviceInfo(Context context){
+    public static Map<String, Object> getDeviceInfo(Context context) {
         HashMap<String, Object> deviceInfo = new HashMap<>();
         deviceInfo.put("lib", "Android");
         deviceInfo.put("lib_version", SensorsDataAPI.SDK_VERSION);
@@ -156,10 +183,10 @@ public class SensorsDataPrivate {
         deviceInfo.put("os_version", Build.VERSION.RELEASE == null ? "UNKNOWN" : Build.VERSION.RELEASE);
         // 生产厂家
         deviceInfo.put("manfacturer", Build.MANUFACTURER == null ? "UNKNOWN" : Build.MANUFACTURER);
-        if (TextUtils.isEmpty(Build.MODEL)){
+        if (TextUtils.isEmpty(Build.MODEL)) {
             deviceInfo.put("model", "UNKNOWN");
-        }else {
-            deviceInfo.put("model",Build.MODEL.trim());
+        } else {
+            deviceInfo.put("model", Build.MODEL.trim());
         }
         try {
             PackageManager packageManager = context.getPackageManager();
@@ -171,16 +198,16 @@ public class SensorsDataPrivate {
             e.printStackTrace();
         }
         DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
-        deviceInfo.put("screen_height",displayMetrics.heightPixels);
-        deviceInfo.put("screen_width",displayMetrics.widthPixels);
+        deviceInfo.put("screen_height", displayMetrics.heightPixels);
+        deviceInfo.put("screen_width", displayMetrics.widthPixels);
         return Collections.unmodifiableMap(deviceInfo);
     }
 
-    public static String getAndroidId(Context context){
+    public static String getAndroidId(Context context) {
         String androidId = "";
         try {
             androidId = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return androidId;
@@ -188,10 +215,11 @@ public class SensorsDataPrivate {
 
     public static void mergeJSONObject(JSONObject source, JSONObject dest) throws JSONException {
         Iterator<String> keys = source.keys();
-        while (keys.hasNext()){
+        while (keys.hasNext()) {
             String key = keys.next();
             dest.put(key, source.get(key));
         }
     }
+
 
 }

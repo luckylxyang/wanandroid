@@ -64,9 +64,10 @@ dependencies {
 import org.aspectj.bridge.IMessage
 import org.aspectj.bridge.MessageHandler
 import org.aspectj.tools.ajc.Main
+
 final def log = project.logger
 
-android.applicationVariants.all{ variant ->
+android.applicationVariants.all { variant ->
     if (!variant.buildType.isDebuggable()) {
         log.debug("Skipping non-debuggable build type '${variant.buildType.name}'.")
         return
@@ -105,4 +106,3 @@ android.applicationVariants.all{ variant ->
         }
     }
 }
-

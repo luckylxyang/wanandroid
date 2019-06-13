@@ -292,13 +292,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             logout();
 
         } else if (id == R.id.nav_set) {
-            int mode = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
-            if(mode == Configuration.UI_MODE_NIGHT_NO) {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-            }else {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-            }
-                recreate();
+            startActivity(new Intent(this,SettingActivity.class));
         }
 
         drawer.closeDrawer(GravityCompat.START);

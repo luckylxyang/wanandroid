@@ -25,7 +25,8 @@
 
     <string name="set_login_out">退出账号</string>
     <string name="set_collect">我的收藏</string>
-    <string name="set_set">日/夜模式</string>
+    <string name="set_set">设置</string>
+    <string name="set_model">日/夜模式</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
