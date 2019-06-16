@@ -25,7 +25,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import lxy.com.sdk.click1.SensorsDataClickPrivate;
+import lxy.com.sdk.click.SensorsDataClickPrivate;
 
 /**
  * Creator : lxy

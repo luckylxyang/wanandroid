@@ -1,4 +1,4 @@
-package lxy.com.sdk.click1;
+package lxy.com.sdk.click;
 
 import android.widget.CompoundButton;
 

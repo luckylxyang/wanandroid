@@ -1,9 +1,6 @@
-package lxy.com.sdk.click1;
+package lxy.com.sdk.click;
 
-import android.util.Log;
 import android.view.View;
-
-import lxy.com.sdk.SensorsDataPrivate;
 
 /**
  * Creator : lxy

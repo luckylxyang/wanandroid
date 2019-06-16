@@ -28,6 +28,7 @@ import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
+import lxy.com.sdk.screen.FragmentListener;
 import lxy.com.wanandroid.base.FragmentInterface;
 import lxy.com.wanandroid.detail.ArticleDetailActivity;
 import lxy.com.wanandroid.R;
@@ -68,6 +69,7 @@ public class HomeFragment extends Fragment implements FragmentInterface {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        FragmentListener.getInstance().registerFragment(this);
         initView(view);
         initListener();
         refreshLayout.setRefreshing(true);
