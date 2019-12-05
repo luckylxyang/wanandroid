@@ -20,11 +20,15 @@ import com.google.gson.Gson;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.internal.observers.BlockingBaseObserver;
 import io.reactivex.schedulers.Schedulers;
 import lxy.com.wanandroid.R;
 import lxy.com.wanandroid.base.Constants;
 import lxy.com.wanandroid.base.ToastUtils;
+import lxy.com.wanandroid.network.BaseObserver;
+import lxy.com.wanandroid.network.BaseResponse;
 import lxy.com.wanandroid.network.NetworkManager;
+import lxy.com.wanandroid.network.RxHelper;
 
 /**
  * Creator : lxy
@@ -75,36 +79,19 @@ public class LoginFragment extends Fragment {
         }
 
         NetworkManager.getManager().getServer().login(user,pswd)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<LoginModel>() {
+                .compose(RxHelper.observableIO2Main())
+                .subscribe(new BaseObserver<LoginModel>(){
                     @Override
-                    public void onSubscribe(Disposable d) {
-
+                    public void onSuccess(LoginModel loginModel) {
+                        ToastUtils.show(R.string.login_success);
+                        loginModel.setPassword(pswd);
+                        LoginUtil.getInstance().setLoginInfo(new Gson().toJson(loginModel));
+                        getActivity().finish();
                     }
 
                     @Override
-                    public void onNext(LoginModel loginModel) {
-                        Log.i(TAG,new Gson().toJson(loginModel));
-                        if (loginModel.getErrorCode() != Constants.NET_SUCCESS){
-                            ToastUtils.show(loginModel.getErrorMsg());
-                        }else {
-                            ToastUtils.show(R.string.login_success);
-                            loginModel.getData().setPassword(pswd);
-                            LoginUtil.getInstance().setLoginInfo(new Gson().toJson(loginModel));
-                            getActivity().finish();
-                        }
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        e.printStackTrace();
-                        ToastUtils.show(e.getMessage());
-                    }
-
-                    @Override
-                    public void onComplete() {
-
+                    public void onFailure(String message) {
+                        ToastUtils.show(message);
                     }
                 });
     }

@@ -38,7 +38,7 @@ public interface NetworkAPI {
      */
     @POST("user/login")
     @FormUrlEncoded
-    Observable<LoginModel> login(@Field("username") String username,
+    Observable<BaseResponse<LoginModel>> login(@Field("username") String username,
                                  @Field("password") String password);
 
     /**

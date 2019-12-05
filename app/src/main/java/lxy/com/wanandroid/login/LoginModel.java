@@ -16,127 +16,97 @@ public class LoginModel {
      * errorMsg :
      */
 
-    private DataBean data;
-    private int errorCode;
-    private String errorMsg;
+    /**
+     * chapterTops : []
+     * collectIds : [7919]
+     * email :
+     * icon :
+     * id : 16821
+     * password :
+     * token :
+     * type : 0
+     * username : lxy8250
+     */
 
-    public DataBean getData() {
-        return data;
+    private String email;
+    private String icon;
+    private int id;
+    private String password;
+    private String token;
+    private int type;
+    private String username;
+    private List<?> chapterTops;
+    private List<Integer> collectIds;
+
+    public String getEmail() {
+        return email;
     }
 
-    public void setData(DataBean data) {
-        this.data = data;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    public int getErrorCode() {
-        return errorCode;
+    public String getIcon() {
+        return icon;
     }
 
-    public void setErrorCode(int errorCode) {
-        this.errorCode = errorCode;
+    public void setIcon(String icon) {
+        this.icon = icon;
     }
 
-    public String getErrorMsg() {
-        return errorMsg;
+    public int getId() {
+        return id;
     }
 
-    public void setErrorMsg(String errorMsg) {
-        this.errorMsg = errorMsg;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public static class DataBean {
-        /**
-         * chapterTops : []
-         * collectIds : [7919]
-         * email :
-         * icon :
-         * id : 16821
-         * password :
-         * token :
-         * type : 0
-         * username : lxy8250
-         */
+    public String getPassword() {
+        return password;
+    }
 
-        private String email;
-        private String icon;
-        private int id;
-        private String password;
-        private String token;
-        private int type;
-        private String username;
-        private List<?> chapterTops;
-        private List<Integer> collectIds;
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
-        public String getEmail() {
-            return email;
-        }
+    public String getToken() {
+        return token;
+    }
 
-        public void setEmail(String email) {
-            this.email = email;
-        }
+    public void setToken(String token) {
+        this.token = token;
+    }
 
-        public String getIcon() {
-            return icon;
-        }
+    public int getType() {
+        return type;
+    }
 
-        public void setIcon(String icon) {
-            this.icon = icon;
-        }
+    public void setType(int type) {
+        this.type = type;
+    }
 
-        public int getId() {
-            return id;
-        }
+    public String getUsername() {
+        return username;
+    }
 
-        public void setId(int id) {
-            this.id = id;
-        }
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
-        public String getPassword() {
-            return password;
-        }
+    public List<?> getChapterTops() {
+        return chapterTops;
+    }
 
-        public void setPassword(String password) {
-            this.password = password;
-        }
+    public void setChapterTops(List<?> chapterTops) {
+        this.chapterTops = chapterTops;
+    }
 
-        public String getToken() {
-            return token;
-        }
+    public List<Integer> getCollectIds() {
+        return collectIds;
+    }
 
-        public void setToken(String token) {
-            this.token = token;
-        }
-
-        public int getType() {
-            return type;
-        }
-
-        public void setType(int type) {
-            this.type = type;
-        }
-
-        public String getUsername() {
-            return username;
-        }
-
-        public void setUsername(String username) {
-            this.username = username;
-        }
-
-        public List<?> getChapterTops() {
-            return chapterTops;
-        }
-
-        public void setChapterTops(List<?> chapterTops) {
-            this.chapterTops = chapterTops;
-        }
-
-        public List<Integer> getCollectIds() {
-            return collectIds;
-        }
-
-        public void setCollectIds(List<Integer> collectIds) {
-            this.collectIds = collectIds;
-        }
+    public void setCollectIds(List<Integer> collectIds) {
+        this.collectIds = collectIds;
     }
 }

@@ -45,6 +45,7 @@ import lxy.com.wanandroid.login.LoginActivity;
 import lxy.com.wanandroid.login.LoginEvent;
 import lxy.com.wanandroid.login.LoginModel;
 import lxy.com.wanandroid.login.LoginUtil;
+import lxy.com.wanandroid.network.BaseObserver;
 import lxy.com.wanandroid.officeAccount.OfficeAccountActivity;
 import lxy.com.wanandroid.network.NetworkManager;
 import lxy.com.wanandroid.project.ProjectFragment;
@@ -243,9 +244,9 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void changeLogin(LoginEvent event) {
         if (event.isHasSuccess()) {
-            tvUserName.setText(LoginUtil.getInstance().getLoginModel().getData().getUsername());
-            tvUserEmail.setText(LoginUtil.getInstance().getLoginModel().getData().getEmail());
-            tvHeader.setText(LoginUtil.getInstance().getLoginModel().getData().getUsername().substring(0,1));
+            tvUserName.setText(LoginUtil.getInstance().getLoginModel().getUsername());
+            tvUserEmail.setText(LoginUtil.getInstance().getLoginModel().getEmail());
+            tvHeader.setText(LoginUtil.getInstance().getLoginModel().getUsername().substring(0,1));
         }
     }
 
@@ -318,11 +319,11 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
                     @Override
                     public void onNext(LoginModel model) {
-                        if (model.getErrorCode() == Constants.NET_SUCCESS) {
-                            LoginUtil.getInstance().clearLoginInfo();
-                            tvUserEmail.setText("");
-                            tvUserName.setText(R.string.login_yet);
-                        }
+//                        if (model.getErrorCode() == Constants.NET_SUCCESS) {
+//                            LoginUtil.getInstance().clearLoginInfo();
+//                            tvUserEmail.setText("");
+//                            tvUserName.setText(R.string.login_yet);
+//                        }
                     }
 
                     @Override
@@ -338,11 +339,11 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     private void autoLogin(){
-        if (LoginUtil.getInstance().getLoginModel().getData() == null){
+        if (LoginUtil.getInstance().getLoginModel() == null){
             return;
         }
-        String name = LoginUtil.getInstance().getLoginModel().getData().getUsername();
-        String pswd = LoginUtil.getInstance().getLoginModel().getData().getPassword();
+        String name = LoginUtil.getInstance().getLoginModel().getUsername();
+        String pswd = LoginUtil.getInstance().getLoginModel().getPassword();
         if (TextUtils.isEmpty(name) || TextUtils.isEmpty(pswd)){
             loadFragment();
             return;
@@ -351,32 +352,18 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         NetworkManager.getManager().getServer().login(name, pswd)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<LoginModel>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
+                .subscribe(new BaseObserver<LoginModel>(){
 
+                    @Override
+                    public void onSuccess(LoginModel model) {
+                        changeLogin(new LoginEvent(true));
+                        model.setPassword(pswd);
+                        LoginUtil.getInstance().setLoginInfo(new Gson().toJson(model));
                     }
 
                     @Override
-                    public void onNext(LoginModel model) {
-                        if (model.getErrorCode() == 0){
-                            changeLogin(new LoginEvent(true));
-                            model.getData().setPassword(pswd);
-                            LoginUtil.getInstance().setLoginInfo(new Gson().toJson(model));
-                        }else {
-                            ToastUtils.show(model.getErrorMsg());
-                        }
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        loadFragment();
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        loadFragment();
+                    public void onFailure(String message) {
+                        ToastUtils.show(message);
                     }
                 });
     }

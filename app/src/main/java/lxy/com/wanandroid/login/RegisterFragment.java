@@ -83,13 +83,13 @@ public class RegisterFragment extends Fragment {
 
                     @Override
                     public void onNext(LoginModel model) {
-                        if (model.getErrorCode() == 0){
-                            ToastUtils.show(R.string.login_success);
-                            model.getData().setPassword(pswd);
-                            LoginUtil.getInstance().setLoginInfo(new Gson().toJson(model));
-                        }else {
-                            ToastUtils.show(model.getErrorMsg());
-                        }
+//                        if (model.getErrorCode() == 0){
+//                            ToastUtils.show(R.string.login_success);
+//                            model.getData().setPassword(pswd);
+//                            LoginUtil.getInstance().setLoginInfo(new Gson().toJson(model));
+//                        }else {
+//                            ToastUtils.show(model.getErrorMsg());
+//                        }
 
                     }
 
