@@ -15,16 +15,16 @@ import java.util.List;
 
 public class ViewPagerAdapter extends FragmentStatePagerAdapter {
 
-    private List<OfficeAccountModel.DataBean> dataBeans = new ArrayList<>();
+    private List<OfficeAccountModel> dataBeans = new ArrayList<>();
     private List<OfficeAccountFragment> fragments = new ArrayList<>();
 
     public ViewPagerAdapter(FragmentManager fm) {
         super(fm);
     }
 
-    public void setDataBeans(List<OfficeAccountModel.DataBean> dataBeans) {
+    public void setDataBeans(List<OfficeAccountModel> dataBeans) {
         this.dataBeans = dataBeans;
-        for (OfficeAccountModel.DataBean dataBean : dataBeans) {
+        for (OfficeAccountModel dataBean : dataBeans) {
             fragments.add(OfficeAccountFragment.newInstance(dataBean.getId()));
         }
         notifyDataSetChanged();

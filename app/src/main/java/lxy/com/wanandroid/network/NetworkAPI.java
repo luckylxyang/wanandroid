@@ -1,5 +1,7 @@
 package lxy.com.wanandroid.network;
 
+import java.util.List;
+
 import io.reactivex.Observable;
 import lxy.com.wanandroid.base.ResponseModel;
 import lxy.com.wanandroid.collect.CollectModel;
@@ -7,6 +9,7 @@ import lxy.com.wanandroid.home.model.ArticleModel;
 import lxy.com.wanandroid.home.model.BannerModel;
 import lxy.com.wanandroid.knowledge.KnowledgeModel;
 import lxy.com.wanandroid.login.LoginModel;
+import lxy.com.wanandroid.officeAccount.OfficeAccountArticleModel;
 import lxy.com.wanandroid.officeAccount.OfficeAccountModel;
 import lxy.com.wanandroid.search.HotModel;
 import lxy.com.wanandroid.search.WebsiteModel;
@@ -67,7 +70,7 @@ public interface NetworkAPI {
      * @return
      */
     @GET("banner/json")
-    Observable<BannerModel> getBannerList();
+    Observable<BaseResponse<List<BannerModel>>> getBannerList();
 
     /**
      * Get article in a website which link is www.wanandroid.com
@@ -172,15 +175,15 @@ public interface NetworkAPI {
      * @return
      */
     @GET("wxarticle/chapters/json")
-    Observable<OfficeAccountModel> getOfficeAccountList();
+    Observable<BaseResponse<List<OfficeAccountModel>>> getOfficeAccountList();
 
     /**
      * https://wanandroid.com/wxarticle/list/408/1/json
      * @return
      */
     @GET("wxarticle/list/{id}/{page}/json")
-    Observable<ResponseModel> getOfficeAccountArticle(@Path("id") int id,
-                                                      @Path("page") int page);
+    Observable<BaseResponse<OfficeAccountArticleModel>> getOfficeAccountArticle(@Path("id") int id,
+                                                                                @Path("page") int page);
 
     /**
      * https://www.wanandroid.com/project/list/1/json?cid=294

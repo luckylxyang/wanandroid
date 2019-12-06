@@ -2,6 +2,8 @@ package lxy.com.wanandroid.home;
 
 import android.annotation.TargetApi;
 import android.content.Intent;
+import android.databinding.DataBindingUtil;
+import android.databinding.ViewDataBinding;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -30,6 +32,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import lxy.com.sdk.screen.FragmentListener;
 import lxy.com.wanandroid.base.FragmentInterface;
+import lxy.com.wanandroid.base.WanApplication;
 import lxy.com.wanandroid.detail.ArticleDetailActivity;
 import lxy.com.wanandroid.R;
 import lxy.com.wanandroid.base.Constants;
@@ -38,7 +41,9 @@ import lxy.com.wanandroid.base.ToastUtils;
 import lxy.com.wanandroid.detail.DetailModel;
 import lxy.com.wanandroid.home.model.ArticleModel;
 import lxy.com.wanandroid.home.model.BannerModel;
+import lxy.com.wanandroid.network.BaseObserver;
 import lxy.com.wanandroid.network.NetworkManager;
+import lxy.com.wanandroid.network.RxHelper;
 
 /**
  * @author  : lxy
@@ -51,11 +56,11 @@ public class HomeFragment extends Fragment implements FragmentInterface {
     private SwipeRefreshLayout refreshLayout;
     private RecyclerView recyclerView;
     private HomeAdapter articleAdapter;
-    private HomeMultiAdapter adapter;
     private List<ArticleModel> homeList;
     private int totalPage = 0;
     private Banner banner;
-    private List<BannerModel.DataBean> bannerList;
+    private List<BannerModel> bannerList;
+    private ViewDataBinding binding;
 
     /** 文章页数 */
     private int page = 0;
@@ -63,18 +68,24 @@ public class HomeFragment extends Fragment implements FragmentInterface {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.home_frag_article,container,false);
+        binding = DataBindingUtil.inflate(inflater, R.layout.home_frag_article, container, false);
+        return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        FragmentListener.getInstance().registerFragment(this);
         initView(view);
         initListener();
         refreshLayout.setRefreshing(true);
         getArticleByServer();
         getBannerByServer();
+        initViewModel();
+    }
+
+    private void initViewModel() {
+        HomeViewModel homeViewModel = new HomeViewModel(getActivity().getApplication());
+        binding.setLifecycleOwner(this);
     }
 
     private void initView(View view) {
@@ -163,7 +174,6 @@ public class HomeFragment extends Fragment implements FragmentInterface {
                         }
                     }
 
-
                     @Override
                     public void onError(Throwable e) {
                         ToastUtils.show(e.getMessage());
@@ -179,32 +189,21 @@ public class HomeFragment extends Fragment implements FragmentInterface {
 
     public void getBannerByServer(){
         NetworkManager.getManager().getServer().getBannerList()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<BannerModel>() {
+                .compose(RxHelper.observableIO2Main())
+                .subscribe(new BaseObserver<List<BannerModel>>() {
                     @Override
-                    public void onSubscribe(Disposable d) {
-
-                    }
-
-                    @Override
-                    public void onNext(BannerModel model) {
-                        Log.i("homeBanner",model.getData().size() + " hjkkhlk" );
+                    public void onSuccess(List<BannerModel> model) {
+                        Log.i("homeBanner",model.size() + " hjkkhlk" );
                         bannerList.clear();
-                        bannerList.addAll(model.getData());
-                        banner.setImages(model.getData()).start();
+                        bannerList.addAll(model);
+                        banner.setImages(model).start();
                         articleAdapter.addHeaderView(banner);
                         articleAdapter.notifyDataSetChanged();
                     }
 
                     @Override
-                    public void onError(Throwable e) {
-                        ToastUtils.show(e.getMessage());
-                    }
-
-                    @Override
-                    public void onComplete() {
-
+                    public void onFailure(String message) {
+                        ToastUtils.show(message);
                     }
                 });
     }

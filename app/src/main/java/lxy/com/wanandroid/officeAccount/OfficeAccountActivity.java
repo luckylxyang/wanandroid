@@ -1,5 +1,8 @@
 package lxy.com.wanandroid.officeAccount;
 
+import android.arch.lifecycle.ViewModelProvider;
+import android.arch.lifecycle.ViewModelProviders;
+import android.databinding.DataBindingUtil;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -24,6 +27,8 @@ import io.reactivex.schedulers.Schedulers;
 import lxy.com.wanandroid.R;
 import lxy.com.wanandroid.base.BaseActivity;
 import lxy.com.wanandroid.base.ToastUtils;
+import lxy.com.wanandroid.databinding.ActivityOfficeAccountBinding;
+import lxy.com.wanandroid.network.BaseObserver;
 import lxy.com.wanandroid.network.NetworkManager;
 import lxy.com.wanandroid.utils.WaitDialog;
 
@@ -34,19 +39,20 @@ import lxy.com.wanandroid.utils.WaitDialog;
 
 public class OfficeAccountActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private TabLayout tabLayout;
-    private ViewPager viewPager;
     private ViewPagerAdapter adapter;
-    private List<OfficeAccountModel.DataBean> dataBeans = new ArrayList<>();
-    private FloatingActionButton fabTop;
+    private List<OfficeAccountModel> dataBeans = new ArrayList<>();
     private int fragIndex;
-    private Toolbar toolbar;
+    private ActivityOfficeAccountBinding binding;
+    private OfficeAccountViewModel viewModel;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_office_account);
-
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_office_account);
+        viewModel = ViewModelProviders.of(this).get(OfficeAccountViewModel.class);
+        binding.setViewModel(viewModel);
+        binding.setLifecycleOwner(this);
         initView();
         initListener();
         getListByServer();
@@ -54,8 +60,8 @@ public class OfficeAccountActivity extends AppCompatActivity implements View.OnC
 
 
     private void initListener() {
-        fabTop.setOnClickListener(this);
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        binding.officeAccountFloat.setOnClickListener(this);
+        binding.officeAccountViewpager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
@@ -74,59 +80,29 @@ public class OfficeAccountActivity extends AppCompatActivity implements View.OnC
     }
 
     private void initView() {
-        toolbar = findViewById(R.id.office_account_toolbar);
-        setSupportActionBar(toolbar);
+        setSupportActionBar(binding.officeAccountToolbar);
         getSupportActionBar().setTitle(R.string.official_accounts);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        toolbar.setNavigationOnClickListener(v -> finish());
+        binding.officeAccountToolbar.setNavigationOnClickListener(v -> finish());
 
-        tabLayout = findViewById(R.id.office_account_tab);
-        viewPager = findViewById(R.id.office_account_viewpager);
-        fabTop = findViewById(R.id.office_account_float);
         adapter = new ViewPagerAdapter(getSupportFragmentManager());
 
-        viewPager.setAdapter(adapter);
-        tabLayout.setupWithViewPager(viewPager);
+        binding.officeAccountViewpager.setAdapter(adapter);
+        binding.officeAccountTab.setupWithViewPager(binding.officeAccountViewpager);
     }
 
     private void getListByServer() {
-        WaitDialog.show(this);
-        NetworkManager.getManager().getServer().getOfficeAccountList()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<OfficeAccountModel>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-
-                    }
-
-                    @Override
-                    public void onNext(OfficeAccountModel model) {
-                        if (model.getErrorCode() != 0){
-                            ToastUtils.show(model.getErrorMsg());
-                            return;
-                        }
-                        dataBeans.clear();
-                        dataBeans.addAll(model.getData());
-                        adapter.setDataBeans(dataBeans);
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Log.i("officeAccount",e.getMessage());
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        WaitDialog.close();
-                    }
-                });
+        viewModel.getListByServer().observe(this, officeAccountModels -> {
+            dataBeans.clear();
+            dataBeans.addAll(officeAccountModels);
+            adapter.setDataBeans(dataBeans);
+        });
     }
 
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.office_account_float:
                 adapter.getItem(fragIndex).smoothToTop();
                 break;
@@ -135,7 +111,6 @@ public class OfficeAccountActivity extends AppCompatActivity implements View.OnC
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-//        getMenuInflater().inflate(R.menu.office_account_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
 

@@ -16,7 +16,7 @@ import lxy.com.wanandroid.home.model.BannerModel;
 public class GlideImageLoader extends ImageLoader {
     @Override
     public void displayImage(Context context, Object path, ImageView imageView) {
-        BannerModel.DataBean dataBean = (BannerModel.DataBean)path;
+        BannerModel dataBean = (BannerModel)path;
         Glide.with(context).load(dataBean.getImagePath()).into(imageView);
     }
 }

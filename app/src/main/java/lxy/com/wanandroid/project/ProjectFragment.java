@@ -56,7 +56,7 @@ public class ProjectFragment extends Fragment{
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        FragmentListener.getInstance().registerFragment(this);
+//        FragmentListener.getInstance().registerFragment(this);
         initView(view);
         initListener();
         getArticleByServer();
