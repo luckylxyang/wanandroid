@@ -9,9 +9,12 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewTreeObserver;
 
@@ -68,6 +71,8 @@ public class SensorsDataPrivate {
 
             @Override
             public void onActivityResumed(final Activity activity) {
+                AppCompatActivity activity1 = (AppCompatActivity) activity;
+                activity1.getSupportFragmentManager().registerFragmentLifecycleCallbacks(fragmentLifecycleCallbacks,false);
                 // 页面浏览采集
                 trackAppViewScreen(activity);
                 // 点击事件采集
@@ -98,6 +103,77 @@ public class SensorsDataPrivate {
 
             }
         });
+
+    }
+
+    private static FragmentManager.FragmentLifecycleCallbacks fragmentLifecycleCallbacks = new FragmentManager.FragmentLifecycleCallbacks() {
+        @Override
+        public void onFragmentAttached(FragmentManager fm, Fragment f, Context context) {
+            super.onFragmentAttached(fm, f, context);
+        }
+
+        @Override
+        public void onFragmentCreated(FragmentManager fm, Fragment f, Bundle savedInstanceState) {
+            super.onFragmentCreated(fm, f, savedInstanceState);
+        }
+
+        @Override
+        public void onFragmentViewCreated(FragmentManager fm, Fragment f, View v, Bundle savedInstanceState) {
+            super.onFragmentViewCreated(fm, f, v, savedInstanceState);
+        }
+
+        @Override
+        public void onFragmentStarted(FragmentManager fm, Fragment f) {
+            super.onFragmentStarted(fm, f);
+//            Log.i("fragmentLifeCallback",f.getClass().getSimpleName());
+            getFragmentMessage(f,"onFragmentStarted");
+        }
+
+        @Override
+        public void onFragmentResumed(FragmentManager fm, Fragment f) {
+            super.onFragmentResumed(fm, f);
+        }
+
+        @Override
+        public void onFragmentPaused(FragmentManager fm, Fragment f) {
+            super.onFragmentPaused(fm, f);
+        }
+
+        @Override
+        public void onFragmentStopped(FragmentManager fm, Fragment f) {
+            super.onFragmentStopped(fm, f);
+        }
+
+        @Override
+        public void onFragmentSaveInstanceState(FragmentManager fm, Fragment f, Bundle outState) {
+            super.onFragmentSaveInstanceState(fm, f, outState);
+        }
+
+        @Override
+        public void onFragmentDestroyed(FragmentManager fm, Fragment f) {
+            super.onFragmentDestroyed(fm, f);
+        }
+
+        @Override
+        public void onFragmentDetached(FragmentManager fm, Fragment f) {
+            super.onFragmentDetached(fm, f);
+        }
+    };
+
+    private static void getFragmentMessage(Fragment fragment, String lifeMethod){
+        try {
+            if (fragment == null) {
+                return;
+            }
+
+            JSONObject object = new JSONObject();
+            object.put("fragment_activity", fragment.getActivity().getClass().getCanonicalName());
+            object.put("fragment", fragment.getClass().getCanonicalName());
+            object.put("lifeMethod", lifeMethod);
+            SensorsDataAPI.getInstance().track("AppViewScreen", object);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -123,9 +199,11 @@ public class SensorsDataPrivate {
         }
     }
 
-
-
-
+    /**
+     * 获取 activity 标题
+     * @param activity
+     * @return
+     */
     private static String getActivityTitle(Activity activity) {
         String title = null;
         if (activity == null) {
@@ -175,6 +253,12 @@ public class SensorsDataPrivate {
         return null;
     }
 
+
+    /**
+     * 获取设备信息
+     * @param context
+     * @return
+     */
     public static Map<String, Object> getDeviceInfo(Context context) {
         HashMap<String, Object> deviceInfo = new HashMap<>();
         deviceInfo.put("lib", "Android");
