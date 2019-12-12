@@ -40,7 +40,7 @@ import lxy.com.wanandroid.base.ToastUtils;
 import lxy.com.wanandroid.db.DBHelper;
 import lxy.com.wanandroid.detail.DetailModel;
 import lxy.com.wanandroid.greendao.SearchHistoryModelDao;
-import lxy.com.wanandroid.home.HomeAdapter;
+import lxy.com.wanandroid.home.ArticleAdapter;
 import lxy.com.wanandroid.home.model.ArticleModel;
 import lxy.com.wanandroid.knowledge.FlowLayout;
 import lxy.com.wanandroid.network.NetworkManager;
@@ -60,7 +60,7 @@ public class SearchActivity extends BaseActivity {
     private FlowLayout historyLayout;
     private RecyclerView rvResult;
     private ScrollView svTag;
-    private HomeAdapter adapter;
+    private ArticleAdapter adapter;
     private List<ArticleModel> list = new ArrayList<>();
 
 
@@ -98,7 +98,7 @@ public class SearchActivity extends BaseActivity {
         rvResult = findViewById(R.id.hot_recycler);
         svTag = findViewById(R.id.hot_scroll);
         rvResult.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new HomeAdapter(R.layout.item_home_article_image, list);
+        adapter = new ArticleAdapter(R.layout.item_home_article_image, list);
         rvResult.setAdapter(adapter);
         adapter.bindToRecyclerView(rvResult);
         adapter.setEmptyView(R.layout.item_empty);
