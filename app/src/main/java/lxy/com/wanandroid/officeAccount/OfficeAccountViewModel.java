@@ -43,4 +43,23 @@ public class OfficeAccountViewModel extends BaseViewModel {
         return liveData;
     }
 
+    public MutableLiveData<OfficeAccountArticleModel> getOfficeAccountArticle(int officeAccountId,int pageIndex){
+        MutableLiveData<OfficeAccountArticleModel> liveData = new MutableLiveData<>();
+        NetworkManager.getManager().getServer().getOfficeAccountArticle(officeAccountId,pageIndex)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new BaseObserver<OfficeAccountArticleModel>() {
+                    @Override
+                    public void onSuccess(OfficeAccountArticleModel model) {
+                        liveData.postValue(model);
+                    }
+
+                    @Override
+                    public void onFailure(String message) {
+                        ToastUtils.show(message);
+                    }
+                });
+        return liveData;
+    }
+
 }

@@ -8,28 +8,17 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
-import lxy.com.sdk.screen.FragmentListener;
 import lxy.com.wanandroid.R;
 import lxy.com.wanandroid.base.Constants;
-import lxy.com.wanandroid.base.FragmentInterface;
-import lxy.com.wanandroid.base.ResponseModel;
 import lxy.com.wanandroid.base.ToastUtils;
-import lxy.com.wanandroid.home.HomeAdapter;
-import lxy.com.wanandroid.home.model.ArticleModel;
 import lxy.com.wanandroid.knowledge.KnowledgeModel;
 import lxy.com.wanandroid.network.NetworkManager;
 

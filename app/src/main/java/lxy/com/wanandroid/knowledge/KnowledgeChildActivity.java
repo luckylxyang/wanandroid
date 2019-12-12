@@ -5,9 +5,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
 
-import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -23,7 +21,7 @@ import lxy.com.wanandroid.base.BaseActivity;
 import lxy.com.wanandroid.base.Constants;
 import lxy.com.wanandroid.base.ResponseModel;
 import lxy.com.wanandroid.detail.DetailModel;
-import lxy.com.wanandroid.home.HomeAdapter;
+import lxy.com.wanandroid.home.ArticleAdapter;
 import lxy.com.wanandroid.home.model.ArticleModel;
 import lxy.com.wanandroid.network.NetworkManager;
 
@@ -38,7 +36,7 @@ public class KnowledgeChildActivity extends BaseActivity{
     private int page = 0;
     private String name;
     private int cid = 0;
-    private HomeAdapter adapter;
+    private ArticleAdapter adapter;
     private List<ArticleModel> dataList;
     private int totalPage = 0;
 
@@ -83,7 +81,7 @@ public class KnowledgeChildActivity extends BaseActivity{
 
         rvKnowledge = findViewById(R.id.knowledge_child_recycle);
         dataList = new ArrayList<>();
-        adapter = new HomeAdapter(R.layout.item_home_article, dataList);
+        adapter = new ArticleAdapter(R.layout.item_home_article, dataList);
         rvKnowledge.setLayoutManager(new LinearLayoutManager(this));
         rvKnowledge.setAdapter(adapter);
     }

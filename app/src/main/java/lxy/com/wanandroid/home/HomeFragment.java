@@ -17,11 +17,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.google.gson.Gson;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
-import com.youth.banner.listener.OnBannerListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,9 +28,7 @@ import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
-import lxy.com.sdk.screen.FragmentListener;
 import lxy.com.wanandroid.base.FragmentInterface;
-import lxy.com.wanandroid.base.WanApplication;
 import lxy.com.wanandroid.detail.ArticleDetailActivity;
 import lxy.com.wanandroid.R;
 import lxy.com.wanandroid.base.Constants;
@@ -55,7 +51,7 @@ public class HomeFragment extends Fragment implements FragmentInterface {
 
     private SwipeRefreshLayout refreshLayout;
     private RecyclerView recyclerView;
-    private HomeAdapter articleAdapter;
+    private ArticleAdapter articleAdapter;
     private List<ArticleModel> homeList;
     private int totalPage = 0;
     private Banner banner;
@@ -93,7 +89,7 @@ public class HomeFragment extends Fragment implements FragmentInterface {
         refreshLayout = view.findViewById(R.id.home_frag_refresh);
         recyclerView = view.findViewById(R.id.home_frag_recycle);
         homeList = new ArrayList<>();
-        articleAdapter = new HomeAdapter(R.layout.item_home_article_image,homeList);
+        articleAdapter = new ArticleAdapter(R.layout.item_home_article_image,homeList);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(articleAdapter);
         refreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorPrimary));

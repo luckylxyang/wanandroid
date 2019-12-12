@@ -29,10 +29,9 @@ import lxy.com.wanandroid.base.ResponseModel;
 import lxy.com.wanandroid.base.ToastUtils;
 import lxy.com.wanandroid.detail.ArticleDetailActivity;
 import lxy.com.wanandroid.detail.DetailModel;
-import lxy.com.wanandroid.home.HomeAdapter;
+import lxy.com.wanandroid.home.ArticleAdapter;
 import lxy.com.wanandroid.home.model.ArticleModel;
 import lxy.com.wanandroid.network.NetworkManager;
-import lxy.com.wanandroid.officeAccount.OfficeAccountFragment;
 
 /**
  * Creator : lxy
@@ -42,7 +41,7 @@ import lxy.com.wanandroid.officeAccount.OfficeAccountFragment;
 public class ItemFragment extends Fragment {
 
     private RecyclerView rv;
-    private HomeAdapter adapter;
+    private ArticleAdapter adapter;
     private List<ArticleModel> list = new ArrayList<>();
     private int ocId;
     private int page = 0;
@@ -77,7 +76,7 @@ public class ItemFragment extends Fragment {
 
     private void initView(View view) {
         rv = view.findViewById(R.id.office_account_rv);
-        adapter = new HomeAdapter(R.layout.item_home_article_image,list);
+        adapter = new ArticleAdapter(R.layout.item_home_article_image,list);
 
         rv.setLayoutManager(new LinearLayoutManager(getContext()));
         rv.setAdapter(adapter);

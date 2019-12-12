@@ -14,7 +14,6 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
-import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 
@@ -28,7 +27,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import lxy.com.wanandroid.R;
-import lxy.com.wanandroid.base.Constants;
 import lxy.com.wanandroid.base.ResponseModel;
 import lxy.com.wanandroid.base.ToastUtils;
 import lxy.com.wanandroid.home.model.ArticleModel;
@@ -40,10 +38,10 @@ import lxy.com.wanandroid.network.NetworkManager;
  * date: 2019/2/8
  */
 
-public class HomeAdapter extends BaseQuickAdapter<ArticleModel,BaseViewHolder> {
+public class ArticleAdapter extends BaseQuickAdapter<ArticleModel,BaseViewHolder> {
 
 
-    public HomeAdapter(int layoutResId, @Nullable List<ArticleModel> data) {
+    public ArticleAdapter(int layoutResId, @Nullable List<ArticleModel> data) {
         super(layoutResId, data);
     }
 
@@ -163,7 +161,7 @@ public class HomeAdapter extends BaseQuickAdapter<ArticleModel,BaseViewHolder> {
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
                 articleModel.setCollect(true);
-                HomeAdapter.this.notifyDataSetChanged();
+                ArticleAdapter.this.notifyDataSetChanged();
                 animator2.setDuration(300).start();
             }
         });
@@ -179,7 +177,7 @@ public class HomeAdapter extends BaseQuickAdapter<ArticleModel,BaseViewHolder> {
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
                 articleModel.setCollect(false);
-                HomeAdapter.this.notifyDataSetChanged();
+                ArticleAdapter.this.notifyDataSetChanged();
                 animator2.setDuration(300).start();
             }
         });
