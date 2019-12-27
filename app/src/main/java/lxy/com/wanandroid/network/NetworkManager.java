@@ -52,4 +52,15 @@ public class NetworkManager {
         return retrofit.create(NetworkAPI.class);
     }
 
+    public <T> T getServer(Class<T> cls){
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(baseUrl)
+                .client(client)
+                .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .build();
+
+        return retrofit.create(cls);
+    }
+
 }

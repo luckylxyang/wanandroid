@@ -6,13 +6,11 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import java.io.IOException;
-import java.lang.ref.SoftReference;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import lxy.com.wanandroid.base.WanApplication;
+import lxy.com.wanandroid.WanApplication;
 import okhttp3.Interceptor;
 import okhttp3.Response;
 
@@ -29,11 +27,12 @@ public class SaveCookieInterceptor implements Interceptor {
     @Override
     public Response intercept(Chain chain) throws IOException {
          Response response = chain.proceed(chain.request());
-//        Log.i(TAG,response.body().string());
-        if (!response.headers("set-Cookie").isEmpty()){
+        Log.i(TAG,chain.request().url().toString());
+        if (!response.headers("Set-Cookie").isEmpty()){
             HashSet<String> cookies = new HashSet<>();
 
-            for (String header : response.headers("set-cookie")) {
+            for (String header : response.headers("Set-Cookie")) {
+                Log.d("OkCookieSave",header.toString());
                 cookies.add(header);
             }
             saveCookie(chain.request().url().toString(), chain.request().url().host(), cookies);

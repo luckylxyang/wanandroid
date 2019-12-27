@@ -49,7 +49,7 @@ public interface NetworkAPI {
      * @return
      */
     @GET("user/logout/json")
-    Observable<LoginModel> logout();
+    Observable<BaseResponse<String>> logout();
 
     /**
      * http://www.wanandroid.com/user/register

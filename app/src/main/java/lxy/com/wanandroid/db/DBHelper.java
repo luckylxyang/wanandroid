@@ -1,6 +1,6 @@
 package lxy.com.wanandroid.db;
 
-import lxy.com.wanandroid.base.WanApplication;
+import lxy.com.wanandroid.WanApplication;
 import lxy.com.wanandroid.greendao.DaoMaster;
 import lxy.com.wanandroid.greendao.DaoSession;
 

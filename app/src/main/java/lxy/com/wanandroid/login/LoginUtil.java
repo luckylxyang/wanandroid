@@ -8,7 +8,7 @@ import com.google.gson.Gson;
 
 import org.greenrobot.eventbus.EventBus;
 
-import lxy.com.wanandroid.base.WanApplication;
+import lxy.com.wanandroid.WanApplication;
 
 /**
  * date: 2019/1/30

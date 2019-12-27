@@ -3,11 +3,12 @@ package lxy.com.wanandroid.network;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.text.TextUtils;
+import android.util.Log;
 
 import java.io.IOException;
 import java.util.HashSet;
 
-import lxy.com.wanandroid.base.WanApplication;
+import lxy.com.wanandroid.WanApplication;
 import okhttp3.Interceptor;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -28,6 +29,7 @@ public class AddCookieInterceptor implements Interceptor {
         HashSet cookies = getCookie(request.url().toString(), request.url().host());
 
         for (Object header : cookies) {
+            Log.d("OkCookieAdd",header.toString());
             builder.addHeader("Cookie",(String)header);
         }
 

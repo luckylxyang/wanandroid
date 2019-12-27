@@ -3,6 +3,8 @@ package lxy.com.wanandroid.base;
 import android.content.Context;
 import android.widget.Toast;
 
+import lxy.com.wanandroid.WanApplication;
+
 /**
  * Creator : lxy
  * date: 2019/1/15

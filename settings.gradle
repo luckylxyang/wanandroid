@@ -1,1 +1,1 @@
-include ':app', ':aoplibrary', ':sdk'
+include ':app', ':aoplibrary', ':sdk', ':basemodel', ':login'

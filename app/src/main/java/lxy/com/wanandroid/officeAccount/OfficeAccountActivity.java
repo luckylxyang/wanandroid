@@ -43,14 +43,14 @@ public class OfficeAccountActivity extends AppCompatActivity implements View.OnC
     private List<OfficeAccountModel> dataBeans = new ArrayList<>();
     private int fragIndex;
     private ActivityOfficeAccountBinding binding;
-    private OfficeAccountViewModel viewModel;
+    private ActivityOfficeAccountViewModel viewModel;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_office_account);
+//        setContentView(R.layout.activity_office_account);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_office_account);
-        viewModel = ViewModelProviders.of(this).get(OfficeAccountViewModel.class);
+        viewModel = ViewModelProviders.of(this).get(ActivityOfficeAccountViewModel.class);
         binding.setViewModel(viewModel);
         binding.setLifecycleOwner(this);
         initView();

@@ -311,28 +311,14 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         NetworkManager.getManager().getServer().logout()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<LoginModel>() {
+                .subscribe(new BaseObserver<String>() {
                     @Override
-                    public void onSubscribe(Disposable d) {
-
+                    public void onSuccess(String s) {
+                        LoginUtil.getInstance().clearLoginInfo();
                     }
 
                     @Override
-                    public void onNext(LoginModel model) {
-//                        if (model.getErrorCode() == Constants.NET_SUCCESS) {
-//                            LoginUtil.getInstance().clearLoginInfo();
-//                            tvUserEmail.setText("");
-//                            tvUserName.setText(R.string.login_yet);
-//                        }
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onComplete() {
+                    public void onFailure(String message) {
 
                     }
                 });
@@ -358,7 +344,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                     public void onSuccess(LoginModel model) {
                         changeLogin(new LoginEvent(true));
                         model.setPassword(pswd);
-                        LoginUtil.getInstance().setLoginInfo(new Gson().toJson(model));
+//                        LoginUtil.getInstance().setLoginInfo(new Gson().toJson(model));
                     }
 
                     @Override
