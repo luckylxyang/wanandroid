@@ -1,4 +1,4 @@
-package com.lxy.login.login;
+package com.lxy.basemodel.model;
 
 import java.util.List;
 

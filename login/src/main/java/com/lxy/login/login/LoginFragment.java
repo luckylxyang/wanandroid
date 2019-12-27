@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.lxy.basemodel.model.LoginModel;
 import com.lxy.basemodel.network.BaseObserver;
 import com.lxy.basemodel.network.NetworkManager;
 import com.lxy.basemodel.network.RxHelper;
@@ -75,7 +76,7 @@ public class LoginFragment extends Fragment {
                     public void onSuccess(LoginModel loginModel) {
                         ToastUtils.show(R.string.login_success);
                         loginModel.setPassword(pswd);
-                        LoginUtil.getInstance().setLoginInfo(new Gson().toJson(loginModel));
+                        LoginUtil.getInstance().setLoginInfo(getContext(),new Gson().toJson(loginModel));
                         getActivity().finish();
                     }
 

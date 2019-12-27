@@ -1,6 +1,7 @@
 package lxy.com.wanandroid;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -19,9 +20,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.alibaba.android.arouter.facade.annotation.Autowired;
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.lxy.basemodel.base.BaseActivity;
+import com.lxy.basemodel.model.LoginEvent;
+import com.lxy.basemodel.model.LoginModel;
+import com.lxy.basemodel.provider.LoginProvider;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.lang.reflect.Field;
 
@@ -225,14 +233,18 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         super.onDestroy();
     }
 
-//    @Subscribe(threadMode = ThreadMode.MAIN)
-//    public void changeLogin(LoginEvent event) {
-//        if (event.isHasSuccess()) {
-//            tvUserName.setText(LoginUtil.getInstance().getLoginModel().getUsername());
-//            tvUserEmail.setText(LoginUtil.getInstance().getLoginModel().getEmail());
-//            tvHeader.setText(LoginUtil.getInstance().getLoginModel().getUsername().substring(0,1));
-//        }
-//    }
+    @Autowired
+    private LoginProvider provider;
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void changeLogin(LoginEvent event) {
+        if (event.isHasSuccess()) {
+
+            tvUserName.setText(provider.getLoginInfo().getUsername());
+            tvUserEmail.setText(provider.getLoginInfo().getEmail());
+            tvHeader.setText(provider.getLoginInfo().getUsername().substring(0,1));
+        }
+    }
 
     @Override
     public void onBackPressed() {

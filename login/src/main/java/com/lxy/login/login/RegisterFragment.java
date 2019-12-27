@@ -12,16 +12,12 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.google.gson.Gson;
+import com.lxy.basemodel.model.LoginModel;
 import com.lxy.basemodel.network.BaseObserver;
 import com.lxy.basemodel.network.NetworkManager;
 import com.lxy.basemodel.network.RxHelper;
 import com.lxy.basemodel.utils.ToastUtils;
 import com.lxy.login.R;
-
-import io.reactivex.Observer;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 
 /**
  * Creator : lxy

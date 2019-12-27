@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.text.TextUtils;
 
 import com.google.gson.Gson;
+import com.lxy.basemodel.model.LoginModel;
 import com.lxy.login.LoginApp;
 
 /**
@@ -42,16 +43,16 @@ public class LoginUtil {
         return sp.getBoolean("isLogin",false);
     }
 
-    public void setLoginInfo(String loginInfo){
-        SharedPreferences sp = LoginApp.getContext().getSharedPreferences(SP_LOGIN, Context.MODE_PRIVATE);
+    public void setLoginInfo(Context context, String loginInfo){
+        SharedPreferences sp = context.getSharedPreferences(SP_LOGIN, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
         editor.putBoolean("isLogin",true);
         editor.putString("loginInfo",loginInfo);
         editor.apply();
     }
 
-    public LoginModel getLoginModel(){
-        SharedPreferences sp = LoginApp.getContext().getSharedPreferences(SP_LOGIN, Context.MODE_PRIVATE);
+    public LoginModel getLoginModel(Context context){
+        SharedPreferences sp = context.getSharedPreferences(SP_LOGIN, Context.MODE_PRIVATE);
         String userInfo = sp.getString("loginInfo","");
         if (TextUtils.isEmpty(userInfo)){
             return new LoginModel();
