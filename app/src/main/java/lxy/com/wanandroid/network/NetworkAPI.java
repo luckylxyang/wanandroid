@@ -8,7 +8,6 @@ import lxy.com.wanandroid.collect.CollectModel;
 import lxy.com.wanandroid.home.model.ArticleModel;
 import lxy.com.wanandroid.home.model.BannerModel;
 import lxy.com.wanandroid.knowledge.KnowledgeModel;
-import lxy.com.wanandroid.login.LoginModel;
 import lxy.com.wanandroid.officeAccount.OfficeAccountArticleModel;
 import lxy.com.wanandroid.officeAccount.OfficeAccountModel;
 import lxy.com.wanandroid.search.HotModel;
@@ -31,38 +30,12 @@ import retrofit2.http.QueryMap;
 public interface NetworkAPI {
 
 
-    // 登录注册
-
-    /**
-     * 登录
-     * @param username
-     * @param password
-     * @return
-     */
-    @POST("user/login")
-    @FormUrlEncoded
-    Observable<BaseResponse<LoginModel>> login(@Field("username") String username,
-                                 @Field("password") String password);
-
     /**
      * http://www.wanandroid.com/user/logout/json
      * @return
      */
     @GET("user/logout/json")
     Observable<BaseResponse<String>> logout();
-
-    /**
-     * http://www.wanandroid.com/user/register
-     * @param username
-     * @param password
-     * @param repassword
-     * @return
-     */
-    @POST("user/register")
-    @FormUrlEncoded
-    Observable<LoginModel> register(@Field("username") String username,
-                                    @Field("password") String password,
-                                    @Field("repassword") String repassword);
 
     /**
      * http://www.wanandroid.com/banner/json

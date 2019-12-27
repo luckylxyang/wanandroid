@@ -3,10 +3,9 @@ package lxy.com.wanandroid.home.model;
 import android.text.TextUtils;
 
 import com.chad.library.adapter.base.entity.MultiItemEntity;
+import com.lxy.basemodel.base.Constants;
 
 import java.util.List;
-
-import lxy.com.wanandroid.base.Constants;
 
 /**
  * @author  : lxy

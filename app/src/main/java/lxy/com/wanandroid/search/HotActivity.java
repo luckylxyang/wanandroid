@@ -6,13 +6,13 @@ import android.view.LayoutInflater;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.lxy.basemodel.base.BaseActivity;
 
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import lxy.com.wanandroid.R;
-import lxy.com.wanandroid.base.BaseActivity;
 import lxy.com.wanandroid.base.ToastUtils;
 import lxy.com.wanandroid.detail.ArticleDetailActivity;
 import lxy.com.wanandroid.detail.DetailModel;

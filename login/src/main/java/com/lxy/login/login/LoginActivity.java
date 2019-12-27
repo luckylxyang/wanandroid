@@ -3,7 +3,9 @@ package com.lxy.login.login;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 
+import com.alibaba.android.arouter.facade.annotation.Route;
 import com.lxy.basemodel.base.BaseActivity;
+import com.lxy.basemodel.base.Constants;
 import com.lxy.login.R;
 
 
@@ -11,7 +13,7 @@ import com.lxy.login.R;
  * @author : lxy
  *         date: 2019/1/29
  */
-
+@Route(path = Constants.URL_LOGIN_ACTIVITY)
 public class LoginActivity extends BaseActivity {
 
     private static String TAG = "LoginActivity";

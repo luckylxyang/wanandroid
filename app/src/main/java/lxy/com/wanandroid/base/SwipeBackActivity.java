@@ -9,6 +9,8 @@ import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.lxy.basemodel.base.BaseActivity;
+
 import lxy.com.wanandroid.R;
 
 /**

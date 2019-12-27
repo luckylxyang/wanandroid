@@ -8,7 +8,11 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.google.gson.Gson;
+import com.lxy.basemodel.base.BaseActivity;
+import com.lxy.basemodel.base.Constants;
+import com.lxy.basemodel.model.LoginEvent;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -23,12 +27,8 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import lxy.com.wanandroid.detail.ArticleDetailActivity;
 import lxy.com.wanandroid.R;
-import lxy.com.wanandroid.base.BaseActivity;
-import lxy.com.wanandroid.base.Constants;
 import lxy.com.wanandroid.base.ToastUtils;
 import lxy.com.wanandroid.detail.DetailModel;
-import lxy.com.wanandroid.login.LoginActivity;
-import lxy.com.wanandroid.login.LoginEvent;
 import lxy.com.wanandroid.network.NetworkManager;
 
 public class CollectActivity extends BaseActivity {
@@ -141,8 +141,7 @@ public class CollectActivity extends BaseActivity {
                             articleAdapter.notifyDataSetChanged();
                         }else if (model.getErrorCode() == -1001){
                             ToastUtils.show(model.getErrorMsg());
-                            Intent intent = new Intent(CollectActivity.this, LoginActivity.class);
-                            startActivity(intent);
+                            ARouter.getInstance().build(Constants.URL_LOGIN_ACTIVITY).navigation();
                         }
                     }
 

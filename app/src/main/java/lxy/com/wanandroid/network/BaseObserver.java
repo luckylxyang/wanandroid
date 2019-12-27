@@ -2,13 +2,14 @@ package lxy.com.wanandroid.network;
 
 import android.util.Log;
 
+import com.lxy.basemodel.base.Constants;
+
 import org.apache.http.conn.ConnectTimeoutException;
 
 import java.net.SocketTimeoutException;
 
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
-import lxy.com.wanandroid.base.Constants;
 
 /**
  * Created by Administrator on 2019/11/8.

@@ -34,7 +34,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.ViewAnimator;
 
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.google.gson.Gson;
+import com.lxy.basemodel.base.BaseActivity;
+import com.lxy.basemodel.base.Constants;
 import com.wang.avi.AVLoadingIndicatorView;
 
 import io.reactivex.Observer;
@@ -42,10 +45,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import lxy.com.wanandroid.R;
-import lxy.com.wanandroid.base.BaseActivity;
 import lxy.com.wanandroid.base.ResponseModel;
 import lxy.com.wanandroid.base.ToastUtils;
-import lxy.com.wanandroid.login.LoginActivity;
 import lxy.com.wanandroid.network.NetworkManager;
 
 /**
@@ -144,8 +145,7 @@ public class ArticleDetailActivity extends BaseActivity {
                         try {
                             if (model.getErrorCode() != 0) {
                                 ToastUtils.show(R.string.login_yet);
-                                Intent intent = new Intent(ArticleDetailActivity.this, LoginActivity.class);
-                                startActivity(intent);
+                                ARouter.getInstance().build(Constants.URL_LOGIN_ACTIVITY).navigation();
                             } else {
                                 ToastUtils.show(R.string.collect_success);
                                 like = true;
@@ -184,8 +184,7 @@ public class ArticleDetailActivity extends BaseActivity {
                         try {
                             if (model.getErrorCode() != 0) {
                                 ToastUtils.show(R.string.login_yet);
-                                Intent intent = new Intent(ArticleDetailActivity.this, LoginActivity.class);
-                                startActivity(intent);
+                                ARouter.getInstance().build(Constants.URL_LOGIN_ACTIVITY).navigation();
                             } else {
                                 ToastUtils.show(R.string.uncollect_success);
                                 like = false;
@@ -301,7 +300,7 @@ public class ArticleDetailActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        flContext.removeView(webView);
+        flContent.removeView(webView);
         webView.destroy();
     }
 }

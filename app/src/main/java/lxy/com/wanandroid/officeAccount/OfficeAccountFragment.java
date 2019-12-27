@@ -1,6 +1,5 @@
 package lxy.com.wanandroid.officeAccount;
 
-import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
@@ -14,24 +13,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.google.gson.Gson;
+import com.lxy.basemodel.base.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 import lxy.com.wanandroid.R;
-import lxy.com.wanandroid.base.Constants;
 import lxy.com.wanandroid.base.FragmentInterface;
 import lxy.com.wanandroid.databinding.FragmentOfficeAccountBinding;
 import lxy.com.wanandroid.detail.ArticleDetailActivity;
 import lxy.com.wanandroid.detail.DetailModel;
 import lxy.com.wanandroid.home.ArticleAdapter;
 import lxy.com.wanandroid.home.model.ArticleModel;
-import lxy.com.wanandroid.network.BaseObserver;
-import lxy.com.wanandroid.network.NetworkManager;
 
 /**
  * Creator : lxy

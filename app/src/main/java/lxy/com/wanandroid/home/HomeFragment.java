@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.gson.Gson;
+import com.lxy.basemodel.base.Constants;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
 
@@ -31,7 +32,6 @@ import io.reactivex.schedulers.Schedulers;
 import lxy.com.wanandroid.base.FragmentInterface;
 import lxy.com.wanandroid.detail.ArticleDetailActivity;
 import lxy.com.wanandroid.R;
-import lxy.com.wanandroid.base.Constants;
 import lxy.com.wanandroid.base.ResponseModel;
 import lxy.com.wanandroid.base.ToastUtils;
 import lxy.com.wanandroid.detail.DetailModel;

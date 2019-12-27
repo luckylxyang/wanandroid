@@ -7,6 +7,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.google.gson.Gson;
+import com.lxy.basemodel.base.BaseActivity;
+import com.lxy.basemodel.base.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,8 +19,6 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import lxy.com.wanandroid.detail.ArticleDetailActivity;
 import lxy.com.wanandroid.R;
-import lxy.com.wanandroid.base.BaseActivity;
-import lxy.com.wanandroid.base.Constants;
 import lxy.com.wanandroid.base.ResponseModel;
 import lxy.com.wanandroid.detail.DetailModel;
 import lxy.com.wanandroid.home.ArticleAdapter;
@@ -30,7 +30,7 @@ import lxy.com.wanandroid.network.NetworkManager;
  * date: 2019/2/27
  */
 
-public class KnowledgeChildActivity extends BaseActivity{
+public class KnowledgeChildActivity extends BaseActivity {
 
     private RecyclerView rvKnowledge;
     private int page = 0;

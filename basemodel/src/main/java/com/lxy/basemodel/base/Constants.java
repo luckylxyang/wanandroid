@@ -7,7 +7,6 @@ package com.lxy.basemodel.base;
 public class Constants {
 
     public final static int NET_SUCCESS = 0;
-
     public final static int ITEM_NUM = 4;
 
     public final static String TYPE_ARTICLE = "ARTICLE";
@@ -15,5 +14,7 @@ public class Constants {
 
     public final static int TYPE_IMAGE = 1;
     public final static int TYPE_TEXT = 2;
+
+    public final static String URL_LOGIN_ACTIVITY = "/login/LoginActivity";
 
 }

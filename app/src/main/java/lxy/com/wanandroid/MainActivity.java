@@ -2,7 +2,6 @@ package lxy.com.wanandroid;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.internal.BottomNavigationItemView;
@@ -14,37 +13,24 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatDelegate;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
+import com.lxy.basemodel.base.BaseActivity;
 
 import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 import java.lang.reflect.Field;
 
-import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
-import lxy.com.wanandroid.base.BaseActivity;
-import lxy.com.wanandroid.base.Constants;
 import lxy.com.wanandroid.base.FragmentInterface;
-import lxy.com.wanandroid.base.ToastUtils;
 import lxy.com.wanandroid.collect.CollectActivity;
 import lxy.com.wanandroid.home.HomeFragment;
 import lxy.com.wanandroid.knowledge.KnowledgeFragment;
-import lxy.com.wanandroid.login.LoginActivity;
-import lxy.com.wanandroid.login.LoginEvent;
-import lxy.com.wanandroid.login.LoginModel;
-import lxy.com.wanandroid.login.LoginUtil;
 import lxy.com.wanandroid.network.BaseObserver;
 import lxy.com.wanandroid.officeAccount.OfficeAccountActivity;
 import lxy.com.wanandroid.network.NetworkManager;
@@ -72,13 +58,12 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     @Override
     protected void initOptions() {
 
-        EventBus.getDefault().register(this);
         initView();
         initListener();
         if (saveBundle != null) {
             TAGFrag = saveBundle.getString("showFrag", "HomeFragment");
         }
-        autoLogin();
+        loadFragment();
     }
 
     private void loadFragment(){
@@ -172,10 +157,10 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         llNavHeader.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!LoginUtil.getInstance().checkLogin()) {
-                    Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                    startActivity(intent);
-                }
+//                if (!LoginUtil.getInstance().checkLogin()) {
+//                    Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+//                    startActivity(intent);
+//                }
             }
         });
     }
@@ -238,17 +223,16 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        EventBus.getDefault().unregister(this);
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void changeLogin(LoginEvent event) {
-        if (event.isHasSuccess()) {
-            tvUserName.setText(LoginUtil.getInstance().getLoginModel().getUsername());
-            tvUserEmail.setText(LoginUtil.getInstance().getLoginModel().getEmail());
-            tvHeader.setText(LoginUtil.getInstance().getLoginModel().getUsername().substring(0,1));
-        }
-    }
+//    @Subscribe(threadMode = ThreadMode.MAIN)
+//    public void changeLogin(LoginEvent event) {
+//        if (event.isHasSuccess()) {
+//            tvUserName.setText(LoginUtil.getInstance().getLoginModel().getUsername());
+//            tvUserEmail.setText(LoginUtil.getInstance().getLoginModel().getEmail());
+//            tvHeader.setText(LoginUtil.getInstance().getLoginModel().getUsername().substring(0,1));
+//        }
+//    }
 
     @Override
     public void onBackPressed() {
@@ -261,7 +245,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
@@ -314,42 +297,12 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 .subscribe(new BaseObserver<String>() {
                     @Override
                     public void onSuccess(String s) {
-                        LoginUtil.getInstance().clearLoginInfo();
+//                        LoginUtil.getInstance().clearLoginInfo();
                     }
 
                     @Override
                     public void onFailure(String message) {
 
-                    }
-                });
-    }
-
-    private void autoLogin(){
-        if (LoginUtil.getInstance().getLoginModel() == null){
-            return;
-        }
-        String name = LoginUtil.getInstance().getLoginModel().getUsername();
-        String pswd = LoginUtil.getInstance().getLoginModel().getPassword();
-        if (TextUtils.isEmpty(name) || TextUtils.isEmpty(pswd)){
-            loadFragment();
-            return;
-        }
-
-        NetworkManager.getManager().getServer().login(name, pswd)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new BaseObserver<LoginModel>(){
-
-                    @Override
-                    public void onSuccess(LoginModel model) {
-                        changeLogin(new LoginEvent(true));
-                        model.setPassword(pswd);
-//                        LoginUtil.getInstance().setLoginInfo(new Gson().toJson(model));
-                    }
-
-                    @Override
-                    public void onFailure(String message) {
-                        ToastUtils.show(message);
                     }
                 });
     }

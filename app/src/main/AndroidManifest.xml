@@ -26,7 +26,6 @@
         <activity
             android:name=".detail.ArticleDetailActivity"
             android:configChanges="orientation" />
-        <activity android:name=".login.LoginActivity" />
         <activity android:name=".knowledge.KnowledgeChildActivity" />
         <activity
             android:name=".collect.CollectActivity"

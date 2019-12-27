@@ -6,7 +6,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatDelegate;
 import android.view.View;
 
-import lxy.com.wanandroid.base.BaseActivity;
+import com.lxy.basemodel.base.BaseActivity;
+
 
 public class SettingActivity extends BaseActivity {
 

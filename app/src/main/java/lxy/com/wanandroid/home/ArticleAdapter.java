@@ -13,9 +13,11 @@ import android.text.style.ForegroundColorSpan;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
+import com.lxy.basemodel.base.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +32,6 @@ import lxy.com.wanandroid.R;
 import lxy.com.wanandroid.base.ResponseModel;
 import lxy.com.wanandroid.base.ToastUtils;
 import lxy.com.wanandroid.home.model.ArticleModel;
-import lxy.com.wanandroid.login.LoginActivity;
 import lxy.com.wanandroid.network.NetworkManager;
 
 /**
@@ -127,8 +128,7 @@ public class ArticleAdapter extends BaseQuickAdapter<ArticleModel,BaseViewHolder
                         try {
                             if (model.getErrorCode() != 0) {
                                 ToastUtils.show(R.string.login_yet);
-                                Intent intent = new Intent(mContext, LoginActivity.class);
-                                mContext.startActivity(intent);
+                                ARouter.getInstance().build(Constants.URL_LOGIN_ACTIVITY).navigation();
                             } else {
                                 ToastUtils.show( R.string.collect_success);
                                 collectAnimator(holder,articleModel);
@@ -199,8 +199,7 @@ public class ArticleAdapter extends BaseQuickAdapter<ArticleModel,BaseViewHolder
                         try {
                             if (model.getErrorCode() != 0) {
                                 ToastUtils.show(R.string.login_yet);
-                                Intent intent = new Intent(mContext, LoginActivity.class);
-                                mContext.startActivity(intent);
+                                ARouter.getInstance().build(Constants.URL_LOGIN_ACTIVITY).navigation();
                             } else {
                                 ToastUtils.show( R.string.uncollect_success);
                                 unCollectAnimator(holder, articleModel);

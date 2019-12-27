@@ -1,4 +1,4 @@
-package lxy.com.wanandroid.login;
+package com.lxy.basemodel.model;
 
 /**
  * Creator : lxy
