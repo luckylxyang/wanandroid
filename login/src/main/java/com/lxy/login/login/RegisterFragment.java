@@ -73,7 +73,7 @@ public class RegisterFragment extends Fragment {
                     public void onSuccess(LoginModel model) {
                         ToastUtils.show(R.string.login_success);
                         model.setPassword(pswd);
-                        LoginUtil.getInstance().setLoginInfo(new Gson().toJson(model));
+                        LoginUtil.getInstance().setLoginInfo(getContext(),new Gson().toJson(model));
                     }
 
                     @Override

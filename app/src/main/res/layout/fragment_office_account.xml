@@ -5,7 +5,7 @@
     <data>
         <variable
             name="viewModel"
-            type="lxy.com.wanandroid.officeAccount.OfficeAccountViewModel" />
+            type="lxy.com.wanandroid.officeAccount.ActivityOfficeAccountViewModel" />
     </data>
 
     <android.support.constraint.ConstraintLayout

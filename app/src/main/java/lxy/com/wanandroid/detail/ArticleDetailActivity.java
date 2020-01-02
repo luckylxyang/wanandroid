@@ -1,38 +1,21 @@
 package lxy.com.wanandroid.detail;
 
-import android.animation.Animator;
-import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.net.http.SslError;
 import android.os.Build;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.PersistableBundle;
-import android.support.annotation.Nullable;
-import android.support.design.widget.BottomSheetBehavior;
-import android.support.design.widget.BottomSheetDialog;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.v7.app.AppCompatActivity;
-import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
-import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.webkit.SslErrorHandler;
-import android.webkit.WebChromeClient;
 import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.ViewAnimator;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.google.gson.Gson;
@@ -45,7 +28,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import lxy.com.wanandroid.R;
-import lxy.com.wanandroid.base.ResponseModel;
 import lxy.com.wanandroid.base.ToastUtils;
 import lxy.com.wanandroid.network.NetworkManager;
 

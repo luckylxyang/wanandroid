@@ -239,7 +239,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void changeLogin(LoginEvent event) {
         if (event.isHasSuccess()) {
-
             tvUserName.setText(provider.getLoginInfo().getUsername());
             tvUserEmail.setText(provider.getLoginInfo().getEmail());
             tvHeader.setText(provider.getLoginInfo().getUsername().substring(0,1));

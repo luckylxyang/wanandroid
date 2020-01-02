@@ -40,7 +40,7 @@ public class OfficeAccountFragment extends Fragment implements FragmentInterface
     private int page = 0;
     private int totalPages = 0;
     private FragmentOfficeAccountBinding binding;
-    private OfficeAccountViewModel viewModel;
+    private ActivityOfficeAccountViewModel viewModel;
 
     public static OfficeAccountFragment newInstance(int ocId) {
 
@@ -55,7 +55,7 @@ public class OfficeAccountFragment extends Fragment implements FragmentInterface
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_office_account, container, false);
-        viewModel = ViewModelProviders.of(getActivity()).get(OfficeAccountViewModel.class);
+        viewModel = ViewModelProviders.of(getActivity()).get(ActivityOfficeAccountViewModel.class);
         binding.setViewModel(viewModel);
         binding.setLifecycleOwner(this);
         return binding.getRoot();

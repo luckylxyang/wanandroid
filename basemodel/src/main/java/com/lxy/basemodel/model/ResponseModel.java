@@ -1,8 +1,7 @@
-package lxy.com.wanandroid.base;
+package com.lxy.basemodel.model;
 
 import java.util.List;
 
-import lxy.com.wanandroid.home.model.ArticleModel;
 
 /**
  * Creator : lxy

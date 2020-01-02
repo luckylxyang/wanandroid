@@ -1,26 +1,23 @@
 package lxy.com.wanandroid.network;
 
+import com.lxy.basemodel.model.ResponseModel;
+
 import java.util.List;
 
 import io.reactivex.Observable;
-import lxy.com.wanandroid.base.ResponseModel;
 import lxy.com.wanandroid.collect.CollectModel;
-import lxy.com.wanandroid.home.model.ArticleModel;
 import lxy.com.wanandroid.home.model.BannerModel;
 import lxy.com.wanandroid.knowledge.KnowledgeModel;
 import lxy.com.wanandroid.officeAccount.OfficeAccountArticleModel;
 import lxy.com.wanandroid.officeAccount.OfficeAccountModel;
 import lxy.com.wanandroid.search.HotModel;
 import lxy.com.wanandroid.search.WebsiteModel;
-import okhttp3.ResponseBody;
-import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
-import retrofit2.http.QueryMap;
 
 /**
  * @author : lxy

@@ -19,7 +19,6 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import lxy.com.wanandroid.detail.ArticleDetailActivity;
 import lxy.com.wanandroid.R;
-import lxy.com.wanandroid.base.ResponseModel;
 import lxy.com.wanandroid.detail.DetailModel;
 import lxy.com.wanandroid.home.ArticleAdapter;
 import lxy.com.wanandroid.home.model.ArticleModel;
