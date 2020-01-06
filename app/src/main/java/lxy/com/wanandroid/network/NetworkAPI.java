@@ -1,6 +1,6 @@
 package lxy.com.wanandroid.network;
 
-import com.lxy.basemodel.model.ResponseModel;
+import com.lxy.basemodel.network.model.ResponseModel;
 
 import java.util.List;
 

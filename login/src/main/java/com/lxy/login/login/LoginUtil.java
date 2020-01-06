@@ -5,7 +5,7 @@ import android.content.SharedPreferences;
 import android.text.TextUtils;
 
 import com.google.gson.Gson;
-import com.lxy.basemodel.model.LoginModel;
+import com.lxy.basemodel.network.model.LoginModel;
 import com.lxy.login.LoginApp;
 
 /**

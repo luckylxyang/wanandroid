@@ -12,7 +12,7 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.google.gson.Gson;
 import com.lxy.basemodel.base.BaseActivity;
 import com.lxy.basemodel.base.Constants;
-import com.lxy.basemodel.model.LoginEvent;
+import com.lxy.basemodel.network.model.LoginEvent;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;

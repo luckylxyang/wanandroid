@@ -25,7 +25,6 @@ import lxy.com.wanandroid.databinding.FragmentOfficeAccountBinding;
 import lxy.com.wanandroid.detail.ArticleDetailActivity;
 import lxy.com.wanandroid.detail.DetailModel;
 import lxy.com.wanandroid.home.ArticleAdapter;
-import lxy.com.wanandroid.home.model.ArticleModel;
 
 /**
  * Creator : lxy

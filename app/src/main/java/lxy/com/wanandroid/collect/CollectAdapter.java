@@ -1,7 +1,6 @@
 package lxy.com.wanandroid.collect;
 
 import android.content.Context;
-import android.text.TextUtils;
 import android.view.View;
 
 import java.util.List;
@@ -9,7 +8,6 @@ import java.util.List;
 import lxy.com.wanandroid.R;
 import lxy.com.wanandroid.baseadapter.BaseAdapter;
 import lxy.com.wanandroid.baseadapter.ViewHolder;
-import lxy.com.wanandroid.home.model.ArticleModel;
 
 /**
  * Creator : lxy

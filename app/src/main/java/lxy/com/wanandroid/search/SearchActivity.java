@@ -23,6 +23,8 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.lxy.basemodel.base.BaseActivity;
 import com.lxy.basemodel.base.Constants;
+import com.lxy.basemodel.network.model.ArticleModel;
+import com.lxy.basemodel.network.model.ResponseModel;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -40,7 +42,6 @@ import lxy.com.wanandroid.db.DBHelper;
 import lxy.com.wanandroid.detail.DetailModel;
 import lxy.com.wanandroid.greendao.SearchHistoryModelDao;
 import lxy.com.wanandroid.home.ArticleAdapter;
-import lxy.com.wanandroid.home.model.ArticleModel;
 import lxy.com.wanandroid.knowledge.FlowLayout;
 import lxy.com.wanandroid.network.NetworkManager;
 import lxy.com.wanandroid.utils.WaitDialog;

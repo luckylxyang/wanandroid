@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/aoplibrary/aoplibrary.iml" filepath="$PROJECT_DIR$/aoplibrary/aoplibrary.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/articleitem/articleitem.iml" filepath="$PROJECT_DIR$/articleitem/articleitem.iml" />
       <module fileurl="file://$PROJECT_DIR$/basemodel/basemodel.iml" filepath="$PROJECT_DIR$/basemodel/basemodel.iml" />
       <module fileurl="file://$PROJECT_DIR$/login/login.iml" filepath="$PROJECT_DIR$/login/login.iml" />
       <module fileurl="file://$PROJECT_DIR$/sdk/sdk.iml" filepath="$PROJECT_DIR$/sdk/sdk.iml" />

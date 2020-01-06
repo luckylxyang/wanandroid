@@ -2,7 +2,7 @@ package com.lxy.login.login;
 
 import android.content.Context;
 
-import com.lxy.basemodel.model.LoginModel;
+import com.lxy.basemodel.network.model.LoginModel;
 import com.lxy.basemodel.provider.LoginProvider;
 
 /**

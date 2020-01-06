@@ -19,6 +19,8 @@ import android.view.ViewGroup;
 
 import com.google.gson.Gson;
 import com.lxy.basemodel.base.Constants;
+import com.lxy.basemodel.network.model.ArticleModel;
+import com.lxy.basemodel.network.model.ResponseModel;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
 
@@ -34,7 +36,6 @@ import lxy.com.wanandroid.detail.ArticleDetailActivity;
 import lxy.com.wanandroid.R;
 import lxy.com.wanandroid.base.ToastUtils;
 import lxy.com.wanandroid.detail.DetailModel;
-import lxy.com.wanandroid.home.model.ArticleModel;
 import lxy.com.wanandroid.home.model.BannerModel;
 import lxy.com.wanandroid.network.BaseObserver;
 import lxy.com.wanandroid.network.NetworkManager;

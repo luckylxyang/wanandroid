@@ -23,6 +23,7 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<ViewHolder> {
     private LayoutInflater inflater;
     protected OnItemClickListener listener;
     protected OnItemLongClickListener longListener;
+    protected OnItemChildClickListener childClickListener;
 
 
     private int ITEM_HEADER = 0;
@@ -45,6 +46,7 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<ViewHolder> {
 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
+        holder.setBaseAdapter(this);
         holder.convertView.setOnClickListener(v -> {
             if (listener != null){
                 listener.onClick(v,position);
@@ -76,6 +78,11 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<ViewHolder> {
         void onClick(View view, int position);
     }
 
+    public interface OnItemChildClickListener{
+
+        void onClick(View view, int position);
+    }
+
     public interface OnItemLongClickListener{
         void onLongClick(View view, int position);
     }
@@ -86,6 +93,10 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<ViewHolder> {
 
     public void setOnItemLongListener(OnItemLongClickListener listener){
         this.longListener = listener;
+    }
+
+    public void addOnItemChildClickListener(OnItemChildClickListener listener){
+        this.childClickListener = listener;
     }
 
 }

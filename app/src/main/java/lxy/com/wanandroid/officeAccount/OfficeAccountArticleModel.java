@@ -1,8 +1,8 @@
 package lxy.com.wanandroid.officeAccount;
 
-import java.util.List;
+import com.lxy.basemodel.network.model.ArticleModel;
 
-import lxy.com.wanandroid.home.model.ArticleModel;
+import java.util.List;
 
 /**
  * Created by Administrator on 2019/12/6.

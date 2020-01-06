@@ -7,10 +7,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
-import lxy.com.wanandroid.home.model.ArticleModel;
 import lxy.com.wanandroid.knowledge.KnowledgeModel;
-import lxy.com.wanandroid.officeAccount.OfficeAccountFragment;
-import lxy.com.wanandroid.officeAccount.OfficeAccountModel;
 
 /**
  * Creator : lxy

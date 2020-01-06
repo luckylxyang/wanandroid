@@ -1,1 +1,1 @@
-include ':app', ':aoplibrary', ':sdk', ':basemodel', ':login', ':sharesquare'
+include ':app', ':aoplibrary', ':sdk', ':basemodel', ':login', ':sharesquare', ':articleitem'

@@ -1,4 +1,4 @@
-package com.lxy.basemodel.model;
+package com.lxy.basemodel.network.model;
 
 import android.text.TextUtils;
 
@@ -30,6 +30,8 @@ public class ArticleModel {
      * origin :
      * projectLink : https://github.com/xmuSistone/AlipayPullRefresh
      * publishTime : 1547364410000
+     *     "shareDate": 1578284202000,
+     *     "shareUser": "残页",
      * superChapterId : 294
      * superChapterName : 开源项目主Tab
      * tags : [{"name":"项目","url":"/project/list/1?cid=358"}]
@@ -55,6 +57,11 @@ public class ArticleModel {
     private String origin;
     private String projectLink;
     private long publishTime;
+    private String shareUser;
+    private String niceShareDate;
+    private long shareDate;
+
+
     private int superChapterId;
     private String superChapterName;
     private String title;
@@ -156,6 +163,14 @@ public class ArticleModel {
         return niceDate;
     }
 
+    public String getNiceShareDate() {
+        return niceShareDate;
+    }
+
+    public void setNiceShareDate(String niceShareDate) {
+        this.niceShareDate = niceShareDate;
+    }
+
     public void setNiceDate(String niceDate) {
         this.niceDate = niceDate;
     }
@@ -174,6 +189,22 @@ public class ArticleModel {
 
     public void setProjectLink(String projectLink) {
         this.projectLink = projectLink;
+    }
+
+    public String getShareUser() {
+        return shareUser;
+    }
+
+    public void setShareUser(String shareUser) {
+        this.shareUser = shareUser;
+    }
+
+    public long getShareDate() {
+        return shareDate;
+    }
+
+    public void setShareDate(long shareDate) {
+        this.shareDate = shareDate;
     }
 
     public long getPublishTime() {

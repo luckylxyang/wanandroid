@@ -17,6 +17,8 @@ import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.lxy.basemodel.base.Constants;
+import com.lxy.basemodel.network.model.ArticleModel;
+import com.lxy.basemodel.network.model.ResponseModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +31,6 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import lxy.com.wanandroid.R;
 import lxy.com.wanandroid.base.ToastUtils;
-import lxy.com.wanandroid.home.model.ArticleModel;
 import lxy.com.wanandroid.network.NetworkManager;
 
 /**
@@ -47,7 +48,7 @@ public class ArticleAdapter extends BaseQuickAdapter<ArticleModel,BaseViewHolder
     @Override
     protected void convert(BaseViewHolder helper, ArticleModel articleModel) {
         helper.setText(R.id.item_home_article_title, articleModel.getTitle())
-                .setText(R.id.item_home_article_author, articleModel.getAuthor())
+                .setText(R.id.item_home_article_author, !TextUtils.isEmpty(articleModel.getAuthor()) ? articleModel.getAuthor() : articleModel.getShareUser())
                 .setText(R.id.item_home_article_time, articleModel.getNiceDate());
 
         StringBuffer tag = new StringBuffer();

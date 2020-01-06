@@ -20,7 +20,6 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<ViewHolder> {
     protected Context context;
     protected List<T> list;
     private int layoutId;
-    private LayoutInflater inflater;
     protected OnItemClickListener listener;
     protected OnItemLongClickListener longListener;
 
@@ -28,17 +27,24 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<ViewHolder> {
     private int ITEM_HEADER = 0;
     private int ITEM_COMMON = 1;
     private int ITEM_FOOTER = 2;
+    protected OnItemChildClickListener childClickListener;
+
+    public BaseAdapter(List<T> list,@LayoutRes int layoutId) {
+        this.list = list;
+        this.layoutId = layoutId;
+    }
 
     public BaseAdapter(Context context, List<T> list,@LayoutRes int layoutId) {
         this.context = context;
         this.list = list;
         this.layoutId = layoutId;
-        inflater = LayoutInflater.from(context);
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
+        if (context == null){
+            context = parent.getContext();
+        }
         ViewHolder holder = ViewHolder.get(context,layoutId,parent);
         return holder;
     }
@@ -76,6 +82,11 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<ViewHolder> {
         void onClick(View view, int position);
     }
 
+    public interface OnItemChildClickListener{
+
+        void onClick(View view, int position);
+    }
+
     public interface OnItemLongClickListener{
         void onLongClick(View view, int position);
     }
@@ -87,5 +98,10 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<ViewHolder> {
     public void setOnItemLongListener(OnItemLongClickListener listener){
         this.longListener = listener;
     }
+
+    public void addOnItemChildClickListener(OnItemChildClickListener listener){
+        this.childClickListener = listener;
+    }
+
 
 }

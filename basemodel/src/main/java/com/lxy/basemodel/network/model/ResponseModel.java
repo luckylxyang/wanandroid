@@ -1,4 +1,4 @@
-package com.lxy.basemodel.model;
+package com.lxy.basemodel.network.model;
 
 import java.util.List;
 

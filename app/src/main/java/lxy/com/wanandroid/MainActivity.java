@@ -1,7 +1,6 @@
 package lxy.com.wanandroid;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -21,13 +20,10 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Autowired;
-import com.alibaba.android.arouter.launcher.ARouter;
 import com.lxy.basemodel.base.BaseActivity;
-import com.lxy.basemodel.model.LoginEvent;
-import com.lxy.basemodel.model.LoginModel;
+import com.lxy.basemodel.network.model.LoginEvent;
 import com.lxy.basemodel.provider.LoginProvider;
 
-import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 

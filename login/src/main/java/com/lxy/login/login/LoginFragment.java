@@ -13,7 +13,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
-import com.lxy.basemodel.model.LoginModel;
+import com.lxy.basemodel.network.model.LoginModel;
 import com.lxy.basemodel.network.BaseObserver;
 import com.lxy.basemodel.network.NetworkManager;
 import com.lxy.basemodel.network.RxHelper;

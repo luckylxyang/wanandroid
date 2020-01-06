@@ -9,6 +9,8 @@ import android.support.v7.widget.RecyclerView;
 import com.google.gson.Gson;
 import com.lxy.basemodel.base.BaseActivity;
 import com.lxy.basemodel.base.Constants;
+import com.lxy.basemodel.network.model.ArticleModel;
+import com.lxy.basemodel.network.model.ResponseModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +23,6 @@ import lxy.com.wanandroid.detail.ArticleDetailActivity;
 import lxy.com.wanandroid.R;
 import lxy.com.wanandroid.detail.DetailModel;
 import lxy.com.wanandroid.home.ArticleAdapter;
-import lxy.com.wanandroid.home.model.ArticleModel;
 import lxy.com.wanandroid.network.NetworkManager;
 
 /**
