@@ -22,8 +22,8 @@ import java.util.List;
 import lxy.com.wanandroid.R;
 import lxy.com.wanandroid.base.FragmentInterface;
 import lxy.com.wanandroid.databinding.FragmentOfficeAccountBinding;
-import lxy.com.wanandroid.detail.ArticleDetailActivity;
-import lxy.com.wanandroid.detail.DetailModel;
+import com.lxy.basemodel.detail.ArticleDetailActivity;
+import com.lxy.basemodel.detail.DetailModel;
 import lxy.com.wanandroid.home.ArticleAdapter;
 
 /**

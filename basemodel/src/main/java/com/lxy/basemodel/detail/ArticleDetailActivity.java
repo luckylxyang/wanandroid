@@ -1,4 +1,4 @@
-package lxy.com.wanandroid.detail;
+package com.lxy.basemodel.detail;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -19,17 +19,19 @@ import android.widget.ImageView;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.google.gson.Gson;
+import com.lxy.basemodel.R;
 import com.lxy.basemodel.base.BaseActivity;
 import com.lxy.basemodel.base.Constants;
+import com.lxy.basemodel.network.BaseObserver;
+import com.lxy.basemodel.network.NetworkManager;
+import com.lxy.basemodel.network.model.ResponseModel;
+import com.lxy.basemodel.utils.ToastUtils;
 import com.wang.avi.AVLoadingIndicatorView;
 
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
-import lxy.com.wanandroid.R;
-import lxy.com.wanandroid.base.ToastUtils;
-import lxy.com.wanandroid.network.NetworkManager;
 
 /**
  * date: 2019/1/25
@@ -78,115 +80,97 @@ public class ArticleDetailActivity extends BaseActivity {
 
     private void initListener() {
         toolbar.setOnMenuItemClickListener(menuItem -> {
-            switch (menuItem.getItemId()) {
-                case R.id.detail_love:
-                    collect();
-                    break;
-                case R.id.detail_no_love:
-                    unCollect();
-                    break;
-                case R.id.detail_share:
-                    StringBuffer buffer = new StringBuffer();
-                    buffer.append("这里有一篇好看的文章，")
-                            .append(model.getName())
-                            .append(model.getLink())
-                            .append("快来一起玩Android吧！！！");
-                    Intent i = new Intent(Intent.ACTION_SEND);
-                    i.setType("text/plain");
-                    i.putExtra(Intent.EXTRA_SUBJECT, "Share");
-                    i.putExtra(Intent.EXTRA_TEXT, buffer.toString());
-                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(Intent.createChooser(i, getTitle()));
-                    break;
-                case R.id.detail_other:
-                    Uri uri = Uri.parse(model.getLink());
-                    Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-                    startActivity(intent);
-                    break;
-
-                default:
-                    break;
+            int itemId = menuItem.getItemId();
+            if (itemId == R.id.detail_love){
+                collect();
+            }else if (itemId == R.id.detail_no_love){
+                unCollect();
+            }else if (itemId == R.id.detail_share){
+                StringBuffer buffer = new StringBuffer();
+                buffer.append("这里有一篇好看的文章，")
+                        .append(model.getName())
+                        .append(model.getLink())
+                        .append("快来一起玩Android吧！！！");
+                Intent i = new Intent(Intent.ACTION_SEND);
+                i.setType("text/plain");
+                i.putExtra(Intent.EXTRA_SUBJECT, "Share");
+                i.putExtra(Intent.EXTRA_TEXT, buffer.toString());
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(Intent.createChooser(i, getTitle()));
+            }else if (itemId == R.id.detail_other){
+                Uri uri = Uri.parse(model.getLink());
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                startActivity(intent);
             }
             return true;
         });
     }
 
     private void collect() {
-        NetworkManager.getManager().getServer().collectArticleInSite(model.getId())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<ResponseModel>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-
-                    }
-
-                    @SuppressLint("ResourceType")
-                    @Override
-                    public void onNext(ResponseModel model) {
-                        try {
-                            if (model.getErrorCode() != 0) {
-                                ToastUtils.show(R.string.login_yet);
-                                ARouter.getInstance().build(Constants.URL_LOGIN_ACTIVITY).navigation();
-                            } else {
-                                ToastUtils.show(R.string.collect_success);
-                                like = true;
-                                invalidateOptionsMenu();
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        e.printStackTrace();
-                    }
-
-                    @Override
-                    public void onComplete() {
-
-                    }
-                });
+//        NetworkManager.getManager().getServer().collectArticleInSite(model.getId())
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(new Observer<ResponseModel>() {
+//                    @Override
+//                    public void onSubscribe(Disposable d) {
+//
+//                    }
+//
+//                    @SuppressLint("ResourceType")
+//                    @Override
+//                    public void onNext(ResponseModel model) {
+//                        try {
+//                            if (model.getErrorCode() != 0) {
+//                                ToastUtils.show(R.string.login_yet);
+//                                ARouter.getInstance().build(Constants.URL_LOGIN_ACTIVITY).navigation();
+//                            } else {
+//                                ToastUtils.show(R.string.collect_success);
+//                                like = true;
+//                                invalidateOptionsMenu();
+//                            }
+//                        } catch (Exception e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onError(Throwable e) {
+//                        e.printStackTrace();
+//                    }
+//
+//                    @Override
+//                    public void onComplete() {
+//
+//                    }
+//                });
     }
 
     private void unCollect() {
-        NetworkManager.getManager().getServer().unCollectArticle(model.getId())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<ResponseModel>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-
-                    }
-
-                    @SuppressLint("ResourceType")
-                    @Override
-                    public void onNext(ResponseModel model) {
-                        try {
-                            if (model.getErrorCode() != 0) {
-                                ToastUtils.show(R.string.login_yet);
-                                ARouter.getInstance().build(Constants.URL_LOGIN_ACTIVITY).navigation();
-                            } else {
-                                ToastUtils.show(R.string.uncollect_success);
-                                like = false;
-                                invalidateOptionsMenu();
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        e.printStackTrace();
-                    }
-
-                    @Override
-                    public void onComplete() {
-
-                    }
-                });
+//        NetworkManager.getManager().getServer().unCollectArticle(model.getId())
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(new BaseObserver<ResponseModel>() {
+//                    @Override
+//                    public void onSuccess(ResponseModel responseModel) {
+//                        try {
+//                            if (responseModel.getErrorCode() != 0) {
+//                                ToastUtils.show(R.string.login_yet);
+//                                ARouter.getInstance().build(Constants.URL_LOGIN_ACTIVITY).navigation();
+//                            } else {
+//                                ToastUtils.show(R.string.uncollect_success);
+//                                like = false;
+//                                invalidateOptionsMenu();
+//                            }
+//                        } catch (Exception e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onFailure(String message) {
+//
+//                    }
+//                });
     }
 
     private void initWebView() {

@@ -51,6 +51,7 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<ViewHolder> {
 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
+        holder.setBaseAdapter(this);
         holder.convertView.setOnClickListener(v -> {
             if (listener != null){
                 listener.onClick(v,position);

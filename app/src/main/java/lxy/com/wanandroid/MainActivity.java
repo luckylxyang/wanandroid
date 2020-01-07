@@ -20,7 +20,9 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Autowired;
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.lxy.basemodel.base.BaseActivity;
+import com.lxy.basemodel.base.Constants;
 import com.lxy.basemodel.network.model.LoginEvent;
 import com.lxy.basemodel.provider.LoginProvider;
 
@@ -132,8 +134,9 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                         addFragment(homeFragment, "HomeFragment");
                         break;
                     case R.id.navigation_official_accounts:
-                        Intent intent = new Intent(MainActivity.this, OfficeAccountActivity.class);
-                        startActivity(intent);
+//                        Intent intent = new Intent(MainActivity.this, OfficeAccountActivity.class);
+//                        startActivity(intent);
+                        ARouter.getInstance().build(Constants.URL_SQUARE_ACTIVITY).navigation();
                         break;
                     case R.id.navigation_dashboard:
                         if (TAGFrag.equals("KnowledgeFragment")){
@@ -229,15 +232,15 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         super.onDestroy();
     }
 
-    @Autowired
-    private LoginProvider provider;
+//    @Autowired
+//    private LoginProvider provider;
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void changeLogin(LoginEvent event) {
         if (event.isHasSuccess()) {
-            tvUserName.setText(provider.getLoginInfo().getUsername());
-            tvUserEmail.setText(provider.getLoginInfo().getEmail());
-            tvHeader.setText(provider.getLoginInfo().getUsername().substring(0,1));
+//            tvUserName.setText(provider.getLoginInfo().getUsername());
+//            tvUserEmail.setText(provider.getLoginInfo().getEmail());
+//            tvHeader.setText(provider.getLoginInfo().getUsername().substring(0,1));
         }
     }
 

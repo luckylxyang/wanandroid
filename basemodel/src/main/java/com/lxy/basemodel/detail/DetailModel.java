@@ -1,4 +1,4 @@
-package lxy.com.wanandroid.detail;
+package com.lxy.basemodel.detail;
 
 /**
  * Creator : lxy

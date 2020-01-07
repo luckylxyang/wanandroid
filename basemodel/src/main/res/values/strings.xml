@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">baseModel</string>
+
+    <string name="like">收藏</string>
+    <string name="unlike">取消收藏</string>
+    <string name="share">分享</string>
+    <string name="other">用浏览器打开</string>
+
+    <string name="login_yet">请先登录</string>
+    <string name="collect_success">收藏成功</string>
+    <string name="uncollect_success">取消收藏成功</string>
 </resources>

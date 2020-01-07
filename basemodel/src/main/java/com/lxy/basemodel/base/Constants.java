@@ -16,5 +16,6 @@ public class Constants {
     public final static int TYPE_TEXT = 2;
 
     public final static String URL_LOGIN_ACTIVITY = "/login/LoginActivity";
+    public final static String URL_SQUARE_ACTIVITY = "/square/SquareActivity";
 
 }

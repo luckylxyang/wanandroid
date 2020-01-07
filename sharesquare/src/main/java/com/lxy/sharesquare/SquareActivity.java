@@ -3,11 +3,20 @@ package com.lxy.sharesquare;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-public class SquareActivity extends AppCompatActivity {
+import com.alibaba.android.arouter.facade.annotation.Route;
+import com.lxy.basemodel.base.BaseActivity;
+import com.lxy.basemodel.base.Constants;
+
+@Route(path = Constants.URL_SQUARE_ACTIVITY)
+public class SquareActivity extends BaseActivity {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_square);
+    public int setContextView() {
+        return R.layout.activity_square;
+    }
+
+    @Override
+    protected void initOptions() {
+
     }
 }

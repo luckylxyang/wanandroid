@@ -2,6 +2,7 @@ package com.lxy.basemodel.baseadapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.support.annotation.DrawableRes;
 import android.support.annotation.IdRes;
 import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
@@ -89,7 +90,7 @@ public class ViewHolder extends RecyclerView.ViewHolder {
     }
 
     @SuppressLint("ResourceType")
-    public ViewHolder setImageResource(int viewId, @IdRes int imageId) {
+    public ViewHolder setImageResource(int viewId, @DrawableRes int imageId) {
         ImageView iv = getView(viewId);
         iv.setImageResource(imageId);
         return this;
@@ -107,7 +108,7 @@ public class ViewHolder extends RecyclerView.ViewHolder {
                 @Override
                 public void onClick(View v) {
                     if (baseAdapter != null) {
-                        baseAdapter.childClickListener.onClick(v, getAdapterPosition());
+                        baseAdapter.childClickListener.onClick(v, getLayoutPosition());
                     }
                 }
             });
